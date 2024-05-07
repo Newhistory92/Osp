@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@clerk/nextjs": "^4.24.1",
+    "@clerk/nextjs": "^5.0.6",
     "@clerk/themes": "^1.7.9",
     "@fontsource-variable/onest": "^5.0.4",
     "@googlemaps/js-api-loader": "^1.16.6",

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useUser,SignOutButton} from '@clerk/clerk-react';
 import { ClerkLoading } from '@clerk/nextjs';
+import Image from 'next/image';
 
 const ButtonUser = () => {
   const { user } = useUser();
@@ -18,7 +19,7 @@ return <ClerkLoading>
   }
   return (
     <div className="relative inline-block">
-      <img
+      <Image
         id="avatarButton"
         className="w-10 h-10 rounded-full cursor-pointer"
         src={user.imageUrl}
