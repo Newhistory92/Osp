@@ -1,0 +1,565 @@
+@import 'https://fonts.googleapis.com/css?family=Montserrat';
+* {
+  font-family: Montserrat;
+}
+
+html {
+  color: #222;
+  font-size:70%;
+  line-height: 1.5;
+  box-sizing: border-box
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: #777;
+  text-decoration: none;
+}
+
+p {
+  margin: 0 0 45px 0;
+  text-align: justify;
+}
+
+.header {
+  width: 100%;
+}
+
+h1,h2,h3,h4,h5,h6 {
+  font-family: Montserrat;
+  font-weight: 600;
+  color: #484848;
+  margin: 30px 0 25px 0;
+  line-height: 1.3
+}
+
+
+.intro h1 {
+  color: #000;
+}
+
+.intro h1 strong {
+  color: #ffd300
+}
+
+
+/* - link under - */
+
+.link-arrow:after {
+  content: '';
+  background-size: 100% 100%;
+  width: 16px;
+  height: 12px;
+  position: absolute;
+  top: 5px;
+  right: -28px;
+  -webkit-transition: all .4s cubic-bezier(.35, 1, .33, 1);
+  transition: all .4s cubic-bezier(.35, 1, .33, 1)
+}
+
+.link-arrow:hover:after {
+  right: -35px
+}
+
+.link-arrow.link-arrow-white:after {
+  background-size: 100% 100%
+}
+
+.link-arrow-hover:after {
+  right: -35px
+}
+
+.link {
+  display: inline-block;
+  position: relative;
+  border: none;
+  padding-bottom: 4px;
+  text-transform: uppercase;
+  font-family: Montserrat, helvetica, arial, sans-serif;
+  font-weight: 700
+  
+}
+
+.link:active,
+.link:focus,
+.link:hover {
+  outline: 0
+}
+
+.link:before {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background: #000;
+  width: 0;
+  height: 2px;
+  -webkit-transition: all .4s cubic-bezier(.35, 1, .33, 1);
+  transition: all .4s cubic-bezier(.35, 1, .33, 1);
+  z-index:100
+}
+
+.link:hover {
+  color: #000
+}
+
+.link:hover:before {
+  width: 100%
+}
+
+.link-theme:before {
+  background: #ffd300
+}
+
+@media only screen and (min-width: 250px) {
+  
+  .container {
+    width: 80%;
+  }
+  h1 {
+    font-size: 30px;
+  }
+  h2 {
+    font-size: 20px;
+  }
+}
+  
+@media only screen and (min-width:768px) {
+
+  .container {
+    width: 80%;
+  }
+  h1 {
+    font-size: 48px;
+  }
+  h2 {
+    font-size: 28px;
+  }
+  
+}
+
+@media only screen and (min-width:992px) {
+  
+  h1 {
+    font-size: 60px;
+  }
+  h2 {
+    font-size: 28px;
+  }
+
+}
+
+@media only screen and (min-width:1200px) {
+
+  h1 {
+    font-size: 80px;
+  }
+  h2 {
+    font-size: 30px;
+  }
+
+}
+
+
+
+.header {
+  background: transparent;
+  position: absolute;
+  z-index: 3;
+  margin-left: 0;
+  margin-right: 0;
+  height: 17%;
+  padding: 20px 0;
+  box-shadow: 1px 1px 4px 0 rgba(0,0,0,.1);
+  background-attachment: fixed;
+  background-position: center center;
+  background-repeat: no-repear;
+  background-size: cover;
+}
+
+.header ul {
+  margin: 0;
+  padding: 0;
+  margin-left: 0;
+  margin-right: 120px;
+  list-style: none;
+  overflow: hidden;
+  background: transparent;
+}
+
+.header li a {
+  display: block;
+  padding: 20px 20px 4px 20px;
+  text-decoration: none;
+}
+
+.header li a:hover,
+.header .menu-btn:hover {
+  background: transparent;
+}
+
+.header .Image {
+  float: left; 
+  margin-right: 20px; 
+  
+}
+
+.header .logo-container {
+  float: left;
+  margin-right: 0px;
+  margin-left: 6px;
+  
+}
+.logo {
+  font-family: 'Montserrat', sans-serif; /* Usar la fuente Montserrat */
+  font-weight: 600; /* Establecer el peso de la fuente */
+  font-size: 2.5em; /* Tamaño de la fuente */
+  color: #ffd300; /* Color del texto */
+  display: inline-block;
+  text-transform: uppercase;
+  letter-spacing: 0.5em;
+  opacity: 0.8;
+  transform: rotateX(-90deg);
+  animation: letterDrop 1.2s ease 1 normal forwards;
+}
+
+/* Estilos específicos del efecto de animación */
+@keyframes letterDrop {
+  10% {
+    opacity: 0.5;
+  }
+  20% {
+    opacity: 0.8;
+    top: 3.75em;
+    transform: rotateX(-360deg);
+  }
+  100% {
+    opacity: 1;
+    top: 4.50em;
+    transform: rotateX(360deg);
+  }
+}
+
+/* Estilos adicionales para alternar el color del texto */
+span:nth-child(2n) {
+  color: #663399; /* Cambiar el color del texto cada dos elementos */
+}
+/* 
+.header .logo {
+  color: #ffd300;
+  display: block;
+  float: left;
+  font-size: 2.5em;
+  padding: 2px 0px;
+  text-decoration: none;
+  margin-left: 10px;
+  
+} */
+
+/* menu */
+
+.header .menu {
+  clear: both;
+  max-height: 0;
+  transition: max-height .2s ease-out;
+}
+
+/* menu icon */
+
+.header .menu-icon {
+  cursor: pointer;
+  float: right;
+  padding: 28px 20px;
+  position: relative;
+  user-select: none;
+}
+
+.header .menu-icon .navicon {
+  background: #333;
+  display: block;
+  height: 2px;
+  position: relative;
+  transition: background .2s ease-out;
+  width: 18px;
+}
+
+.header .menu-icon .navicon:before,
+.header .menu-icon .navicon:after {
+  background: #333;
+  content: '';
+  display: block;
+  height: 100%;
+  position: absolute;
+  transition: all .2s ease-out;
+  width: 100%;
+}
+
+.header .menu-icon .navicon:before {
+  top: 5px;
+}
+
+.header .menu-icon .navicon:after {
+  top: -5px;
+}
+
+/* menu btn */
+
+.header .menu-btn {
+  display: none;
+}
+
+.header .menu-btn:checked ~ .menu {
+  max-height: 240px;
+}
+
+.header .menu-btn:checked ~ .menu-icon .navicon {
+  background: transparent;
+}
+
+.header .menu-btn:checked ~ .menu-icon .navicon:before {
+  transform: rotate(-45deg);
+}
+
+.header .menu-btn:checked ~ .menu-icon .navicon:after {
+  transform: rotate(45deg);
+}
+
+.header .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:before,
+.header .menu-btn:checked ~ .menu-icon:not(.steps) .navicon:after {
+  top: 0;
+}
+
+
+@media (min-width: 875px) {
+  
+  .header li {
+    float: left;
+  }
+ 
+  .header li a {
+    padding: 20px 0px 0px 0px;
+    margin-left: 30px;
+  }
+  .header .menu {
+    clear: none;
+    float: right;
+    max-height: none;
+  }
+  .header .menu-icon {
+    display: none;
+  }
+  .header.fixed-top .link  {
+    background: transparent;
+  }
+  .header .dropdown-menu {
+    position: fixed;
+    
+
+  }
+  
+}
+
+/* 48em = 768px */
+
+@media (min-width: 48em) {
+  .section-split a {
+    width: 50%;
+  }
+}
+
+
+ .header .dropdown-menu {
+  padding: 0;
+  background-color: rgba(0, 0, 0, .9);
+}
+.header .dropdown-menu .dropdown-item {
+  position: relative;
+  padding: 10px 20px;
+  color: #fff;
+  font-size: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, .1);
+  transition: color 0.2s ease-in;
+}
+.header .dropdown-menu .dropdown-item:last-child {
+  border-bottom: none;
+}
+.header .dropdown-menu .dropdown-item:hover {
+  background: transparent;
+  color: #c0ca33;
+}
+.header .dropdown-menu .dropdown-item::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  top: 0;
+  width: 5px;
+  background-color: #c0ca33;
+  opacity: 0;
+  transition: opacity 0.2s ease-in;
+}
+.header .dropdown-menu .dropdown-item:hover::before {
+  opacity: 1;
+}
+.header.fixed-top {
+  position: fixed;
+  -webkit-animation: header-animation 0.6s;
+  animation: header-animation 0.6s;
+  background-color: rgba(0, 0, 0, .9);
+}
+
+.header.fixed-top:not(:hover) .logo-container,
+.header.fixed-top:not(:hover) .container_button {
+  background-color: rgba(0, 0, 0, 0.9);
+}
+
+.header.fixed-top.link::after { 
+   background-color: rgba(0, 0, 0, .9); 
+}
+  
+.header.fixed-top .dropdown-menu .dropdown-item,
+.header.fixed-top .menu li {
+    background-color: rgba(0, 0, 0, .9);
+}
+
+.header.fixed-top .link:before {
+   background-color: rgba(0, 0, 0, .9); 
+}
+  .dropdown-menu {
+    min-width: 200px;
+    -webkit-animation: dropdown-animation 0.3s;
+    animation: dropdown-animation 0.3s;
+    -webkit-transform-origin: top;
+    -ms-transform-origin: top;
+    transform-origin: top;
+  }
+  @-webkit-keyframes header-animation {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-100%);
+    -ms-transform: translateY(-100%);
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+@keyframes header-animation {
+  0% {
+    opacity: 0;
+    -webkit-transform: translateY(-100%);
+    -ms-transform: translateY(-100%);
+    transform: translateY(-100%);
+  }
+  100% {
+    opacity: 1;
+    -webkit-transform: translateY(0);
+    -ms-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+@-webkit-keyframes dropdown-animation {
+  0% {
+    -webkit-transform: scaleY(0);
+    -ms-transform: scaleY(0);
+    transform: scaleY(0);
+  }
+  75% {
+    -webkit-transform: scaleY(1.1);
+    -ms-transform: scaleY(1.1);
+    transform: scaleY(1.1);
+  }
+  100% {
+    -webkit-transform: scaleY(1);
+    -ms-transform: scaleY(1);
+    transform: scaleY(1);
+  }
+}
+@keyframes dropdown-animation {
+  0% {
+    -webkit-transform: scaleY(0);
+    -ms-transform: scaleY(0);
+    transform: scaleY(0);
+  }
+  75% {
+    -webkit-transform: scaleY(1.1);
+    -ms-transform: scaleY(1.1);
+    transform: scaleY(1.1);
+  }
+  100% {
+    -webkit-transform: scaleY(1);
+    -ms-transform: scaleY(1);
+    transform: scaleY(1);
+  }
+
+
+
+  
+}
+
+.header .container_button {
+  float: right; 
+  margin-top: 1px; 
+  margin-right: 10px;
+  position: relative;
+  background: transparent; 
+}
+
+.btn {
+  width: 100%;
+  max-width: 200px; 
+  height: 40px;
+  display: block;
+  font-size: inherit;
+  text-align: center;
+  text-transform: uppercase;
+  background: transparent;
+  cursor: pointer;
+  text-decoration: none;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.045em;
+  position: relative; 
+  right: 0;
+}
+
+
+
+
+.btn svg {
+  width: 100%; 
+  height:70%; 
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.btn svg rect {
+  stroke-width: 4;
+  stroke-dasharray: 353, 0;
+  stroke-dashoffset: 0;
+  transition: all 600ms ease; 
+}
+
+.btn span {
+  background: rgb(239, 234, 234);
+  background: -moz-linear-gradient(left, rgba(224, 87, 41, 1) 0%, rgba(225, 120, 41, 1) 100%);
+  background: -webkit-linear-gradient(left, rgba(255, 130, 43, 1) 0%, rgba(225, 120, 46, 1) 100%);
+  background: linear-gradient(to right, rgba(255, 130, 48, 1) 0%, rgba(225, 120,50, 1) 100%);
+  filter: progid: DXImageTransform.Microsoft.gradient(startColorstr='#ff8282', endColorstr='#e178ed', GradientType=1);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.btn:hover svg rect {
+  stroke-width: 4;
+  stroke-dasharray: 196, 543;
+  stroke-dashoffset: 437;
+}
