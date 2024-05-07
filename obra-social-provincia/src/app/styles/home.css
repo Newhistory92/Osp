@@ -107,6 +107,7 @@
     height: 100%;
     margin: auto;
     width: 90vw;
+    z-index: -1;
   }
   
   .line {
@@ -117,6 +118,7 @@
     left: 50%;
     background: rgba(255, 255, 255, 0.1);
     overflow: hidden;
+    z-index: -1;
   }
   
   .line::after {

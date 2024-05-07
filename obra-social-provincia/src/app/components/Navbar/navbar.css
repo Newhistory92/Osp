@@ -213,41 +213,9 @@ h1,h2,h3,h4,h5,h6 {
   margin-left: 6px;
   
 }
-.logo {
-  font-family: 'Montserrat', sans-serif; /* Usar la fuente Montserrat */
-  font-weight: 600; /* Establecer el peso de la fuente */
-  font-size: 2.5em; /* Tamaño de la fuente */
-  color: #ffd300; /* Color del texto */
-  display: inline-block;
-  text-transform: uppercase;
-  letter-spacing: 0.5em;
-  opacity: 0.8;
-  transform: rotateX(-90deg);
-  animation: letterDrop 1.2s ease 1 normal forwards;
-}
 
-/* Estilos específicos del efecto de animación */
-@keyframes letterDrop {
-  10% {
-    opacity: 0.5;
-  }
-  20% {
-    opacity: 0.8;
-    top: 3.75em;
-    transform: rotateX(-360deg);
-  }
-  100% {
-    opacity: 1;
-    top: 4.50em;
-    transform: rotateX(360deg);
-  }
-}
 
-/* Estilos adicionales para alternar el color del texto */
-span:nth-child(2n) {
-  color: #663399; /* Cambiar el color del texto cada dos elementos */
-}
-/* 
+ 
 .header .logo {
   color: #ffd300;
   display: block;
@@ -256,8 +224,9 @@ span:nth-child(2n) {
   padding: 2px 0px;
   text-decoration: none;
   margin-left: 10px;
-  
-} */
+  text-shadow: 10px 10px 10px rgba(0,0,0,.5), 20px 20px 20px rgba(0,0,0,.4), 30px 30px 30px rgba(0,0,0,.1);
+   
+} 
 
 /* menu */
 

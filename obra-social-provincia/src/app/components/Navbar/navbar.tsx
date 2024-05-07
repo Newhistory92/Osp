@@ -1,13 +1,15 @@
-
+"use client"
 
 import Image from 'next/image';
-import Logo from "../../../public/Logo.png";
+import Logo from "../../../../public/Logo.png";
 import { useUser} from '@clerk/clerk-react';
 import React, { useState, useEffect } from 'react';
-import './styles/navbar.css';
+import "./navbar.css"
 import {useAppDispatch,useAppSelector} from "../../hooks/StoreHook"
 import {setSelectedContent,setPublicaciones,setShowPrestadores} from '../../redux/Slice/navbarSlice'
 import ButtonUser from '../UserComponent/ButtomUser';
+
+
 
 
 const Navbar: React.FC = () => {
@@ -225,4 +227,3 @@ const Navbar: React.FC = () => {
 
 
 export default Navbar;
-
