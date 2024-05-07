@@ -6,9 +6,9 @@ import Navbar from "./components/Navbar/navbar";
 export default function Home() {
   return (
     <main className="container" >
+      <div><Navbar/></div>
       <section className="lines">
        <section className="line"/>
-          <div><Navbar/></div>
   <div className="line"></div>
   <div className="line"></div>
         </section>

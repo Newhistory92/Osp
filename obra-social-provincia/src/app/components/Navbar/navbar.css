@@ -168,7 +168,7 @@ h1,h2,h3,h4,h5,h6 {
 .header {
   background: transparent;
   position: absolute;
-  z-index: 3;
+  z-index: 80;
   margin-left: 0;
   margin-right: 0;
   height: 17%;
