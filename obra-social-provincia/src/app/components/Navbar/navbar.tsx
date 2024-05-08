@@ -175,8 +175,8 @@ const Navbar: React.FC = () => {
             <a href="#two" className="link link-theme link-arrow animate-zoom-in animate-duration-1000" data-toggle="dropdown">Afiliaciones</a>
             {publicaciones.map((publicacion: Publicacion, id: number) => (
                  publicacion.published === "afiliaciones" && (
-            <div className="dropdown-menu">
-              <a key={id} href="#" className="dropdown-item" onClick={() => handleTitleClick(publicacion.contenido)}>
+            <div className="dropdown-menu" key={id}>
+              <a href="#" className="dropdown-item" onClick={() => handleTitleClick(publicacion.contenido)}>
                 {publicacion.titulo}
               </a>
             </div>
@@ -188,8 +188,8 @@ const Navbar: React.FC = () => {
           <a href="#two" className="link link-theme link-arrow animate-zoom-in animate-duration-1000" data-toggle="dropdown">Farmacia</a>
           {publicaciones.map((publicacion: Publicacion, id: number) => (
                  publicacion.published === "farmacia" && (
-            <div className="dropdown-menu">
-              <a key={id} href="#" className="dropdown-item" onClick={() => handleTitleClick(publicacion.contenido)}>
+            <div className="dropdown-menu" key={id}>
+              <a href="#" className="dropdown-item" onClick={() => handleTitleClick(publicacion.contenido)}>
                 {publicacion.titulo}
               </a>
             </div>
@@ -200,8 +200,8 @@ const Navbar: React.FC = () => {
           <a href="#two" className="link link-theme link-arrow animate-zoom-in animate-duration-1000" data-toggle="dropdown">Prestadores</a>
           {publicaciones.map((publicacion: Publicacion, id: number) => (
                  publicacion.published === "prestadores" && (
-            <div className="dropdown-menu">
-              <a key={id} href="#" className="dropdown-item" onClick={() => handleTitleClick(publicacion.contenido)}>
+            <div className="dropdown-menu" key={id}>
+              <a href="#" className="dropdown-item" onClick={() => handleTitleClick(publicacion.contenido)}>
                 {publicacion.titulo}
               </a>
             </div>
@@ -212,8 +212,8 @@ const Navbar: React.FC = () => {
           <a href="#two" className="link link-theme link-arrow animate-zoom-in animate-duration-1000" data-toggle="dropdown">Servicios</a>
            {publicaciones.map((publicacion: Publicacion, id: number) => (
                   publicacion.published === "servicios" && (
-            <div className="dropdown-menu">
-              <a key={id} href="#" className="dropdown-item" onClick={() => handleTitleClick(publicacion.contenido)}>
+            <div className="dropdown-menu" key={id}>
+              <a href="#" className="dropdown-item" onClick={() => handleTitleClick(publicacion.contenido)}>
                 {publicacion.titulo}
               </a>
             </div>
