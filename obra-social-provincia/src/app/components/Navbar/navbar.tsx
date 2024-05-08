@@ -118,12 +118,13 @@ const Navbar: React.FC = () => {
         <>
          
           <div className="container_button">
-            <a href="/sign-in" className="btn">
+            <a href="page/sign-in" className="btn">
               <svg viewBox="0 0 277 62"> 
                 <defs>
                   <linearGradient id="grad1">
-                    <stop offset="0%" stop-color="#d45129"/>
-                    <stop offset="100%" stop-color="#c66820" />
+                  <stop offset="0%" stopColor="#ca5633"/>
+                  <stop offset="50%" stopColor="#E53F30" />
+                    <stop offset="100%" stopColor="#c0ca33" />
                   </linearGradient>
                 </defs>
                 <rect x="5" y="5" rx="25" fill="none" stroke="url(#grad1)" width="266" height="50"></rect>
@@ -134,12 +135,13 @@ const Navbar: React.FC = () => {
           
           
           <div className="container_button">
-            <a href="/sign-up" className="btn">
+            <a href="page/sign-up" className="btn">
               <svg viewBox="0 0 277 62"> 
                 <defs>
                   <linearGradient id="grad1">
-                    <stop offset="0%" stop-color="#d45129"/>
-                    <stop offset="100%" stop-color="#c66820" />
+                  <stop offset="0%" stopColor="#ca5633"/>
+                  <stop offset="50%" stopColor="#E53F30" />
+                    <stop offset="100%" stopColor="#c0ca33" />
                   </linearGradient>
                 </defs>
                 <rect x="5" y="5" rx="25" fill="none" stroke="url(#grad1)" width="266" height="50"></rect>
@@ -159,8 +161,12 @@ const Navbar: React.FC = () => {
 
   return (
     <header className={`header ${isScrolled ? 'fixed-top' : ''}`}>
-      <div className="logo-container animate-slide-in-left animate-duration-1000">
-  <Image src={Logo} alt="Obra Social Provincia" width={200} height={80} />
+     <div className="logo-container animate-slide-in-left animate-duration-1000">
+  <div className="text-container">
+    <h2>San Juan</h2>
+    <h3>Gobierno</h3>
+  </div>
+  <Image src={Logo} alt="Obra Social Provincia" priority />
 </div>
       <a className="logo animate-fade-in-down animate-duration-1000" href=".page-top">Obra Social Provincia</a>
       <input className="menu-btn" type="checkbox" id="menu-btn" />
