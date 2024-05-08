@@ -1,36 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-interface UserState {
-  currentUser: UserInfo | null;
-  loading: boolean;
-  errorMessage: string | null;
-}
-
-export interface UserInfo {
-  operador: any;
-  splice(arg0: number[]): unknown;
-  
-  id: string;
-  name: string;
-  apellido?: string;
-  email: string;
-  checkedphone:boolean;
-  phone: string;
-  phoneopc?: string;
-  imageUrl: string;
-  matricula?: string;
-  dni?: string;
-  numeroOperador?: string;
-  role: string;
-  address: string;
-  prestador:string
-  especialidad?: string;
-  especialidad2?:string;
-  especialidad3?:string;
-  dependencia?: string;
-  tipo:string
-  descripcion:string
-}
+import { UserState,UserInfo } from '@/app/interfaces/interfaces';
 
 
 

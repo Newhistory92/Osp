@@ -1,19 +1,9 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { Publicacion,NavbarState } from '@/app/interfaces/interfaces';
 
 
 
-interface Publicacion {
-  titulo: string;
-  contenido: string;
-  published: string;
-}
-// Define el estado para navbar
-interface NavbarState {
-  showPrestadores: boolean;
-  selectedContent: string | null; 
-  showWelcome: boolean;
-  publicaciones: Publicacion[];
-}
+
 
 const initialNavbarState: NavbarState = {
   showPrestadores: false,

@@ -8,7 +8,7 @@ import "./navbar.css"
 import {useAppDispatch,useAppSelector} from "../../hooks/StoreHook"
 import {setSelectedContent,setPublicaciones,setShowPrestadores} from '../../redux/Slice/navbarSlice'
 import ButtonUser from '../UserComponent/ButtomUser';
-
+import { Publicacion } from '@/app/interfaces/interfaces';
 
 
 
