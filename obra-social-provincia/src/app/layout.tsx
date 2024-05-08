@@ -4,11 +4,10 @@
 import { Provider } from "react-redux";
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from "./redux/Store/store";
-import { ClerkProvider, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs'
+import { ClerkProvider} from '@clerk/nextjs'
 import { dark } from '@clerk/themes';
 import '@fontsource-variable/onest';
 import "./globals.css";
-
 
 
 export default function RootLayout({
