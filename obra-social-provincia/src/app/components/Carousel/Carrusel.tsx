@@ -1,39 +1,41 @@
-"use client"
-
-import { SetStateAction, useState } from 'react';
+'use client'
 import Carousel from 'react-bootstrap/Carousel';
-import 'bootstrap/dist/css/bootstrap.min.css';
-function ControlledCarousel() {
-  const [index, setIndex] = useState(0);
+import "./Carrusel.css"
 
-  const handleSelect = (selectedIndex: SetStateAction<number>) => {
-    setIndex(selectedIndex);
-  };
+
+
+
+function ControlledCarousel() {
+
 
   return (
-    <Carousel className='' activeIndex={index} onSelect={handleSelect}>
-      <Carousel.Item>
-        <img src="https://intef.es/wp-content/uploads/2021/12/32_RED_RRSS_D%C3%ADa-Mundial-de-la-Salud.jpg" alt={''} width={1000} height={300} />
-        <Carousel.Caption>
-          <h3>First slide label</h3>
-          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img src="https://statics-cuidateplus.marca.com/cms/styles/natural/azblob/salud-cardiovascular-ni%C3%B1os.jpg.webp?itok=n4Gpfjz-" alt={''} width={1000} height={300} />
-        <Carousel.Caption>
-          <h3>Second slide label</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-      <Carousel.Item>
-        <img src="https://defensoria.org.ar/wp-content/uploads/2022/11/salud.webp" alt={''} width={1000} height={300} />
-        <Carousel.Caption>
-          <h3>Third slide label</h3>
-          <p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>
-        </Carousel.Caption>
-      </Carousel.Item>
-    </Carousel>
+    <Carousel data-bs-theme="dark">
+    <Carousel.Item interval={1000}>
+      <img src="https://i.pinimg.com/564x/79/69/da/7969da539aa5937622aa1cc9193943d2.jpg" alt={''}  />
+      <Carousel.Caption>
+                <h2>Third slide label</h2>
+                <h1>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</h1>
+                <h4></h4>
+      </Carousel.Caption>
+    </Carousel.Item>
+    <Carousel.Item interval={500}>
+      <img src="https://i.pinimg.com/564x/2a/67/df/2a67df349af5a38ded2018f391421863.jpg" alt={''}  />
+      <Carousel.Caption>
+        <h3>Second slide label</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+      </Carousel.Caption>
+    </Carousel.Item>
+    <Carousel.Item>
+      <img src="https://i.pinimg.com/564x/97/cd/ff/97cdff818907968caffe0bf8b977dc20.jpg" alt={''}  />        
+      <Carousel.Caption>
+        <h3>Third slide label</h3>
+        <p>
+          Praesent commodo cursus magna, vel scelerisque nisl consectetur.
+        </p>
+      </Carousel.Caption>
+    </Carousel.Item>
+  </Carousel>
+   
   );
 }
 

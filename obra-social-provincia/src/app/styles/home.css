@@ -1,11 +1,12 @@
 .container {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    grid-template-rows: minmax(100px, 150px) minmax(155px, 300px) minmax(1000px, 1fr) minmax(150px, 1fr) repeat(2, minmax(100px, 200px)) 1fr;
+    
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: minmax(100px, 150px) minmax(155px, 350px) minmax(1000px, 1fr) minmax(150px, 1fr) repeat(2, minmax(100px, 200px)) 1fr;
     min-height: 100vh;
     grid-template-areas:
       "register  register  register"
-      "curusel curusel curusel"
+      "curusel curusel curusel "
       "contenido  contenido contenido"
       "card card card"
       "hero hero  hero"
@@ -14,7 +15,7 @@
   
   @media (max-width: 475px) {
     .container {
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       grid-template-rows: 450px 1000px 150px 200px;
       grid-template-areas:
         "register  register  register"
@@ -29,13 +30,15 @@
   }
   
   .container div:nth-child(2) {
+   
+    
     grid-area: curusel;
   }
   
   .container div:nth-child(3) {
 
     grid-area: contenido;
-    clip-path: polygon(0 0, 100% 0, 100% 75%, 50% 100%, 50% 100%, 0 75%);
+    
   }
   
   .container div:nth-child(4) {
@@ -51,6 +54,12 @@
     grid-area: footer;
   }
   
+  body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
   .wave {
     background: rgb(255 255 255 / 25%);
     border-radius: 1000% 1000% 0 0;
