@@ -2,7 +2,7 @@
     display: grid;
     
     grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: minmax(100px, 150px) minmax(155px, 350px) minmax(1000px, 1fr) minmax(150px, 1fr) repeat(2, minmax(100px, 200px)) 1fr;
+    grid-template-rows: minmax(100px, 150px) minmax(400px,500px) minmax(1000px, 1fr) minmax(150px, 1fr) repeat(2, minmax(100px, 200px)) 1fr;
     min-height: 100vh;
     grid-template-areas:
       "register  register  register"
@@ -30,8 +30,6 @@
   }
   
   .container div:nth-child(2) {
-   
-    
     grid-area: curusel;
   }
   

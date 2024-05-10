@@ -23,10 +23,8 @@
     "@types/redux-logger": "^3.0.13",
     "bootstrap": "^5.3.3",
     "html-react-parser": "^5.1.10",
-    "jquery": "^3.7.1",
     "material-ui-colors": "^1.0.0",
     "next": "14.2.3",
-    "owl.carousel": "^2.3.4",
     "react": "^18",
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18",
@@ -39,9 +37,7 @@
     "sass": "^1.71.1"
   },
   "devDependencies": {
-    "@types/jquery": "^3.5.30",
     "@types/node": "^20",
-    "@types/owl.carousel": "^2.3.6",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",
