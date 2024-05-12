@@ -46,3 +46,4 @@ export interface NavbarState {
     loading: boolean;
     errorMessage: string | null;
   }
+

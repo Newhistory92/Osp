@@ -49,6 +49,8 @@ function ControlledCarousel() {
   </Carousel>
    
   );
+
 }
+
 
 export default ControlledCarousel;
