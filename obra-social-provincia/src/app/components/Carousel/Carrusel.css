@@ -23,9 +23,10 @@
 .carousel-item {
     position: relative;
     display: none;
-    height:80vh;
+    height:70vh;
     float: left;
     width: 100%;
+    overflow: hidden;
     margin-right: -100%;
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;

@@ -1,7 +1,7 @@
 
 
 import React, { useState, useEffect, Suspense } from "react";
-import "./styles/buttomAvatar.css"
+import "./Styles/buttomAvatar.css"
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 import MedicalInformationOutlinedIcon from '@mui/icons-material/MedicalInformationOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';

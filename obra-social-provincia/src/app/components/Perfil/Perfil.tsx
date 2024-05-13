@@ -1,11 +1,11 @@
 import { Col, Row, Container } from 'react-bootstrap';
 import { useAppSelector } from "../../hooks/StoreHook";
-import PageHeading from '../../widgets/PageHeading';
 import ProfileHeader from './ProfileHeader';
-import  UserCard from "../cards/Card";
+import  UserCard from "../Cards/Card";
+import { UserInfo } from '@/app/interfaces/interfaces';
 
 const Profile = () => {
-  const currentUser = useAppSelector(state => state.user.currentUser);
+  const currentUser = useAppSelector((state: { user: { currentUser: UserInfo | null; }; }) => state.user.currentUser);
 console.log("este estado global esta en el perfil",currentUser)
   if (!currentUser) {
     return <div>Loading...</div>;
@@ -16,22 +16,14 @@ console.log("este estado global esta en el perfil",currentUser)
 
   return (
     <Container fluid className="p-6">
-      {/* Page Heading */}
-      <PageHeading heading="Perfil"/>
-
-      {/* Profile Header  */}
-      {/* Pasar los datos del usuario al componente ProfileHeader */}
       <ProfileHeader 
         imageUrl={userData.imageUrl} 
         name={userData.name} 
         apellido={userData.apellido} 
         email={userData.email} 
       />
-
-      {/* content */}
       <div className="py-6">
         <Row>
-          {/* About Me */}
           <UserCard 
             id={userData.id}
             numeroOperador={userData.numeroOperador}
@@ -48,21 +40,8 @@ console.log("este estado global esta en el perfil",currentUser)
             tipo={userData.tipo}
             descripcion={userData.descripcion}
             checkedphone={userData.checkedphone}
-           
           />
-
-          {/* Projects Contributions */}
-          {/* <ProjectsContributions /> */}
-
-          {/* Recent From Blog */}
-          {/* <RecentFromBlog /> */}
-
           <Col xl={6} lg={12} md={12} xs={12} className="mb-6">
-            {/* My Team */}
-            {/* <MyTeam /> */}
-
-            {/* Activity Feed */}
-            {/* <ActivityFeed /> */}
           </Col>
         </Row>
       </div>

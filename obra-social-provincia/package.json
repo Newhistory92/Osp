@@ -26,6 +26,7 @@
     "@types/google.maps": "^3.55.4",
     "@types/redux-logger": "^3.0.13",
     "autosuggest-highlight": "^3.3.4",
+    "axios": "^1.6.8",
     "bootstrap": "^5.3.3",
     "html-react-parser": "^5.1.10",
     "material-ui-colors": "^1.0.0",

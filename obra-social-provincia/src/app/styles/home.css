@@ -36,6 +36,7 @@
   
   .container-home  div:nth-child(3) {
 background-color: aqua;
+     margin-top: 3px;
     grid-area: contenido;
     
   }

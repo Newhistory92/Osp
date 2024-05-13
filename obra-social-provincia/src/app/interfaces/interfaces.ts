@@ -76,3 +76,23 @@ export interface Especialidad {
   id: number;
   nombre: string;
 }
+
+export interface UserCardProps {
+  id:string,
+  role: string;
+  dependencia?: string;
+  dni?: string;
+  phone?: string;
+  phoneopc?: string;
+  matricula?: string;
+  especialidad?: string;
+  especialidad2?: string; 
+  especialidad3?: string;
+  puntuacion?: string;
+  descripcion?: string;
+  tipo?: string;
+  numeroOperador?: string;
+  address?: string;
+  checkedphone:boolean,
+
+}
