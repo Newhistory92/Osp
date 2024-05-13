@@ -1,0 +1,62 @@
+[
+    {
+      "name": "Dr. John Smith",
+      "matricula": "12345",
+      "especialidad": "Cardiología",
+      "id": "1"
+    },
+    {
+      "name": "Dr. Sarah Johnson",
+      "matricula": "54321",
+      "especialidad": "Dermatología",
+      "id": "2"
+    },
+    {
+      "name": "Dr. Michael Williams",
+      "matricula": "6789",
+      "especialidad": "Pediatría",
+      "id": "3"
+    },
+    {
+      "name": "Dr. Jessica Brown",
+      "matricula": "98765",
+      "especialidad": "Ginecología",
+      "id": "4"
+    },
+    {
+      "name": "Dr. David Miller",
+      "matricula": "4321",
+      "especialidad": "Oftalmología",
+      "id": "5"
+    },
+    {
+      "name": "Dr. Olivia Davis",
+      "matricula": "87654",
+      "especialidad": "Psiquiatría",
+      "id": "6"
+    },
+    {
+      "name": "Dr. James Wilson",
+      "matricula": "9876",
+      "especialidad": "Ortopedia",
+      "id": "7"
+    },
+    {
+      "name": "Dr. Emily Taylor",
+      "matricula": "1234",
+      "especialidad": "Endocrinología",
+      "id": "8"
+    },
+    {
+      "name": "Dr. Benjamin Anderson",
+      "matricula": "5678",
+      "especialidad": "Neurología",
+      "id": "9"
+    },
+    {
+      "name": "Dr. Mia Martinez",
+      "matricula": "34567",
+      "especialidad": "Oncología",
+      "id": "10"
+    }
+  ]

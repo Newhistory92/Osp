@@ -1,0 +1,119 @@
+.avatar-button {
+    background: transparent;
+    border: none;
+    outline: none;
+    position: relative;
+    overflow: hidden;
+    width: 40px; /* Ajusta el ancho según sea necesario */
+    height: 40px; /* Ajusta la altura según sea necesario */
+    padding: 0;
+    margin: 0;
+    border-radius: 1.5em;
+    transition: opacity 300ms;
+  }
+  
+  .avatar-button:after,
+  .avatar-button:before {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    opacity: 0;
+  }
+  
+  .avatar-button:after {
+    top: 0;
+  bottom: 0;
+  box-shadow: rgba(212, 207, 201, 0.75) 0 0 15px 2px;
+  background: #d4cfc9;
+  height: 2px;
+  }
+  
+  .avatar-button:before {
+    top: 0;
+    bottom: 0;
+    background: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAGCAYAAAAL+1RLAAAAF0lEQVQIW2NkwAIYgWKS6OIgQQxAoUoAE4AAUnD/0ugAAAAASUVORK5CYII=) repeat;
+  }
+  
+  .avatar-button:hover {
+    -webkit-animation: glitch 750ms infinite;
+  }
+  .avatar-button:hover:before {
+    opacity: 1;
+  }
+  
+  .avatar-button:hover:after {
+    animation: scan 2s infinite;
+  opacity: 1;
+  }
+  
+  @keyframes glitch {
+    0% {
+      transform: skewX(0deg);
+      opacity: 1;
+    }
+    5% {
+      transform: skewX(2deg);
+      opacity: 0.75;
+    }
+    10% {
+      transform: skewX(0deg);
+      opacity: 1;
+    }
+    15% {
+      transform: skewX(-5deg);
+      opacity: 0.75;
+    }
+    20% {
+      transform: skewX(0deg);
+      opacity: 1;
+    }
+    45% {
+      transform: skewX(3deg);
+      opacity: 0.75;
+    }
+    50% {
+      transform: skewX(0deg);
+      opacity: 1;
+    }
+    55% {
+      transform: skewX(0deg);
+      opacity: 0.75;
+    }
+    60% {
+      transform: skewX(0deg);
+      opacity: 1;
+    }
+    75% {
+      transform: skewX(2deg);
+      opacity: 0.75;
+    }
+    80% {
+      transform: skewX(0deg);
+    }
+    85% {
+      transform: skewX(-8deg);
+      opacity: 0.75;
+    }
+    90% {
+      transform: skewX(0deg);
+      opacity: 1;
+    }
+    100% {
+      transform: skewX(0deg);
+    }
+  }
+  
+  
+  @keyframes scan {
+    0% {
+      top: 0%;
+    }
+    50% {
+      top: 97%;
+    }
+    100% {
+      top: 0%;
+    }
+  }
+  

@@ -1,0 +1,82 @@
+[
+    {
+      "id": "1",
+      "motivo": "Negligencia en el seguimiento de síntomas: Después de visitar a mi médico varias veces por síntomas persistentes, no se realizaron pruebas adicionales ni se exploraron otras posibles causas. Eventualmente, me diagnosticaron una enfermedad grave que podría haberse tratado más efectivamente si se hubiera detectado a tiempo.",
+      "autor": "John Doe",
+      "createdAt": "25/04/2023",
+      "prestador": "Jane Smith",
+      "status": "Leido"
+    },
+    {
+      "id": "2",
+      "motivo": "Falta de comunicación sobre el plan de tratamiento: Después de recibir un diagnóstico preocupante, mi médico no me proporcionó información clara sobre las opciones de tratamiento disponibles ni discutió los posibles efectos secundarios o riesgos asociados con el tratamiento recomendado.",
+      "autor": "Alice Johnson",
+      "createdAt": "05/10/2023",
+      "prestador": "Bob Wilson",
+      "status": "Nuevo"
+    },
+    {
+      "id": "3",
+      "motivo": "Denuncias",
+      "autor": "Emily Brown",
+      "createdAt": "17/01/2023",
+      "prestador": "David Davis",
+      "status": "Pendiente"
+    },
+    {
+      "id": "4",
+      "motivo": "Diagnóstico erróneo: Mi médico diagnosticó incorrectamente mi condición médica, lo que resultó en un retraso en el tratamiento adecuado y un empeoramiento de mis síntomas. Solo después de buscar una segunda opinión se identificó correctamente mi enfermedad.",
+      "autor": "Sarah Miller",
+      "createdAt": "12/08/2023",
+      "prestador": "Michael Thompson",
+      "status": "No solucionado"
+    },
+    {
+      "id": "5",
+      "motivo": "Atención apresurada y falta de empatía: Durante mis consultas médicas, mi médico parecía apresurado y no mostraba interés en escuchar mis preocupaciones o responder a mis preguntas. Su actitud descuidada y falta de empatía contribuyeron a mi sensación de incomodidad y desconfianza en su atención médica.",
+      "autor": "Oliver Garcia",
+      "createdAt": "12/12/2023",
+      "prestador": "Sophia Lee",
+      "status": "Leido"
+    },
+    {
+      "id": "6",
+      "motivo": "Prescripción excesiva de medicamentos: En lugar de explorar opciones de tratamiento alternativas, mi médico recetó una gran cantidad de medicamentos sin considerar los posibles efectos secundarios o el riesgo de dependencia. Esta práctica resultó en una mala gestión de mi salud y un deterioro de mi calidad de vida.",
+      "autor": "Ethan Martinez",
+      "createdAt": "07/08/2023",
+      "prestador": "Isabella Anderson",
+      "status": "Nuevo"
+    },
+    {
+      "id": "7",
+      "motivo": "Falta de seguimiento después de un procedimiento: Después de someterme a un procedimiento médico, mi médico no realizó un seguimiento adecuado para monitorear mi progreso o responder a mis preocupaciones postoperatorias. Esta falta de seguimiento contribuyó a mi ansiedad y confusión sobre mi proceso de recuperación.",
+      "autor": "Ava Wilson",
+      "createdAt": "25/07/2023",
+      "prestador": "James Harris",
+      "status": "Pendiente"
+    },
+    {
+      "id": "8",
+      "motivo": "Desinformación sobre los riesgos de un procedimiento: Antes de someterme a una cirugía, mi médico minimizó los posibles riesgos asociados con el procedimiento y no me proporcionó una comprensión completa de las posibles complicaciones. Como resultado, me enfrenté a complicaciones inesperadas y una recuperación prolongada después de la cirugía.",
+      "autor": "Mia Taylor",
+      "createdAt": "25/06/2023",
+      "prestador": "Benjamin Clark",
+      "status": "Leido"
+    },
+    {
+      "id": "9",
+      "motivo": "Falta de coordinación entre especialistas: Durante mi tratamiento médico, hubo una falta de comunicación y coordinación entre los diferentes especialistas involucrados en mi atención. Esta falta de colaboración resultó en un enfoque desorganizado y fragmentado para mi cuidado ",
+      "autor": "Lucas Lewis",
+      "createdAt": "03/03/2024",
+      "prestador": "Emma Walker",
+      "status": "Otros"
+    },
+    {
+      "id": "10",
+      "motivo": "Trato discriminatorio: Experimenté trato discriminatorio por parte de mi médico debido a mi género, raza o edad. Esta falta de profesionalismo y respeto socavó mi confianza en la relación médico-paciente y me hizo sentir marginado y poco valorado como paciente.",
+      "autor": "Liam Turner",
+      "createdAt": "25/05/2023",
+      "prestador": "Alexander Green",
+      "status": "Pendiente"
+    }
+]

@@ -47,3 +47,32 @@ export interface NavbarState {
     errorMessage: string | null;
   }
 
+export interface Prestador {
+  id:string,
+  imageUrl: string;
+  name: string;
+  apellido: string;
+  descripcion: string;
+  phone: string;
+  phoneopc: string;
+  address: string;
+  especialidad:string,
+  especialidad2:string,
+  especialidad3:string,
+  tipo: string,
+  email:string,
+  checkedphone:boolean,
+  coordinatesLat:Number, 
+  coordinatesLon: Number,
+}
+
+
+export interface DescriptionProps {
+  initialDescription: string;
+  onSave: (descripcion: string) => void;
+}
+
+export interface Especialidad {
+  id: number;
+  nombre: string;
+}

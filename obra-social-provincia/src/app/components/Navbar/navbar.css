@@ -528,16 +528,21 @@ header.fixed-top .menu-icon .navicon {
   
 
   
-  @media (max-width: 875px) {
+  @media (min-width: 875px) {
      .header {
       height: 25%;
     }
     
   }
-      @media only screen and (min-width: 250px) {
+      @media only screen and (min-width: 350px) {
         
-        .container {
-          width: 80%;
+        .header {
+          height: 30%;
+        }
+        .header .container_button {
+         
+          margin-top: 3px; 
+          margin-right: 10px;
         }
         h1 {
           font-size: 30px;
@@ -549,9 +554,7 @@ header.fixed-top .menu-icon .navicon {
         
       @media only screen and (min-width:768px) {
       
-        .container {
-          width: 80%;
-        }
+       
         h1 {
           font-size: 48px;
         }
@@ -583,3 +586,16 @@ header.fixed-top .menu-icon .navicon {
       
       }
   
+
+      @media only screen and (min-width:525px) {
+        .header {
+          height: 25%;
+        }
+        .header .container_button {
+         
+          margin-top: 3px; 
+          margin-right: 10px;
+        }
+      }
+
+      

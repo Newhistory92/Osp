@@ -1,0 +1,54 @@
+[
+    { 
+      "id":"256",
+      "name": "John Doe",
+      "dependencia": "Ministerio de Eduacion",
+      "dni": "12345678"
+    },
+    { "id":"5987",
+      "name": "Jane Smith",
+      "dependencia": "Ministerio de Salud",
+      "dni": "87654321"
+    },
+    { 
+      "id":"15",
+      "name": "Michael Johnson",
+      "dependencia": "Municipalidad de Capital",
+      "dni": "45678912"
+    },
+    { "id":"285",
+      "name": "Emily Davis",
+      "dependencia": "Ministerio de Hacienda",
+      "dni": "98765432"
+    },
+    { "id":"26",
+      "name": "David Brown",
+      "dependencia": "Policia",
+      "dni": "21436587"
+    },
+    { "id":"2184",
+      "name": "Sarah Wilson",
+      "dependencia": "Ministerio de Desarrollo",
+      "dni": "13579246"
+    },
+    { "id":"2152",
+      "name": "Daniel Taylor",
+      "dependencia": "Penitenciario",
+      "dni": "64285739"
+    },
+    { "id":"8945",
+      "name": "Olivia Clark",
+      "dependencia": "Ministerio de Cultura",
+      "dni": "37962458"
+    },
+    { "id":"5879",
+      "name": "Christopher Lewis",
+      "dependencia": "Secretaria de Deporte",
+      "dni": "86593724"
+    },
+    { "id":"22967",
+      "name": "Sophia Martinez",
+      "dependencia": "Casa de Gobierno",
+      "dni": "29754863"
+    }
+  ]
