@@ -33,10 +33,9 @@ export default withMT({
     },
   },
   plugins: [
-    nextui(),
+ 
     animations,
   ],
 });
-
 
 

@@ -3,6 +3,7 @@ import "./styles/home.css"
 import Navbar from "./components/Navbar/navbar";
 import Carrusel from "./components/Carousel/Carrusel"
 import Contenido from "./components/Contenido/Contenido";
+import CardMenu from "./components/CardMenu/CardMenu";
 
 export default function Home() {
   return (
@@ -10,7 +11,7 @@ export default function Home() {
       <div><Navbar/></div>
       <div><Carrusel/></div>
       <div> <Contenido/></div>
-      <div></div>
+      <div>< CardMenu /></div>
       <div></div>
       <div></div>
       <section className="lines">

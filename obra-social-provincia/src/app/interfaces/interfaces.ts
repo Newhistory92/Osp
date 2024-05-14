@@ -1,4 +1,4 @@
-
+import React from "react";
 
 export interface Publicacion {
     id:Number;
@@ -62,8 +62,6 @@ export interface Prestador {
   tipo: string,
   email:string,
   checkedphone:boolean,
-  coordinatesLat:Number, 
-  coordinatesLon: Number,
 }
 
 
@@ -95,4 +93,18 @@ export interface UserCardProps {
   address?: string;
   checkedphone:boolean,
 
+}
+
+export interface PrestadorFilter {
+  id: string;
+  name: string;
+  apellido: string;
+}
+
+
+export interface PaginationButtonsProps {
+  page: number;
+  setPage: React.Dispatch<React.SetStateAction<number>>;
+  maxPage: number;
+  data: any[];
 }

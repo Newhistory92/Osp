@@ -2,7 +2,7 @@ import * as React from 'react';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { styled } from '@mui/system';
-
+import { PrestadorFilter, Prestador } from '@/app/interfaces/interfaces';
 
 const GroupHeader = styled('div')(({ theme }) => ({
   position: 'sticky',
@@ -29,20 +29,16 @@ const GroupItems = styled('ul')({
 });
 
 
-interface Prestador {
-  id: string;
-  name: string;
-  apellido: string;
-}
+
 
 interface FilterUserProps {
-  prestadores: Prestador[];
+  prestadores: PrestadorFilter[];
   openModal: (prestador: Prestador) => void;
 }
 
 const FilterUser: React.FC<FilterUserProps> = ({ prestadores,openModal  }) => {
   const [inputValue, setInputValue] = React.useState('');
-  const [options, setOptions] = React.useState<Prestador[]>([]);
+  const [options, setOptions] = React.useState<PrestadorFilter[]>([]);
 
   React.useEffect(() => {
     filterOptions(inputValue);
@@ -64,6 +60,28 @@ const FilterUser: React.FC<FilterUserProps> = ({ prestadores,openModal  }) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
   };
 
+  const handleOpenModal = (prestadorFilter: PrestadorFilter) => {
+    // Aquí puedes convertir prestadorFilter a Prestador, usando valores predeterminados o buscando los datos faltantes
+    const prestador: Prestador = {
+      ...prestadorFilter,
+      imageUrl: '',       
+      descripcion: '',  
+      phone: '',          
+      phoneopc: '',      
+      address: '',       
+      especialidad: '',   
+      especialidad2: '', 
+      especialidad3: '', 
+      tipo: '',
+      email: '',         
+      checkedphone: false 
+    };
+    openModal(prestador);
+  };
+
+
+
+
   return (
     <Autocomplete
       id="grouped-demo"
@@ -83,7 +101,7 @@ const FilterUser: React.FC<FilterUserProps> = ({ prestadores,openModal  }) => {
       )}
       onChange={(event, value) => {
         if (value) {
-          openModal(value); // Abrir el modal con el prestador seleccionado
+          handleOpenModal(value);
         }
       }}
       inputValue={inputValue}

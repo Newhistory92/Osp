@@ -147,7 +147,7 @@ const perPage = 8;
   
   
  
-  const handleAvatarButtonClick = (prestador) => {
+  const handleAvatarButtonClick = (prestador: React.SetStateAction<Prestador | null>) => {
     setSelectedPrestador(prestador);
     onOpen();
   };
@@ -215,7 +215,7 @@ const perPage = 8;
             </tr>
           </thead>
           <tbody>
-          {filteredData.map(({ id, name, apellido, imageUrl, phone, phoneopc, especialidad, address, tipo, descripcion, checkedphone, especialidad2, especialidad3, coordinatesLat, coordinatesLon }, index) => {
+          {filteredData.map(({ id, name, apellido, imageUrl, phone, phoneopc, especialidad, address, tipo, descripcion, checkedphone, especialidad2, especialidad3 }, index) => {
               const isLast = index === filteredData.length - 1;
                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
  
@@ -224,7 +224,7 @@ const perPage = 8;
                     <td className={classes}>
                     <div className="flex items-center gap-3">
                       <button className="avatar-button"  onClick={() => handleAvatarButtonClick({  id, name, apellido, imageUrl, phone, phoneopc, especialidad, address, tipo,
-                       descripcion,checkedphone,especialidad2,especialidad3, })}>
+                       descripcion,checkedphone,especialidad2,especialidad3,email:"" })}>
                      <Avatar src={imageUrl} alt={apellido} size="sm" />
                      </button>
 
