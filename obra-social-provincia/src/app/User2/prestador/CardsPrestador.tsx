@@ -9,8 +9,7 @@ import { Prestador } from '@/app/interfaces/interfaces';
 
 
 const PrestadorCard: React.FC<Prestador > = ({  id, name, apellido, imageUrl, phone, phoneopc, especialidad, address, tipo,
-    descripcion, email,checkedphone,especialidad2,especialidad3,coordinatesLat, 
-    coordinatesLon }) => {
+    descripcion, email,checkedphone,especialidad2,especialidad3 }) => {
     const [showModal, setShowModal] = useState(false);
     const handleShowModal = () => setShowModal(true);
 
@@ -48,8 +47,6 @@ const PrestadorCard: React.FC<Prestador > = ({  id, name, apellido, imageUrl, ph
                                 <h6 className="text-uppercase fs-5 ls-2"> <AddLocationIcon/>Direccion</h6>
                                 <p className="mb-0">{address}</p>
                                 {/* <MapPrestador coordinatesLat={coordinatesLat as number} coordinatesLon={coordinatesLon as number} /> */}
-
-
                             </Col>
                         </Row>
                     </Card.Body>

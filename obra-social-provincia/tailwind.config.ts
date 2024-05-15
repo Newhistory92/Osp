@@ -3,12 +3,13 @@
 
 import animations from "@midudev/tailwind-animations";
 import withMT from "@material-tailwind/react/utils/withMT";
-import { nextui } from "@nextui-org/react";
+import {nextui} from "@nextui-org/react"
 export default withMT({
   content: [
     "./src/pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./node_modules/@nextui-org/theme/dist/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
     extend: {
@@ -33,7 +34,7 @@ export default withMT({
     },
   },
   plugins: [
- 
+    [nextui()],
     animations,
   ],
 });
