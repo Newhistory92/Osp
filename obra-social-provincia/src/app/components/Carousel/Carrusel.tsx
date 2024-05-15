@@ -11,7 +11,7 @@ function ControlledCarousel() {
   return (
     <Carousel data-bs-theme="dark">
     <Carousel.Item interval={1000}>
-      <img src="https://i.pinimg.com/564x/79/69/da/7969da539aa5937622aa1cc9193943d2.jpg" alt={''}  />
+      <img src="https://i.pinimg.com/564x/a1/ab/41/a1ab4144dd8d6b5a05da36f82156dbfd.jpg" alt={''}  />
       <Carousel.Caption>
       <div className="header-content">
                         <div className="carousel-line "></div>
@@ -23,7 +23,7 @@ function ControlledCarousel() {
       </Carousel.Caption>
     </Carousel.Item>
     <Carousel.Item interval={500}>
-      <img src="https://i.pinimg.com/564x/2a/67/df/2a67df349af5a38ded2018f391421863.jpg" alt={''}  />
+      <img src="https://i.pinimg.com/564x/43/6d/f0/436df0ed55ec0bfa723a8f12299d2cb1.jpg" alt={''}  />
       <Carousel.Caption>
       <div className="header-content">
                         <div className="carousel-line "></div>
@@ -35,7 +35,7 @@ function ControlledCarousel() {
       </Carousel.Caption>
     </Carousel.Item>
     <Carousel.Item>
-      <img src="https://i.pinimg.com/564x/97/cd/ff/97cdff818907968caffe0bf8b977dc20.jpg" alt={''}  />        
+      <img src="https://i.pinimg.com/736x/b4/57/17/b457174d0d1634bde68e79e08473f41f.jpg" alt={''}  />        
       <Carousel.Caption>
       <div className="header-content">
                         <div className="carousel-line "></div>

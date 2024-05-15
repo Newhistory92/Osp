@@ -108,3 +108,14 @@ export interface PaginationButtonsProps {
   maxPage: number;
   data: any[];
 }
+
+
+export interface PartialUserInfo {
+  name: string;
+  matricula: string;
+  especialidad: string;
+  id: string;
+  dni: string;
+  dependencia:string;
+  operador: string
+}

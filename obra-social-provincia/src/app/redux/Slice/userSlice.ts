@@ -1,7 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { UserState,UserInfo } from '@/app/interfaces/interfaces';
-
-
+import { UserState, UserInfo, PartialUserInfo } from '@/app/interfaces/interfaces';
 
 const initialState: UserState = {
   currentUser: null,
@@ -13,20 +11,36 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setCurrentUser(state, action: PayloadAction<UserInfo | null>) {
-      console.log("setCurrentUser action dispatched with payload:", action.payload);
+    setCurrentUser(state, action: PayloadAction<UserInfo>) {
       state.currentUser = action.payload;
     },
+    setPartialCurrentUser(state, action: PayloadAction<PartialUserInfo>) {
+      state.currentUser = {
+        ...state.currentUser,
+        ...action.payload,
+        // Asegúrate de que las propiedades obligatorias están presentes
+        operador: state.currentUser?.operador ?? '',
+        splice: state.currentUser?.splice ?? (() => {}),
+        email: state.currentUser?.email ?? '',
+        checkedphone: state.currentUser?.checkedphone ?? false,
+        phone: state.currentUser?.phone ?? '',
+        imageUrl: state.currentUser?.imageUrl ?? '',
+        role: state.currentUser?.role ?? '',
+        address: state.currentUser?.address ?? '',
+        prestador: state.currentUser?.prestador ?? '',
+        tipo: state.currentUser?.tipo ?? '',
+        descripcion: state.currentUser?.descripcion ?? '',
+      };
+    },
     setLoading(state, action: PayloadAction<boolean>) {
-      console.log("setLoading action dispatched with payload:", action.payload);
       state.loading = action.payload;
     },
     setErrorMessage(state, action: PayloadAction<string | null>) {
-      console.log("setErrorMessage action dispatched with payload:", action.payload);
       state.errorMessage = action.payload;
     },
   },
 });
 
-export const { setCurrentUser, setLoading, setErrorMessage } = userSlice.actions;
+export const { setCurrentUser, setPartialCurrentUser, setLoading, setErrorMessage } = userSlice.actions;
+
 export default userSlice.reducer;

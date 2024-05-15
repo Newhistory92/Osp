@@ -2,7 +2,7 @@
     display: grid;
     
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(100px, 150px) minmax(400px,500px) minmax(1000px, 1fr) minmax(150px, 1fr) repeat(2, minmax(100px, 200px));
+    grid-template-rows: minmax(100px, 150px) minmax(400px,500px) minmax(700px, 1fr) minmax(500px, 1fr) minmax(312px,auto) minmax(550px,auto);
     min-height: 100vh;
     grid-template-areas:
       "register "
@@ -15,14 +15,15 @@
   
   @media (max-width: 570px) {
     .container-home {
-      grid-template-columns: repeat(3, 1fr);
-      grid-template-rows: 450px 1000px 150px 500px 200px;
+      grid-template-columns: 1fr;
+      grid-template-rows: 450px 1000px 350px 700px auto auto ;
       grid-template-areas:
-        "register  register  register"
-        "contenido  contenido contenido"
-        "curusel curusel curusel"
-        "card card card"
-        "hero footer footer";
+        "register  "
+        "contenido  "
+        "curusel "
+        "card "
+        "hero "
+        "footer ";
     }
   }
   
@@ -36,22 +37,23 @@
   }
   
   .container-home  div:nth-child(3) {
-
+    
     grid-area: contenido;
     
   }
   
   .container-home  div:nth-child(4) {
-background-color: aqua;
+  margin-top: 10px;
     grid-area: card;
   }
   
   .container-home  div:nth-child(5) {
+    margin-top: 10px;
     grid-area: hero;
   }
   
   .container-home  div:nth-child(6) {
-    grid-area: footer;
+    grid-area:footer;
   }
   
   body, html {
