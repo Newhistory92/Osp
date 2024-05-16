@@ -420,7 +420,6 @@ header.fixed-top .menu-icon .navicon {
 
   
 }
-
 .header .container_button {
   float: right; 
   margin-top: 3px; 
@@ -430,9 +429,10 @@ header.fixed-top .menu-icon .navicon {
 }
 
 .btn {
-  width: 100%;
-  max-width: 200px; 
-  height: 40px;
+  /* Ajustar el ancho y alto para que se adapte al contenido */
+  width: auto; /* Cambiado de 100% */
+  max-width: none; /* Removido max-width */
+  height: auto; /* Cambiado de 40px */
   display: inline-block; 
   font-size: inherit;
   text-align: center;
@@ -447,19 +447,19 @@ header.fixed-top .menu-icon .navicon {
   right: 0;
   display: flex;
   align-items: center;
+  padding: 0.5em 1em; /* Añadido padding para el contenido */
 }
-
-
-
 
 .btn svg {
   width: 10em; 
   height: 20em;  
-  position: absolute;
-  top: 50%; /* Centra verticalmente el SVG */
-  left: 50%; /* Centra horizontalmente el SVG */
-  transform: translate(-50%, -50%); /* Centra el SVG correctamente */
-
+  position: absolute; 
+  margin: 0 auto; 
+  display: block; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  pointer-events: none;
 }
 
 .btn svg rect {
@@ -476,7 +476,6 @@ header.fixed-top .menu-icon .navicon {
   background-clip: text;
   font-size: 1em; 
   padding: 0.5em 1em;
-
 }
 
 .btn:hover svg rect {

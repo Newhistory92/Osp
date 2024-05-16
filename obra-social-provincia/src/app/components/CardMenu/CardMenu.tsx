@@ -17,12 +17,11 @@ const CardMenu: React.FC = () => {
     const [value, setValue] = React.useState("12345678");
 
 
-    const validateDni = (value: string) => value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
+    const validateDni = (value: string) => /^\d{7,8}$/.test(value);
 
     const isInvalid = React.useMemo(() => {
       if (value === "") return false;
-  
-      return validateDni(value) ? false : true;
+      return !validateDni(value);
     }, [value]);
 
 
@@ -143,18 +142,40 @@ const CardMenu: React.FC = () => {
               <ModalHeader className="flex flex-col gap-1">Obra Social Provincia</ModalHeader>
               <ModalBody>
              
-              <Input type="dni"
-               label="D.N.I" 
-               variant={"underlined"}
+              <Input 
+               type="text"
+               variant="bordered"
                isClearable
-               onClear={() => console.log("input cleared")}
-               className="max-w-xs "
+               onClear={() => setValue("")}
+               classNames={{
+                label: "text-black/50 dark:text-white/90",
+               input: [
+                "bg-transparent",
+                "text-white/90 dark:text-white/90",
+                "placeholder:text-default-700/50 dark:placeholder:text-white/60",
+              ],
+              innerWrapper: "bg-transparent",
+              inputWrapper: [
+                "shadow-xl",
+                "bg-default-200/50",
+                "dark:bg-default/60",
+                "backdrop-blur-xl",
+                "backdrop-saturate-200",
+                "hover:bg-default-200/70",
+                "dark:hover:bg-default/70",
+                "group-data-[focus=true]:bg-default-200/50",
+                "dark:group-data-[focus=true]:bg-default/60",
+                "!cursor-text",
+              ],
+            }}
                placeholder="Ingre el DNI del Paciente"
                value={value}
                isInvalid={isInvalid}
               color={isInvalid ? "danger" : "success"}
               errorMessage={isInvalid && "DNI Invalido"}
               onValueChange={setValue} />
+
+              
               {publicaciones.map((publicacion) => {
             if (publicacion.published === "formularioconico") {
               return renderContentWithVideos(publicacion.contenido);
@@ -167,7 +188,7 @@ const CardMenu: React.FC = () => {
                 <Button color="primary" variant="light" onPress={onClose}>
                   Close
                 </Button>
-                <Button className="bg-[#6f4ef2] shadow-lg shadow-indigo-500/20" onPress={onClose}>
+                <Button className="bg-[#FE8400] shadow-lg shadow-indigo-500/20" onPress={onClose}>
                   Imprimir
                 </Button>
               </ModalFooter>
