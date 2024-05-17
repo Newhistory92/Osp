@@ -31,7 +31,7 @@ const UserCard: React.FC<UserCardProps> = ({
   dependencia,
   dni,
   phone,
-  phoneopc,
+  phoneOpc,
   matricula,
   especialidad,
   especialidad2,
@@ -186,7 +186,7 @@ const handleDescriptionSave = (newDescription: string) => {
                       label="Publicar Telefono"
                     />
                   </FormGroup>
-                  <Typography><PhoneAndroidIcon/>Telefono Publico: {phoneopc}</Typography>
+                  <Typography><PhoneAndroidIcon/>Telefono Publico: {phoneOpc}</Typography>
                   <Box component="form" sx={{ '& > :not(style)': { m: 1, width: '15ch' }, }} noValidate autoComplete="off">
                     <TextField id="standard-basic" label="N° de Telefono" variant="standard" onChange={handleTelefonoPublicoChange} />
                   </Box>

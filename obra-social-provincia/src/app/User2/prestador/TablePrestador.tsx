@@ -215,7 +215,7 @@ const perPage = 8;
             </tr>
           </thead>
           <tbody>
-          {filteredData.map(({ id, name, apellido, imageUrl, phone, phoneopc, especialidad, address, tipo, descripcion, checkedphone, especialidad2, especialidad3 }, index) => {
+          {filteredData.map(({ id, name, apellido, imageUrl, phone, phoneOpc, especialidad, address, tipo, descripcion, checkedphone, especialidad2, especialidad3 }, index) => {
               const isLast = index === filteredData.length - 1;
                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
  
@@ -223,7 +223,7 @@ const perPage = 8;
                   <tr key={name}>
                     <td className={classes}>
                     <div className="flex items-center gap-3">
-                      <button className="avatar-button"  onClick={() => handleAvatarButtonClick({  id, name, apellido, imageUrl, phone, phoneopc, especialidad, address, tipo,
+                      <button className="avatar-button"  onClick={() => handleAvatarButtonClick({  id, name, apellido, imageUrl, phone, phoneOpc, especialidad, address, tipo,
                        descripcion,checkedphone,especialidad2,especialidad3,email:"" })}>
                      <Avatar src={imageUrl} alt={apellido} size="sm" />
                      </button>
@@ -299,7 +299,7 @@ const perPage = 8;
                           <td className="align-middle ">
                          {checkedphone && (
                         <> <LocalPhoneOutlinedIcon className="mr-2" />{phone}<ChevronRightOutlinedIcon fontSize="small"/></>)}
-                         {phoneopc && ( <><LocalPhoneOutlinedIcon className="mr-2" /> {phoneopc} </>   )}
+                         {phoneOpc && ( <><LocalPhoneOutlinedIcon className="mr-2" /> {phoneOpc} </>   )}
                           </td>
                         </Typography>
                       </div>

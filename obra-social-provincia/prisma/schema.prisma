@@ -1,0 +1,145 @@
+// para ver los modelos despues de npx prisma studio- entrar a http://localhost:5555
+//npx prisma migrate dev --name initgenerator client {
+generator client {
+  provider = "prisma-client-js"
+}
+
+
+datasource db {
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL")
+  directUrl = env("POSTGRES_URL_NON_POOLING")
+}
+
+model Afiliado {
+  id              String          @id @unique
+  name            String          @db.VarChar(20)
+  apellido        String          @db.VarChar(20)
+  email           String          @db.VarChar(200) @unique
+  password        String          @db.VarChar(200)
+  imageUrl        String          @db.VarChar(800)
+  dni             String          @db.VarChar(8) @unique
+  phone           String          @db.VarChar(13)
+  address         String?         @db.VarChar(200)
+  coordinatesLat  Int?
+  coordinatesLon  Int?
+  dependencia     String?
+  role            Role?           @default(USER)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  denuncias       Denuncia[]
+  opiniones       Opinion[]
+  notificaciones  Notificacion[]
+}
+
+model Prestador {
+  id              String          @id @unique
+  name            String          @db.VarChar(20)
+  apellido        String          @db.VarChar(20)
+  email           String          @db.VarChar(200) @unique
+  password        String          @db.VarChar(200)
+  phone           String          @db.VarChar(13)
+  checkedPhone    Boolean?        @default(false)
+  phoneOpc        String?         @db.VarChar(13)
+  imageUrl        String          @db.VarChar(800)
+  matricula       String          @db.VarChar(5)
+  especialidad    String          @db.VarChar(100)
+  especialidad2   String?         @db.VarChar(100)
+  especialidad3   String?         @db.VarChar(100)
+  descripcion     String?         @db.VarChar(600)
+  role            Role?           @default(PROVIDER)
+  tipo            Tipo?           @default(FIDELIZADO)
+  address         String?         @db.VarChar(200)
+  coordinatesLat  Int?
+  coordinatesLon  Int?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  denuncias       Denuncia[]
+}
+
+model Operador {
+  id              String          @id @unique
+  name            String          @db.VarChar(20)
+  apellido        String          @db.VarChar(20)
+  email           String          @db.VarChar(200) @unique
+  password        String          @db.VarChar(200)
+  phone           String          @db.VarChar(13)
+  imageUrl        String          @db.VarChar(800)
+  numeroOperador  String          @db.VarChar(5) @unique
+  role            Role?           @default(EMPLOYEE)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+  publicaciones   Publicacion[]
+  notificaciones  Notificacion[]
+}
+
+model Publicacion {
+  id          Int        @id @default(autoincrement())
+  titulo      String
+  published   String
+  contenido   String?    @db.Text
+  imagen      Bytes?
+  autorId     String
+  autor       Operador   @relation(fields: [autorId], references: [id])
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+}
+
+model Opinion {
+  id          Int         @id @default(autoincrement())
+  contenido   String
+  autorId     String
+  autor       Afiliado    @relation(fields: [autorId], references: [id])
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Denuncia {
+   id          Int         @id @default(autoincrement())
+  motivo      String
+  autorId     String
+  autor       Afiliado    @relation(fields: [autorId], references: [id])
+  prestadorId String
+  prestador   Prestador   @relation(fields: [prestadorId], references: [id])
+  status      Status      @default(Nuevo)
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+}
+
+model Notificacion {
+  id          String          @id @default(uuid())
+  titulo      String
+  contenido   String
+  autorId     String
+  autor       Operador        @relation(fields: [autorId], references: [id])
+  receptorId  String
+  receptor    Afiliado        @relation(fields: [receptorId], references: [id])
+  status      StatusMensaje   @default(No_leido)
+  url         String?
+  createdAt   DateTime        @default(now())
+}
+
+enum Role {
+  USER
+  ADMIN
+  PROVIDER
+  EMPLOYEE
+}
+
+enum Tipo {
+  FIDELIZADO
+  NO_FIDELIZADO
+}
+
+enum Status {
+  No_solucionado
+  Leido
+  Nuevo
+  Pendiente
+  Otros
+}
+
+enum StatusMensaje {
+  Leido
+  No_leido
+}

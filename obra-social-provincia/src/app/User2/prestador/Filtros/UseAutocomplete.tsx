@@ -67,7 +67,7 @@ const FilterUser: React.FC<FilterUserProps> = ({ prestadores,openModal  }) => {
       imageUrl: '',       
       descripcion: '',  
       phone: '',          
-      phoneopc: '',      
+      phoneOpc: '',      
       address: '',       
       especialidad: '',   
       especialidad2: '', 

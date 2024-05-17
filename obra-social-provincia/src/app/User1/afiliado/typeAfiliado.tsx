@@ -16,7 +16,7 @@ const TypeAfiliado = () => {
     const verifyUser = async () => {
       dispatch(setLoading(true));
       try {
-        const response = await fetch('/api/handlerafiliado', {
+        const response = await fetch('/api/Users/afiliado', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ const TypeAfiliado = () => {
     dispatch(setLoading(true));
 
     try {
-      const response = await fetch('/api/handlerafiliado', {
+      const response = await fetch('/api/Users/afiliado', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

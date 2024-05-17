@@ -17,15 +17,13 @@ export interface NavbarState {
 
   export interface UserInfo {
     operador: any;
-    splice(arg0: number[]): unknown;
-    
     id: string;
     name: string;
     apellido?: string;
     email: string;
     checkedphone:boolean;
     phone: string;
-    phoneopc?: string;
+    phoneOpc?: string;
     imageUrl: string;
     matricula?: string;
     dni?: string;
@@ -54,7 +52,7 @@ export interface Prestador {
   apellido: string;
   descripcion: string;
   phone: string;
-  phoneopc: string;
+  phoneOpc: string;
   address: string;
   especialidad:string,
   especialidad2:string,
@@ -81,7 +79,7 @@ export interface UserCardProps {
   dependencia?: string;
   dni?: string;
   phone?: string;
-  phoneopc?: string;
+  phoneOpc?: string;
   matricula?: string;
   especialidad?: string;
   especialidad2?: string; 

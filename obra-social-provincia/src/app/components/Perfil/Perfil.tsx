@@ -30,7 +30,7 @@ console.log("este estado global esta en el perfil",currentUser)
             dni={userData.dni}
             matricula={userData.matricula}
             phone={userData.phone}
-            phoneopc={userData.phoneopc}
+            phoneOpc={userData.phoneOpc}
             role={userData.role}
             address={userData.address}
             especialidad={userData.especialidad}

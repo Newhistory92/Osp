@@ -16,7 +16,7 @@ const TypeOperador = () => {
     const verifyUser = async () => {
       dispatch(setLoading(true));
       try {
-        const response = await fetch('/api/handleroperador', {
+        const response = await fetch('/api/Users/operador', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ const TypeOperador = () => {
     dispatch(setLoading(true));
 
     try {
-      const response = await fetch('/api/handleroperador', {
+      const response = await fetch('/api/Users/operador', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

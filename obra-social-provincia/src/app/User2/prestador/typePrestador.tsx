@@ -18,7 +18,7 @@ const TypePrestador = () => {
     const verifyUser = async () => {
       dispatch(setLoading(true));
       try {
-        const response = await fetch('/api/handlerprestador', {
+        const response = await fetch('/api/Users/prestador', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -80,7 +80,7 @@ const TypePrestador = () => {
     dispatch(setLoading(true));
 
     try {
-      const response = await fetch('/api/handlerprestador', {
+      const response = await fetch('/api/Users/prestador', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

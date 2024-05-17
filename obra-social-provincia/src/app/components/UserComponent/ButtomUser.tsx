@@ -25,6 +25,7 @@ return <ClerkLoading>
         src={user.imageUrl}
         alt="User dropdown"
         onClick={handleToggleDropdown}
+        width={100} height={100}
       />
       {isDropdownOpen && (
         

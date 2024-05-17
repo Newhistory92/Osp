@@ -8,7 +8,7 @@ import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
 import { Prestador } from '@/app/interfaces/interfaces';
 
 
-const PrestadorCard: React.FC<Prestador > = ({  id, name, apellido, imageUrl, phone, phoneopc, especialidad, address, tipo,
+const PrestadorCard: React.FC<Prestador > = ({  id, name, apellido, imageUrl, phone,phoneOpc, especialidad, address, tipo,
     descripcion, email,checkedphone,especialidad2,especialidad3 }) => {
     const [showModal, setShowModal] = useState(false);
     const handleShowModal = () => setShowModal(true);
@@ -37,7 +37,7 @@ const PrestadorCard: React.FC<Prestador > = ({  id, name, apellido, imageUrl, ph
                             <p className="mb-0">{phone}</p>
                            </Col>)}
                            <Col>
-                           <p className="">{phoneopc}</p>
+                           <p className="">{phoneOpc}</p>
                             </Col>
                             <Col xs={12} className="mb-5">
                                 <h6 className="text-uppercase fs-5 ls-2"> <CheckCircleIcon />Estado</h6>

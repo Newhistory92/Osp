@@ -20,7 +20,6 @@ const userSlice = createSlice({
         ...action.payload,
         // Asegúrate de que las propiedades obligatorias están presentes
         operador: state.currentUser?.operador ?? '',
-        splice: state.currentUser?.splice ?? (() => {}),
         email: state.currentUser?.email ?? '',
         checkedphone: state.currentUser?.checkedphone ?? false,
         phone: state.currentUser?.phone ?? '',
