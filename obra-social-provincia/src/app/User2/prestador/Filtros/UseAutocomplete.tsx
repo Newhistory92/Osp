@@ -74,7 +74,7 @@ const FilterUser: React.FC<FilterUserProps> = ({ prestadores,openModal  }) => {
       especialidad3: '', 
       tipo: '',
       email: '',         
-      checkedphone: false 
+      checkedPhone: false 
     };
     openModal(prestador);
   };

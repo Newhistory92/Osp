@@ -34,7 +34,7 @@ export async function GET(req: NextRequest) {
 }
 
 
-export async function POST(request: { json: () => any; }) {
+export async function POST(request: NextRequest) {
     try {
         console.log("Recibida solicitud POST para crear una nueva notificacion");
         const nuevaNotificacion = await request.json();

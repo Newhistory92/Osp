@@ -39,7 +39,7 @@ console.log("este estado global esta en el perfil",currentUser)
             dependencia={userData.dependencia}
             tipo={userData.tipo}
             descripcion={userData.descripcion}
-            checkedphone={userData.checkedphone}
+            checkedPhone={userData.checkedPhone}
           />
           <Col xl={6} lg={12} md={12} xs={12} className="mb-6">
           </Col>

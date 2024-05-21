@@ -40,7 +40,7 @@ const UserCard: React.FC<UserCardProps> = ({
   tipo,
   numeroOperador,
   address,
-  checkedphone,
+  checkedPhone,
 }) => {
   const dispatch = useAppDispatch();
 
@@ -53,7 +53,7 @@ const UserCard: React.FC<UserCardProps> = ({
   const [addressInfo, setAddressInfo] = React.useState<{ address: string | null, coordinates: google.maps.LatLngLiteral | null }>({ address: null, coordinates: null });
   const [hasChanges, setHasChanges] = React.useState(false);
 // console.log(addressInfo)
-const [checked, setChecked] = React.useState(checkedphone);
+const [checked, setChecked] = React.useState( checkedPhone);
 const [telefonoPublico, setTelefonoPublico] = React.useState<string | null>(null);
 const [description, setDescription] =React.useState<string | null>(null);
 

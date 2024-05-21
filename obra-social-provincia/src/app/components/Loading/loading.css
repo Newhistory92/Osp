@@ -1,0 +1,73 @@
+.load{
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1000; 
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .load-bar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    border: 4px solid rgba(255, 255, 255, 0.8);
+    border-top: 4px solid #d83e18;
+    animation: load-bar-rotate 4s linear infinite;
+  }
+  
+  .load-img{
+    width: 95px;
+    height: 95px;
+    position: absolute;
+    border-radius: 50%;
+    
+    animation: load-img-rotate 4s linear infinite;
+  }
+  
+  @keyframes load-bar-rotate{
+    from{
+      transform: rotate(0deg);
+    }
+    
+    to{
+      transform: rotate(360deg);
+    }
+  }
+  
+  @keyframes load-img-rotate{
+    to{
+      transform: rotateY(0deg);
+    }
+    
+    from{
+      transform: rotateY(360deg);
+    }
+  }
+
+  .waviy {
+    position: absolute;
+    margin-top: 120px;
+  }
+  .waviy span {
+    position: relative;
+    display: inline-block;
+    font-size: 20px;
+    color: #020202;
+    text-transform: uppercase;
+    animation: flip 2s infinite;
+    animation-delay: calc(.2s * var(--i))
+  }
+  @keyframes flip {
+    0%,80% {
+      transform: rotateY(360deg) 
+    }
+  }

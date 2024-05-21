@@ -5,6 +5,7 @@ const initialState: UserState = {
   currentUser: null,
   loading: false,
   errorMessage: null,
+  successMessage: null
 };
 
 const userSlice = createSlice({
@@ -12,6 +13,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setCurrentUser(state, action: PayloadAction<UserInfo>) {
+      console.log("setCurrentUser action dispatched with payload:", action.payload);
       state.currentUser = action.payload;
     },
     setPartialCurrentUser(state, action: PayloadAction<PartialUserInfo>) {
@@ -21,7 +23,7 @@ const userSlice = createSlice({
         // Asegúrate de que las propiedades obligatorias están presentes
         operador: state.currentUser?.operador ?? '',
         email: state.currentUser?.email ?? '',
-        checkedphone: state.currentUser?.checkedphone ?? false,
+        checkedPhone: state.currentUser?.checkedPhone ?? false,
         phone: state.currentUser?.phone ?? '',
         imageUrl: state.currentUser?.imageUrl ?? '',
         role: state.currentUser?.role ?? '',
@@ -32,14 +34,20 @@ const userSlice = createSlice({
       };
     },
     setLoading(state, action: PayloadAction<boolean>) {
+      console.log("setLoading action dispatched with payload:", action.payload);
       state.loading = action.payload;
     },
     setErrorMessage(state, action: PayloadAction<string | null>) {
+      console.log("setErrorMessage action dispatched with payload:", action.payload);
       state.errorMessage = action.payload;
+    },
+    setSuccessMessage(state, action: PayloadAction<string | null>) {
+      console.log("setSuccessMessage action dispatched with payload:", action.payload);
+      state.successMessage = action.payload;
     },
   },
 });
 
-export const { setCurrentUser, setPartialCurrentUser, setLoading, setErrorMessage } = userSlice.actions;
+export const { setCurrentUser, setPartialCurrentUser, setLoading, setErrorMessage,setSuccessMessage } = userSlice.actions;
 
 export default userSlice.reducer;

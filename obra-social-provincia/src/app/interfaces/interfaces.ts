@@ -21,7 +21,7 @@ export interface NavbarState {
     name: string;
     apellido?: string;
     email: string;
-    checkedphone:boolean;
+    checkedPhone:boolean;
     phone: string;
     phoneOpc?: string;
     imageUrl: string;
@@ -43,6 +43,7 @@ export interface NavbarState {
     currentUser: UserInfo | null;
     loading: boolean;
     errorMessage: string | null;
+    successMessage:string | null;
   }
 
 export interface Prestador {
@@ -59,7 +60,7 @@ export interface Prestador {
   especialidad3:string,
   tipo: string,
   email:string,
-  checkedphone:boolean,
+  checkedPhone:boolean,
 }
 
 
@@ -89,7 +90,7 @@ export interface UserCardProps {
   tipo?: string;
   numeroOperador?: string;
   address?: string;
-  checkedphone:boolean,
+  checkedPhone:boolean,
 
 }
 

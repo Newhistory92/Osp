@@ -14,6 +14,7 @@ const SelectUser = () => {
     setSelectedType(event.target.value);
   };
 
+
   return (
     <div className="relative w-screen h-screen">
       <Image
@@ -21,32 +22,32 @@ const SelectUser = () => {
         alt="Fondo"
         layout="fill"
         objectFit="cover"
+        className="absolute inset-0 z-0"
       />
-      <div className="absolute top-0 left-0 right-0 flex justify-center">
-      <div className="w-80 max-w-screen-lg flex-col flex mx-auto p-8 bg-gray-800 bg-opacity-50 border-r-1 rounded shadow-lg">
-          {/* Contenido del formulario */}
-          <FormControl className="mt" variant="standard" sx={{ m: 1, minWidth: 150 }}>
-            <InputLabel className="text-white" id="user-type-label">Tipo de Usuario</InputLabel>
+      <div className="absolute inset-0 flex justify-center items-center z-10 p-8">
+        <div className="w-full max-w-lg p-8 bg-white bg-opacity-10 border border-white border-opacity-25 rounded-2xl shadow-lg backdrop-blur-lg">
+          <FormControl variant="standard" className="w-full">
+            <InputLabel className="text-gray-800" id="user-type-label">Tipo de Usuario</InputLabel>
             <Select
               labelId="user-type-label"
               id="user-type-select"
               value={selectedType}
               onChange={handleTypeChange}
               label="Tipo de Usuario"
-              className="mt-3 border-t border-blue-gray-200 focus:border-t  focus:border-gray-900  w-full h-10"
+              className="mt-4 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500 w-full h-10"
             >
               <MenuItem value="">
                 <em>Seleccionar...</em>
               </MenuItem>
-              <MenuItem  value="AFILIADO">Afiliado</MenuItem>
+              <MenuItem value="AFILIADO">Afiliado</MenuItem>
               <MenuItem value="PRESTADOR">Prestador</MenuItem>
               <MenuItem value="OPERADOR">Operador</MenuItem>
             </Select>
           </FormControl>
-          {/* Condicionalmente renderizar componentes según el tipo seleccionado */}
           {selectedType === 'AFILIADO' && <TypeAfiliado />}
           {selectedType === 'PRESTADOR' && <TypePrestador />}
           {selectedType === 'OPERADOR' && <TypeOperador />}
+          <p className="mt-4 text-sm text-gray-700">Por favor, seleccione el tipo de usuario para continuar.</p>
         </div>
       </div>
     </div>
@@ -54,6 +55,52 @@ const SelectUser = () => {
 };
 
 export default SelectUser;
+
+
+
+
+
+
+//   return (
+//     <div className="relative w-screen h-screen">
+//       <Image
+//         src={fondo}
+//         alt="Fondo"
+//         layout="fill"
+//         objectFit="cover"
+//       />
+//       <div className="absolute top-0 left-0 right-0 flex justify-center">
+//       <div className="w-80 max-w-screen-lg flex-col flex mx-auto p-8 bg-gray-800 bg-opacity-50 border-r-1 rounded shadow-lg">
+//           {/* Contenido del formulario */}
+//           <FormControl className="mt" variant="standard" sx={{ m: 1, minWidth: 150 }}>
+//             <InputLabel className="text-white" id="user-type-label">Tipo de Usuario</InputLabel>
+//             <Select
+//               labelId="user-type-label"
+//               id="user-type-select"
+//               value={selectedType}
+//               onChange={handleTypeChange}
+//               label="Tipo de Usuario"
+//               className="mt-3 border-t border-blue-gray-200 focus:border-t  focus:border-gray-900  w-full h-10"
+//             >
+//               <MenuItem value="">
+//                 <em>Seleccionar...</em>
+//               </MenuItem>
+//               <MenuItem  value="AFILIADO">Afiliado</MenuItem>
+//               <MenuItem value="PRESTADOR">Prestador</MenuItem>
+//               <MenuItem value="OPERADOR">Operador</MenuItem>
+//             </Select>
+//           </FormControl>
+//           {/* Condicionalmente renderizar componentes según el tipo seleccionado */}
+//           {selectedType === 'AFILIADO' && <TypeAfiliado />}
+//           {selectedType === 'PRESTADOR' && <TypePrestador />}
+//           {selectedType === 'OPERADOR' && <TypeOperador />}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// };
+
+
 
 
 

@@ -4,13 +4,19 @@ import { Typography, Input, Button, Alert } from '@mui/material';
 import operadoresData from '../../../../operador.json';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from "../../hooks/StoreHook";
-import { setPartialCurrentUser, setLoading, setErrorMessage } from "../../redux/Slice/userSlice";
+import { setPartialCurrentUser,setCurrentUser, setLoading, setErrorMessage,setSuccessMessage } from "../../redux/Slice/userSlice";
 import { PartialUserInfo } from '@/app/interfaces/interfaces';
-
+import Loading from '@/app/components/Loading/loading';
 const TypeOperador = () => {
   const [numeroOperador, setNumeroOperador] = useState<string>('');
   const dispatch = useAppDispatch();
-  const { currentUser, loading, errorMessage } = useAppSelector((state) => state.user);
+  const { currentUser, loading, errorMessage,successMessage } = useAppSelector((state) => state.user);
+
+
+  useEffect(() => {
+    dispatch(setErrorMessage(null));
+  }, [dispatch]);
+
 
   useEffect(() => {
     const verifyUser = async () => {
@@ -86,26 +92,40 @@ const TypeOperador = () => {
       });
 
       const responseData = await response.json();
-
       if (responseData.status === 200) {
-        dispatch(setPartialCurrentUser(responseData.newOperador));
+        dispatch(setCurrentUser(responseData.newOperador));
+        dispatch(setSuccessMessage('El Operador fue creado con éxito'));
+        dispatch(setErrorMessage(null));
         window.location.href = '/page/dashboard';
+      } else if (responseData.status === 400) {
+        dispatch(setErrorMessage('Error al crear la cuenta'));
+        dispatch(setSuccessMessage(null));
       } else {
         dispatch(setErrorMessage(responseData.message));
+        dispatch(setSuccessMessage(null));
       }
     } catch (error) {
-      console.error('Error al confirmar el operador:', error);
-      dispatch(setErrorMessage('Ocurrió un error al confirmar el operador'));
+      dispatch(setErrorMessage('Ocurrió un error al confirmar el Operador'));
+      dispatch(setSuccessMessage(null));
     } finally {
       dispatch(setLoading(false));
     }
   };
 
-  if (loading) {
-    return <div>Cargando...</div>;
-  }
+ 
 
   return (
+    <div>
+    {successMessage && (
+      <Alert severity="success" style={{ position: 'fixed', top: '10px', right: '10px', zIndex: 1000 }}>
+        {successMessage}
+      </Alert>
+    )}
+    {errorMessage && (
+      <Alert severity="error" style={{ position: 'fixed', top: '10px', right: '10px', zIndex: 1000 }}>
+        {errorMessage}
+      </Alert>
+    )}
     <div className="max-w-screen-lg flex-col flex mx-auto p-8 bg-gray-700 rounded shadow-md px-4">
       <Typography className="text-white" variant="h6">Tipo de usuario: Operador</Typography>
       <label className="text-white">Ingrese Número de Operador:</label>
@@ -136,9 +156,12 @@ const TypeOperador = () => {
             </Button>
           )}
         </div>
-      )}
-      {errorMessage && <Alert severity="error">{errorMessage}</Alert>}
-      <Alert severity="info">Por favor ingrese el número de operador para continuar.</Alert>
+        )}
+        <Alert severity="info">Por favor ingrese su N° de Operador para continuar.</Alert>
+      </div>
+      <div className='mt-12 relative'>
+        {loading && <Loading />}
+        </div>
     </div>
   );
 };
