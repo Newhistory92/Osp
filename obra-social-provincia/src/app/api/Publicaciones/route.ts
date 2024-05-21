@@ -55,7 +55,7 @@ export async function GET(req: NextRequest) {
 
 
 // Función para manejar la solicitud POST
-export async function POST(request: { json: () => any; }) {
+export async function POST(request: NextRequest) {
     try {
         console.log("Recibida solicitud POST para crear una nueva publicación");
         const nuevaPublicacion = await request.json();
@@ -74,7 +74,7 @@ export async function POST(request: { json: () => any; }) {
 }
 
 // Función para manejar la solicitud PUT
-export async function PUT(request: { json: () => any; }) {
+export async function PUT(request: NextRequest) {
     try {
         console.log("Recibida solicitud PUT para actualizar una publicación");
         const datosActualizados = await request.json()
@@ -95,7 +95,7 @@ export async function PUT(request: { json: () => any; }) {
 
 
 
-export async function DELETE(request: { json: () => any; }) {
+export async function DELETE(request: NextRequest) {
     try {
         console.log("Recibida solicitud DELETE para eliminar una publicación");
         const datosEliminacion = await request.json();
