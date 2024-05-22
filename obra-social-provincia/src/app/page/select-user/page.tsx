@@ -4,8 +4,6 @@ import { Select, MenuItem, FormControl, InputLabel } from '@mui/material';
 import TypeAfiliado from '../../User1/afiliado/typeAfiliado';
 import TypePrestador from '../../User2/prestador/typePrestador';
 import TypeOperador from '../../User3/operador/typeOperador';
-import Image from 'next/image';
-import fondo from "../../../../public/fondo.jpeg"
 import "../../styles/selectUser.css"
 const SelectUser = () => {
   const [selectedType, setSelectedType] = React.useState('');
@@ -16,7 +14,7 @@ const SelectUser = () => {
 
 
   return (
-    <div className="relative w-screen h-screen overflow-hidden bg-blue-600">
+    <div className="relative w-screen h-screen overflow-hidden bg-orange-800">
     <div className="ripple-background">
       <div className="circle xxlarge shade1"></div>
       <div className="circle xlarge shade2"></div>

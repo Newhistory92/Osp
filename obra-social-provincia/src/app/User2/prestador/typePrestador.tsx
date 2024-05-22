@@ -140,6 +140,7 @@ const TypePrestador = () => {
           type="text"
           value={matricula}
           onChange={handleInputChange}
+           disabled={loading}
           className="mt-2 border-t border-blue-gray-200 focus:border-t focus:border-gray-900 "
         />
         {matricula && currentUser && (
