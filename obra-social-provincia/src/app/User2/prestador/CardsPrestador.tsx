@@ -9,7 +9,7 @@ import { Prestador } from '@/app/interfaces/interfaces';
 
 
 const PrestadorCard: React.FC<Prestador > = ({  id, name, apellido, imageUrl, phone,phoneOpc, especialidad, address, tipo,
-    descripcion, email,checkedphone,especialidad2,especialidad3 }) => {
+    descripcion, email,checkedPhone, especialidad2,especialidad3 }) => {
     const [showModal, setShowModal] = useState(false);
     const handleShowModal = () => setShowModal(true);
 
@@ -29,9 +29,9 @@ const PrestadorCard: React.FC<Prestador > = ({  id, name, apellido, imageUrl, ph
                         <Row>
                             <Col xs={12} className="mb-5">
                                 <h6 className="text-uppercase fs-5 ls-2"> <MedicalInformationIcon/>Especialidad</h6>
-                                <p >{especialidad}</p><p>{especialidad2}</p> <p>{especialidad3}</p>
+                                <p >{especialidad}</p> <p>{especialidad2}</p> <p>{especialidad3}</p>
                             </Col>
-                            {checkedphone && (
+                            {checkedPhone && (
                            <Col xs={12} className="mb-5">
                            <h6 className="text-uppercase fs-5 ls-2 ">< AddIcCallSharpIcon/>Teléfono</h6>
                             <p className="mb-0">{phone}</p>
@@ -46,7 +46,6 @@ const PrestadorCard: React.FC<Prestador > = ({  id, name, apellido, imageUrl, ph
                             <Col xs={12} className="mb-5">
                                 <h6 className="text-uppercase fs-5 ls-2"> <AddLocationIcon/>Direccion</h6>
                                 <p className="mb-0">{address}</p>
-                                {/* <MapPrestador coordinatesLat={coordinatesLat as number} coordinatesLon={coordinatesLon as number} /> */}
                             </Col>
                         </Row>
                     </Card.Body>
