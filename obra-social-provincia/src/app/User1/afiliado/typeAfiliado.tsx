@@ -145,7 +145,7 @@ const TypeAfiliado = () => {
           <Typography className="text-white">Dependencia: {currentUser.dependencia}</Typography>
           <Link href="/">
             {errorMessage === "400" && (
-              <Button variant="contained" className="mt-2 ms-6">
+              <Button variant="contained" className="mt-2 ms-6" color="error">
                 Inicio
               </Button>
             )}
@@ -156,6 +156,7 @@ const TypeAfiliado = () => {
               onClick={handleConfirm}
               className="mt-2 ms-6"
               disabled={loading}
+              color="success"
             >
               Confirmar
             </Button>

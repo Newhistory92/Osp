@@ -9,7 +9,7 @@ import { dark,shadesOfPurple } from '@clerk/themes';
 import {NextUIProvider} from "@nextui-org/react";
 import '@fontsource-variable/onest';
 import "./globals.css";
-
+import "./styles/theme.scss"
 
 export default function RootLayout({
   children,

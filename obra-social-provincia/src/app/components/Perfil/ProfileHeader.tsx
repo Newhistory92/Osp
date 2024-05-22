@@ -1,12 +1,8 @@
 import React from 'react';
 import { Col, Row, Image } from "react-bootstrap";
+import { ProfileHeaderProps } from '@/app/interfaces/interfaces';
 
-interface ProfileHeaderProps {
-    imageUrl: string;
-    name: string;
-    apellido: string;
-    email?:string
-}
+
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({ imageUrl, name, apellido,email }) => {
 
@@ -18,7 +14,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ imageUrl, name, apellido,
                 <div
                     className="pt-20 rounded-top"
                     style={{
-                        background: "url(/images/background/profile-cover.jpg) no-repeat",
+                        background: `url("/obra-social-provincia/public/header1.jpg) no-repeat`,
                         backgroundSize: "cover",
                     }}
                 ></div>
@@ -34,8 +30,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ imageUrl, name, apellido,
                                 />
                                 {/* Verificado */}
                                 <Image
-                                    src="/images/svg/checked-mark.svg"
-                                    alt=""
+                                    src="https://img.icons8.com/color/48/verified-badge.png" alt="verified-badge"
+                                    
                                     height="30"
                                     width="30"
                                     className="position-absolute top-0 right-0 me-2"
@@ -58,4 +54,3 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ imageUrl, name, apellido,
 };
 
 export default ProfileHeader;
-

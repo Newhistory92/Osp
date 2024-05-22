@@ -140,7 +140,7 @@ const TypeOperador = () => {
           <Typography className="text-white">Nombre: {currentUser.name}</Typography>
           <Link href="/">
             {errorMessage === "400" && (
-              <Button variant="contained" className="mt-2 ms-6">
+              <Button variant="contained" className="mt-2 ms-6" color="error">
                 Inicio
               </Button>
             )}
@@ -151,6 +151,7 @@ const TypeOperador = () => {
               onClick={handleConfirm}
               className="mt-2 ms-6"
               disabled={loading}
+              color="success"
             >
               Confirmar
             </Button>

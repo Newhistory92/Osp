@@ -149,7 +149,7 @@ const TypePrestador = () => {
             <Typography className="text-white">Especialidad: {currentUser.especialidad}</Typography>
             <Link href="/">
               {errorMessage === "400" && (
-                <Button variant="contained" className="mt-2 ms-6">
+                <Button variant="contained" className="mt-2 ms-6" color="error">
                   Inicio
                 </Button>
               )}
@@ -160,6 +160,7 @@ const TypePrestador = () => {
                 onClick={handleConfirm}
                 className="mt-2 ms-6"
                 disabled={loading}
+                color="success"
               >
                 Confirmar
               </Button>

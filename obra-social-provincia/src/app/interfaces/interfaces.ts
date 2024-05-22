@@ -6,6 +6,14 @@ export interface Publicacion {
     contenido: string;
     published: string;
 }
+export interface PublicacionEdit {
+  updatedAt: string | number | Date;
+  autor: any;
+  id: number;
+  titulo: string;
+  contenido: string;
+  
+}
 
 export interface NavbarState {
     showPrestadores: boolean;
@@ -117,4 +125,67 @@ export interface PartialUserInfo {
   dni: string;
   dependencia:string;
   operador: string
+}
+
+export interface PropsNavbarVertical {
+  onProfileClick: () => void;
+  onSettingClick: () => void;
+  onFamilyGroupClick: () => void;
+  onOrdenesClick: () => void; 
+  onPublicacionClick:() => void;
+  onDenunciaClick:()=> void;
+  onNotificadorClick:()=> void;
+  onAuditorClick:()=> void;
+}
+
+export interface OrdenData {
+  numeroOrden: number;
+  fechaUso: string;
+  nombreMedico: string;
+  apellidoMedico: string;
+  especialidad: string;
+  nombreAfiliado: string;
+  numeroPrestador: number;
+  tipoBono: string;
+}
+
+
+
+export interface NuevaPublicacion {
+  titulo: string;
+  contenido: string;
+  autorId: string;
+}
+
+export interface Denuncia {
+  id: string;
+  motivo: string;
+  autor: string;
+  createdAt: string;
+  prestador: string;
+  status: string;
+}
+
+export interface Afiliado {
+  id: string;
+  name: string;
+  apellido: string;
+  email: string;
+  dni: string;
+  phone: string;
+  address?: string;
+}
+
+export interface Notificacion {
+  id: string;
+  titulo: string;
+  contenido: string;
+} 
+
+
+export interface ProfileHeaderProps {
+    imageUrl: string;
+    name: string;
+    apellido: string;
+    email?:string
 }
