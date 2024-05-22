@@ -2,7 +2,7 @@
 const nextConfig = {
 
     images: {
-        domains: ['i.pinimg.com',"img.clerk.com"],
+        domains: ['i.pinimg.com',"img.clerk.com", "assets.pinterest.com", "img.icons8.com"],
       },
 };
 

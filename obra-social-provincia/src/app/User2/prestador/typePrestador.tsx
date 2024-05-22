@@ -13,7 +13,7 @@ const TypePrestador = () => {
   const [matricula, setMatricula] = useState<string>('');
   const dispatch = useAppDispatch();
   const { currentUser, loading, errorMessage,successMessage } = useAppSelector((state) => state.user);
-
+ console.log (currentUser)
   // Limpia el mensaje de error al montar el componente
   useEffect(() => {
     dispatch(setErrorMessage(null));
@@ -33,11 +33,11 @@ const TypePrestador = () => {
         });
 
         const data = await response.json();
-
+          console.log(data)
         if (response.ok) {
           if (data.status === 200) {
-            dispatch(setCurrentUser(data.user));
-            window.location.href = '/page/dashboard';
+            dispatch(setCurrentUser(data.users[0]));
+             window.location.href = '/page/dashboard';
           } else if (data.status === 401) {
             window.location.href = '/page/signin';
           } else if (data.status === 402) {

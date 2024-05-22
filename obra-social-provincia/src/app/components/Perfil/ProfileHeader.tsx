@@ -1,23 +1,25 @@
 import React from 'react';
-import { Col, Row, Image } from "react-bootstrap";
+import { Col, Row, } from "react-bootstrap";
 import { ProfileHeaderProps } from '@/app/interfaces/interfaces';
-
-
+import Header from "../../../../public/profile-cover.jpg"
+import Image from 'next/image';
 
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({ imageUrl, name, apellido,email }) => {
 
-    
     return (
         <Row className="align-items-center shadow-lg">
             <Col xl={12} lg={12} md={12} xs={12}>
                 {/* Bg */}
                 <div
-                    className="pt-20 rounded-top"
-                    style={{
-                        background: `url("/obra-social-provincia/public/header1.jpg) no-repeat`,
-                        backgroundSize: "cover",
-                    }}
-                ></div>
+                    className=" rounded-top "> 
+                    <Image 
+                    src={Header} alt="Fondo-badge"
+                    height="1000 "
+                    width="1000 "
+                    className="w-full h-full object-cover"
+                    
+                    />
+                    </div>
                 <div className="bg-white rounded-bottom smooth-shadow-sm ">
                     <div className="d-flex align-items-center justify-content-between pt-4 pb-6 px-4">
                         <div className="d-flex align-items-center">
@@ -27,6 +29,8 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ imageUrl, name, apellido,
                                     src={imageUrl}
                                     className="avatar-xxl rounded-circle border border-white-color-40"
                                     alt=""
+                                    height="100"
+                                    width="1000"
                                 />
                                 {/* Verificado */}
                                 <Image

@@ -3,12 +3,14 @@ import { useAppSelector } from "../../hooks/StoreHook";
 import ProfileHeader from './ProfileHeader';
 import  UserCard from "../Cards/Card";
 import { UserInfo } from '@/app/interfaces/interfaces';
+import Loading from '../Loading/loading';
+
 
 const Profile = () => {
   const currentUser = useAppSelector((state: { user: { currentUser: UserInfo | null; }; }) => state.user.currentUser);
 console.log("este estado global esta en el perfil",currentUser)
   if (!currentUser) {
-    return <div>Loading...</div>;
+    return <div><Loading/></div>;
   }
 
   // Verificar si currentUser es un array o no
