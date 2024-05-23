@@ -65,7 +65,7 @@ const perPage = 8;
 
   const fetchPrestadores = async () => {
     try {
-      const url = '/api/datos/prestador';
+      const url = '/api/Datos/prestador';
       const response = await fetch(url, {
         method: 'GET',
         headers: {
@@ -73,6 +73,7 @@ const perPage = 8;
         }
       });
       const responseData: Prestador[] = await response.json();
+      console.log()
       if (Array.isArray(responseData)) {
         setPrestadores(responseData);
         setFilteredData(responseData);
@@ -155,7 +156,7 @@ const perPage = 8;
     setSelectedPrestador(prestador);
     onOpen();
   };
-
+ console.log(filteredData)
   return (
    
     <Card className="h-full w-full ">
@@ -232,20 +233,22 @@ const perPage = 8;
                  size={"2xl"}
                  isOpen={isOpen}
                  onClose={onClose}
+                 placement="center"
                  scrollBehavior={"outside"}
                  backdrop={"blur"}
                  classNames={{
-                 body: "py-6",
+                 body: "py-6 ",
                  backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
-                 base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
-                header: "border-b-[1px] border-[#292f46]",
+                 base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]  ",
+                header: "border-b-[1px] border-[#292f46] ",
                footer: "border-t-[1px] border-[#292f46]",
-               closeButton: "hover:bg-white/5 active:bg-white/10",
+               closeButton: "hover:bg-white/5 active:bg-white/10 ",
+              
                 }}>
                 <ModalContent>
                    {(onClose) => (
                        <>
-              <ModalHeader className="flex flex-col gap-1">Obra Social Provincia</ModalHeader>
+              <ModalHeader className="flex flex-col gap-1 z-100">Obra Social Provincia</ModalHeader>
               <ModalBody>
               {selectedPrestador && (
             <PrestadorCard {...selectedPrestador} />

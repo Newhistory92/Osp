@@ -78,7 +78,7 @@ const Contenido = () => {
 
 
   return (
-    <div className="verflow-y-auto  p-8 pr-4  w-full max-w-[520px] mx-auto">
+    <div className="verflow-y-auto  p-8 pr-4  w-full  mx-auto">
       {showWelcome && <Welcome />}
       {showPrestadores ? (
         <Prestadores />

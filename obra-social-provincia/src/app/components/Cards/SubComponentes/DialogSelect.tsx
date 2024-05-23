@@ -45,18 +45,17 @@ interface DialogSelectProps {
         <DialogTitle>Especialidad</DialogTitle>
         <DialogContent>
           <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
-           
             <FormControl sx={{ m: 1, minWidth: 200 }}>
-              <InputLabel id="demo-dialog-select-label">Nueva </InputLabel>
+              <InputLabel id="demo-dialog-select-label">Nueva</InputLabel>
               <Select
-              labelId="demo-dialog-select-label"
-              id="demo-dialog-select"
-              value={selectedEspecialidad}
-              onChange={handleChange}
-              input={<OutlinedInput label="Nueva" />}
->
-            {Especialidades.especialidades.map((especialidad: { id: number; nombre: string; }, index: number) => (
-            <MenuItem key={especialidad.id} value={especialidad.nombre}>{especialidad.nombre}</MenuItem>
+                labelId="demo-dialog-select-label"
+                id="demo-dialog-select"
+                value={selectedEspecialidad}
+                onChange={handleChange}
+                input={<OutlinedInput label="Nueva" />}
+              >
+                {Especialidades.especialidades.map((especialidad: { id: number; nombre: string; }, index: number) => (
+                  <MenuItem key={especialidad.id} value={especialidad.nombre}>{especialidad.nombre}</MenuItem>
                 ))}
               </Select>
             </FormControl>

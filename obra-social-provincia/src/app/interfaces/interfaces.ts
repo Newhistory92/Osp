@@ -189,3 +189,9 @@ export interface ProfileHeaderProps {
     apellido: string;
     email?:string
 }
+
+export interface Country {
+  name: string;
+  flags: { svg: string };
+  countryCallingCode: string;
+}

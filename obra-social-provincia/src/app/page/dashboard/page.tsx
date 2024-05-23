@@ -12,11 +12,9 @@ import EditPublicacion from '../../User3/operador/Publicacion/EditPublic';
 import DenunciasTable from '../../User3/operador/Publicacion/GestionDenuncia';
 import Notificador from '../../User3/operador/Notificador/Notificador';
 
-interface Props {
-  children: React.ReactNode;
-}
 
-const DefaultDashboardLayout: React.FC<Props> = ({ children }) => {
+
+const DefaultDashboardLayout: React.FC = () => {
   const [showMenu, setShowMenu] = useState<boolean>(true);
   const [profileActive, setProfileActive] = useState(false);
   const [settingActive, setSettingActive] = useState(false);
@@ -142,7 +140,6 @@ const DefaultDashboardLayout: React.FC<Props> = ({ children }) => {
             }}
           />
         </div>
-        {children}
         <div className='px-6 border-top py-3'>
           {profileActive && <Profile />}
           {settingActive && <UserProfile />} 

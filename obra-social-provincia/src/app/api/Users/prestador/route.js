@@ -164,10 +164,10 @@ export async function PUT(request) {
         updateData.especialidad3 = dataToUpdate.especialidad3Seleccionada;
       }
       if (dataToUpdate.telefonoPublico !== null) {
-        updateData.phoneopc = dataToUpdate.telefonoPublico;
+        updateData.phoneOpc = dataToUpdate.telefonoPublico;
       }
       if (dataToUpdate.checked !== null) {
-        updateData.checkedphone = dataToUpdate.checked;
+        updateData.checkedPhone = dataToUpdate.checked;
       }
       if (dataToUpdate.description !== null) {
         updateData.descripcion = dataToUpdate.description;
@@ -176,7 +176,7 @@ export async function PUT(request) {
         updateData.address = dataToUpdate.addressInfo.address;
       }
       if (coordinatesLat !== null) {
-        updateData.coordinatesLat = coordinatesLat;
+        updateData. coordinatesLat = coordinatesLat;
       }
       if (coordinatesLon !== null) {
         updateData.coordinatesLon = coordinatesLon;

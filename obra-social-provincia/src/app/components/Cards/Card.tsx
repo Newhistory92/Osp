@@ -1,11 +1,14 @@
-import { Card, CardBody, CardFooter, Typography, Button} from "@material-tailwind/react";
+import { Card, CardBody, CardFooter, Typography, Button, Input,
+  Menu,
+  MenuHandler,
+  MenuList,
+  MenuItem} from "@material-tailwind/react";
+import { useCountries } from "use-react-countries";
 import axios from 'axios';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import Box from '@mui/material/Box';
-import TextField from '@mui/material/TextField';
 import SwichtStyle from "./SubComponentes/Switchstyle";
-import React from 'react';
+import React, { useRef } from 'react';
 import AddIcCallIcon from '@mui/icons-material/AddIcCall';
 import PhoneAndroidIcon from '@mui/icons-material/PhoneAndroid';
 import AssignmentIndIcon from '@mui/icons-material/AssignmentInd';
@@ -22,8 +25,8 @@ import  {getFormattedAddress} from "./SubComponentes/Maps/MapApi"
 import { setCurrentUser, setLoading, setErrorMessage } from "../../redux/Slice/userSlice";
 import { useAppDispatch } from "../../hooks/StoreHook";
 import Description from "../Perfil/Description";
-import { ToastContainer, toast } from 'react-toastify';
-import { UserCardProps } from "@/app/interfaces/interfaces";
+import { Toast } from 'primereact/toast';
+import { UserCardProps,  Country} from "@/app/interfaces/interfaces";
 
 const UserCard: React.FC<UserCardProps> = ({
   id,
@@ -43,7 +46,7 @@ const UserCard: React.FC<UserCardProps> = ({
   checkedPhone,
 }) => {
   const dispatch = useAppDispatch();
-
+  const toast = useRef(null);
   const [especialidad2Seleccionada, setEspecialidad2Seleccionada] = React.useState<string | null>(null);
   const [especialidad3Seleccionada, setEspecialidad3Seleccionada] = React.useState<string | null>(null);
   const [fromModalOpen, setFromModalOpen] =  React.useState(false);
@@ -52,7 +55,9 @@ const UserCard: React.FC<UserCardProps> = ({
   const [paisOrigen, setPaisOrigen] =  React.useState<string | null>(null);
   const [addressInfo, setAddressInfo] = React.useState<{ address: string | null, coordinates: google.maps.LatLngLiteral | null }>({ address: null, coordinates: null });
   const [hasChanges, setHasChanges] = React.useState(false);
-// console.log(addressInfo)
+  const { countries } = useCountries();
+  const [country, setCountry] = React.useState<number>(167);
+  const { name, flags, countryCallingCode } = countries[country];
 const [checked, setChecked] = React.useState( checkedPhone);
 const [telefonoPublico, setTelefonoPublico] = React.useState<string | null>(null);
 const [description, setDescription] =React.useState<string | null>(null);
@@ -74,13 +79,13 @@ const handleConfirmChanges = async () => {
     };
     console.log("datos actualizados", postData);
 
-    const response = await axios.put('/api/handlerprestador', postData);
+    const response = await axios.put('/api/Users/prestador', postData);
 
     if (response.status === 200) {
       // Si la respuesta es exitosa, puedes realizar las acciones necesarias, como mostrar un mensaje de éxito.
       console.log('PUT request successful:', response.data);
       dispatch(setCurrentUser(response.data.updatedPrestador));
-      toast.success("Datos Cofirmados con Existo ");
+      // toast.success("Datos Cofirmados con Existo ");
       setHasChanges(false);
     } else {
       // Manejar errores si la respuesta no es exitosa
@@ -89,7 +94,7 @@ const handleConfirmChanges = async () => {
     }
   } catch (error) {
     // Manejar errores si hay una excepción
-    toast.error("Ocurrio un problema, Comunicate con Nosotros");
+    // toast.error("Ocurrio un problema, Comunicate con Nosotros");
     console.error('Error en el PUT request:', error);
      dispatch(setLoading(false))
   }
@@ -138,10 +143,18 @@ const closeMapModal = () => {
 
 };
 
+// const show = () => {
+//   toast.current.show({ severity: 'info', summary: 'Info', detail: 'Message Content' });
+// };
+
+
 const handleTelefonoPublicoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-  setTelefonoPublico(event.target.value);
+  const value = `${countryCallingCode}${event.target.value}`;
+  setTelefonoPublico(value);
   setHasChanges(true);
+  console.log('Número con código de país:', value);
 };
+
 const handleCancelChanges = () => {
   setEspecialidad2Seleccionada(null);
   setEspecialidad3Seleccionada(null);
@@ -153,130 +166,171 @@ const handleDescriptionSave = (newDescription: string) => {
 };
 
 
-  return (
-<>
-  <Card className="mt-6 w-full md:w-96">
-    <CardBody>
+return (
+  <>
+    <Card className="mt-6 w-full md:w-96">
+      <CardBody>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {role === "PROVIDER" && (
-          <div>
-            <Typography variant="h3" color="blue-gray" textGradient className="mb-2">
-              Descripción
-            </Typography>
-            <Description initialDescription={descripcion || ''} onSave={handleDescriptionSave} />
-            {description && (
-            <Typography variant="h6">{description}</Typography>
-          )}
-          </div>
-        )}
-        <div>
           {role === "PROVIDER" && (
-            <>
-              <Typography variant="h4" color="blue-gray" className="mb-2">
-                Información del Prestador
-              </Typography>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <Typography><AssignmentIndIcon/>Matrícula: {matricula}</Typography>
-                  <FormGroup>
-                    <Typography><AddIcCallIcon/>Telefono: {phone}</Typography>
-                    <FormControlLabel 
-                      required 
-                      control={<SwichtStyle checked={checked} onChange={handleChangePhone} />}   
-                      label="Publicar Telefono"
-                    />
-                  </FormGroup>
-                  <Typography><PhoneAndroidIcon/>Telefono Publico: {phoneOpc}</Typography>
-                  <Box component="form" sx={{ '& > :not(style)': { m: 1, width: '15ch' }, }} noValidate autoComplete="off">
-                    <TextField id="standard-basic" label="N° de Telefono" variant="standard" onChange={handleTelefonoPublicoChange} />
-                  </Box>
-                </div>
-                <div>
-                      <Typography> <MedicalInformationIcon/>Especialidad: {especialidad}</Typography>
-
-                      <Typography> <MedicalInformationIcon/>Especialidad: {especialidad2}</Typography>
-                      <Typography>
-                        
-                      <DialogSelect onOk={(especialidad: string) => handleEspecialidadSelect(especialidad)} />
-                      {especialidad2Seleccionada} <button> <DeleteOutlinedIcon  onClick={handleCancelChanges}
-                         /> </button> </Typography>
-
-                      <Typography> <MedicalInformationIcon/>Especialidad: {especialidad3}</Typography>
-                      <Typography>
-
-                      <DialogSelect onOk={(especialidad: string) => handleEspecialidadSelect(especialidad)} />
-                      {especialidad3Seleccionada} <button> <DeleteOutlinedIcon  onClick={handleCancelChanges}
-                         /> </button> </Typography>
-                  
-                      
-                      <Typography><CheckCircleIcon />Estado: {tipo}</Typography>
-                    </div>
-
-              </div>
-              <Typography><PlaceIcon/>Address: {from} {ciudadOrigen}{paisOrigen}</Typography>
-              <div className="mt-5">
-                <button className = "rounded  text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium  text-sm px-2 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 me-2 mb-2"
-                  onClick={fromHandler}> < EditLocationAltIcon className="mr-1"/>Seleccionar dirección
-                </button>
-                {fromModalOpen && (
-                  <div>
-                    <MapComponent closeMapModal={closeMapModal} closeModal={closeModal} />
-                  </div>
-                )}
-              </div>
-            </>
-          )}
-          {role !== "PROVIDER" && (
             <div>
-              {role === "USER" && (
-                <>
-                  <Typography variant="h3" color="blue-gray" className="mb-2">
-                    Información de Usuario
-                  </Typography>
-                  <Typography><LocationCityIcon className="mr-1"/>Dependencia: {dependencia}</Typography>
-                  <Typography><RecentActorsIcon className="mr-1"/>DNI: {dni}</Typography>
-                  <Typography><AddIcCallIcon className="mr-1"/>Phone: {phone}</Typography>
-                  <Typography><PlaceIcon/>Address: {from} {ciudadOrigen}{paisOrigen}</Typography>
-                  <div className="mt-5">
-                <button className = "rounded  text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium  text-sm px-2 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 me-2 mb-2"
-                  onClick={fromHandler}> < EditLocationAltIcon className="mr-1"/>Seleccionar dirección
-                </button>
-                {fromModalOpen && (
-                  <div>
-                    <MapComponent closeMapModal={closeMapModal} closeModal={closeModal} />
-                  </div>
-                )}
-              </div>
-                </>
-              )}
-              {role === "employee" && (
-                <>
-                  <Typography variant="h3" color="blue-gray" className="mb-2">
-                    Información de Empleado
-                  </Typography>
-                  <Typography>Phone: {phone}</Typography>
-                  <Typography>Número Operador: {numeroOperador}</Typography>
-                  <Typography>Address: {address}</Typography>
-                </>
+              <Typography variant="h3" color="blue-gray" textGradient className="mb-2">
+                Descripción
+              </Typography>
+              <Description initialDescription={descripcion || ''} onSave={handleDescriptionSave} />
+              {description && (
+                <Typography variant="h6">{description}</Typography>
               )}
             </div>
           )}
+          <div>
+            {role === "PROVIDER" && (
+              <>
+                <Typography variant="h4" color="blue-gray" className="mb-2">
+                  Información del Prestador
+                </Typography>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <Typography><AssignmentIndIcon/>Matrícula: {matricula}</Typography>
+                    <FormGroup>
+                      <Typography><AddIcCallIcon/>Telefono: {phone}</Typography>
+                      <FormControlLabel 
+                        required 
+                        control={<SwichtStyle checked={checked} onChange={handleChangePhone} />}   
+                        label="Publicar Telefono"
+                      />
+                    </FormGroup>
+                    <Typography><PhoneAndroidIcon/>Telefono Publico: {phoneOpc}</Typography>
+                    <div className="relative flex w-full max-w-[24rem] md:max-w-none">
+                      <Menu placement="bottom-start">
+                        <MenuHandler>
+                          <Button
+                            ripple={false}
+                            variant="text"
+                            color="blue-gray"
+                            className="flex h-10 items-center gap-2 rounded-r-none border border-r-0 border-blue-gray-200 bg-blue-gray-500/10 pl-3"
+                          >
+                            <img
+                              src={flags.svg}
+                              alt={name}
+                              className="h-4 w-4 rounded-full object-cover"
+                            />
+                            {countryCallingCode}
+                          </Button>
+                        </MenuHandler>
+                        <MenuList className="max-h-[20rem] max-w-[18rem]">
+                          {countries.map(({ name, flags, countryCallingCode }: Country, index: number) => (
+                            <MenuItem
+                              key={name}
+                              value={name}
+                              className="flex items-center gap-2"
+                              onClick={() => setCountry(index)}
+                            >
+                              <img
+                                src={flags.svg}
+                                alt={name}
+                                className="h-5 w-5 rounded-full object-cover"
+                              />
+                              {name} <span className="ml-auto">{countryCallingCode}</span>
+                            </MenuItem>
+                          ))}
+                        </MenuList>
+                      </Menu>
+                      <Input
+                        type="tel"
+                        placeholder="Mobile Number"
+                        className="rounded-l-none flex-grow border-t-blue-gray-200 focus:border-t-gray-900"
+                        labelProps={{
+                          className: "before:content-none after:content-none",
+                        }}
+                        containerProps={{
+                          className: "min-w-0",
+                        }}
+                        onChange={handleTelefonoPublicoChange}
+                        crossOrigin={undefined}
+                      />
+                    </div>
+                    <Typography><MedicalInformationIcon/>Especialidad: {especialidad}</Typography>
+                    <Typography><MedicalInformationIcon/>Especialidad: {especialidad2}</Typography>
+                    <Typography>
+                      <DialogSelect onOk={(especialidad: string) => handleEspecialidadSelect(especialidad)} />
+                      {especialidad2Seleccionada} <button><DeleteOutlinedIcon onClick={handleCancelChanges} /></button>
+                    </Typography>
+                    <Typography><MedicalInformationIcon/>Especialidad: {especialidad3}</Typography>
+                    <Typography>
+                      <DialogSelect onOk={(especialidad: string) => handleEspecialidadSelect(especialidad)} />
+                      {especialidad3Seleccionada} <button><DeleteOutlinedIcon onClick={handleCancelChanges} /></button>
+                    </Typography>
+                    <Typography><CheckCircleIcon />Estado: {tipo}</Typography>
+                  </div>
+                </div>
+                <Typography><PlaceIcon/>Address: {from} {ciudadOrigen} {paisOrigen}</Typography>
+                <div className="mt-5">
+                  <button className="rounded text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium text-sm px-2 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 me-2 mb-2"
+                    onClick={fromHandler}> 
+                    <EditLocationAltIcon className="mr-1"/>Seleccionar dirección
+                  </button>
+                  {fromModalOpen && (
+                    <div>
+                      <MapComponent closeMapModal={closeMapModal} closeModal={closeModal} />
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+            {role !== "PROVIDER" && (
+              <div>
+                {role === "USER" && (
+                  <>
+                    <Typography variant="h3" color="blue-gray" className="mb-2">
+                      Información de Usuario
+                    </Typography>
+                    <Typography><LocationCityIcon className="mr-1"/>Dependencia: {dependencia}</Typography>
+                    <Typography><RecentActorsIcon className="mr-1"/>DNI: {dni}</Typography>
+                    <Typography><AddIcCallIcon className="mr-1"/>Phone: {phone}</Typography>
+                    <Typography><PlaceIcon/>Address: {from} {ciudadOrigen} {paisOrigen}</Typography>
+                    <div className="mt-5">
+                      <button className="rounded text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium text-sm px-2 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 me-2 mb-2"
+                        onClick={fromHandler}> 
+                        <EditLocationAltIcon className="mr-1"/>Seleccionar dirección
+                      </button>
+                      {fromModalOpen && (
+                        <div>
+                          <MapComponent closeMapModal={closeMapModal} closeModal={closeModal} />
+                        </div>
+                      )}
+                    </div>
+                  </>
+                )}
+                {role === "employee" && (
+                  <>
+                    <Typography variant="h3" color="blue-gray" className="mb-2">
+                      Información de Empleado
+                    </Typography>
+                    <Typography>Phone: {phone}</Typography>
+                    <Typography>Número Operador: {numeroOperador}</Typography>
+                    <Typography>Address: {address}</Typography>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
         </div>
-      </div>
-    </CardBody>
-    <CardFooter className="pt-0">
-      <Button
-        className={hasChanges ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-400 hover:bg-gray-500"}
-        onClick={ handleConfirmChanges}
-        disabled={!hasChanges}
-      >Confirmar Cambios</Button>
-    </CardFooter>
-  </Card>
-  <ToastContainer />
-</>
-
-  );
+      </CardBody>
+      <CardFooter className="pt-0">
+        <Button
+          className={hasChanges ? "bg-blue-500 hover:bg-blue-600" : "bg-gray-400 hover:bg-gray-500"}
+          onClick={handleConfirmChanges}
+          disabled={!hasChanges}
+        >Confirmar Cambios</Button>
+      </CardFooter>
+    </Card>
+    <Toast ref={toast} />
+  </>
+);
 };
+
+
+
 
 export default UserCard;
 
