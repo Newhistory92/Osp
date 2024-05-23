@@ -46,7 +46,7 @@ const UserCard: React.FC<UserCardProps> = ({
   checkedPhone,
 }) => {
   const dispatch = useAppDispatch();
-  const toast = useRef(null);
+  const toast = useRef<Toast>(null);
   const [especialidad2Seleccionada, setEspecialidad2Seleccionada] = React.useState<string | null>(null);
   const [especialidad3Seleccionada, setEspecialidad3Seleccionada] = React.useState<string | null>(null);
   const [fromModalOpen, setFromModalOpen] =  React.useState(false);
@@ -63,7 +63,7 @@ const [telefonoPublico, setTelefonoPublico] = React.useState<string | null>(null
 const [description, setDescription] =React.useState<string | null>(null);
 
 const handleConfirmChanges = async () => {
-  dispatch(setLoading(true))
+  dispatch(setLoading(true));
   try {
     const postData = {
       id,
@@ -75,30 +75,24 @@ const handleConfirmChanges = async () => {
       addressInfo,
       telefonoPublico,
       checked,
-      description
+      description,
     };
-    console.log("datos actualizados", postData);
 
     const response = await axios.put('/api/Users/prestador', postData);
 
     if (response.status === 200) {
-      // Si la respuesta es exitosa, puedes realizar las acciones necesarias, como mostrar un mensaje de éxito.
-      console.log('PUT request successful:', response.data);
       dispatch(setCurrentUser(response.data.updatedPrestador));
-      // toast.success("Datos Cofirmados con Existo ");
+      toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Datos confirmados con éxito', life: 3000 });
       setHasChanges(false);
     } else {
-      // Manejar errores si la respuesta no es exitosa
-      console.error('Error en el PUT request:', response.data);
-      dispatch(setLoading(false))
+      dispatch(setLoading(false));
     }
   } catch (error) {
-    // Manejar errores si hay una excepción
-    // toast.error("Ocurrio un problema, Comunicate con Nosotros");
-    console.error('Error en el PUT request:', error);
-     dispatch(setLoading(false))
+    toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Ocurrió un problema, inténtalo nuevamente en unos minutos', life: 3000 });
+    dispatch(setLoading(false));
   }
 };
+
 
   const handleEspecialidadSelect = (especialidad: string) => {
     console.log("Especialidad seleccionada:", especialidad);
@@ -143,9 +137,7 @@ const closeMapModal = () => {
 
 };
 
-// const show = () => {
-//   toast.current.show({ severity: 'info', summary: 'Info', detail: 'Message Content' });
-// };
+
 
 
 const handleTelefonoPublicoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -263,7 +255,7 @@ return (
                     <Typography><CheckCircleIcon />Estado: {tipo}</Typography>
                   </div>
                 </div>
-                <Typography><PlaceIcon/>Address: {from} {ciudadOrigen} {paisOrigen}</Typography>
+                <Typography><PlaceIcon/>Direccion: {from} {ciudadOrigen} {paisOrigen}</Typography>
                 <div className="mt-5">
                   <button className="rounded text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium text-sm px-2 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 me-2 mb-2"
                     onClick={fromHandler}> 
@@ -308,7 +300,7 @@ return (
                     </Typography>
                     <Typography>Phone: {phone}</Typography>
                     <Typography>Número Operador: {numeroOperador}</Typography>
-                    <Typography>Address: {address}</Typography>
+                    <Typography>Direccion: {address}</Typography>
                   </>
                 )}
               </div>
@@ -324,7 +316,10 @@ return (
         >Confirmar Cambios</Button>
       </CardFooter>
     </Card>
-    <Toast ref={toast} />
+    <div className="card flex justify-content-center">
+            <Toast ref={toast} />
+            
+        </div>
   </>
 );
 };
