@@ -5,6 +5,7 @@ const isUserRoute = createRouteMatcher([
   '/page/select-user',
   '/page/dashboard',
   '/page/user-profile',
+  '/page/dashboard/not-found'
 ]);
 
 const isAdminRoute = createRouteMatcher([

@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import NavbarVertical from '../../components/dashbord/navbars/NavbarVertical';
 import NavbarTop from '../../components/dashbord/navbars/NavbarTop';
 import Prestadores from "../../User2/prestador/TablePrestador";
@@ -19,12 +19,12 @@ const DefaultDashboardLayout: React.FC = () => {
   const [profileActive, setProfileActive] = useState(false);
   const [settingActive, setSettingActive] = useState(false);
   const [familyGroupActive, setFamilyGroupActive] = useState(false);
-  const [ordenesActive, setOrdenesActive] = useState(false); // Nuevo estado para Ordenes
-  const [publicacionActive, setPublicacionActive] = useState(false); // Nuevo estado para Publicación
-  const [denunciaActive, setDenunciaActive] = useState(false); // Nuevo estado para Gestión de Denuncias
+  const [ordenesActive, setOrdenesActive] = useState(false); //  estado para Ordenes
+  const [publicacionActive, setPublicacionActive] = useState(false); // estado para Publicación
+  const [denunciaActive, setDenunciaActive] = useState(false); //  estado para Gestión de Denuncias
   const [notificadorActive, setNotificadorActive] = useState(false); 
   const [auditorActive, setauditorActive] = useState(false);
-
+ 
   const currentUser = useAppSelector(state => state.user.currentUser);
   let userRole;
 
@@ -34,6 +34,15 @@ const DefaultDashboardLayout: React.FC = () => {
     userRole = currentUser ? currentUser.role : null;
   }
   
+
+  useEffect(() => {
+    if (!userRole || !['USER', 'ADMIN', 'PROVIDER', 'EMPLOYEE'].includes(userRole)) {
+      window.location.href = '/page/dashboard/not-found';
+    }
+  }, [userRole]);
+
+
+
   const ToggleMenu = () => {
     setShowMenu(!showMenu);
   };

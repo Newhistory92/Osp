@@ -1,9 +1,9 @@
 import Accordion from 'react-bootstrap/Accordion';
-import { Notificacion } from '@/app/interfaces/interfaces';
+import { Notificador} from '@/app/interfaces/interfaces';
 
 
 interface NotificationsAccordionProps {
-    notificaciones: Notificacion[];
+    notificaciones: Notificador[];
 }
 
 function NotificationsAccordion({ notificaciones }: NotificationsAccordionProps) {

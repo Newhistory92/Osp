@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Logo from "../../../../public/Logo.png";
-import { useUser} from '@clerk/clerk-react';
+import {  useAuth} from '@clerk/clerk-react';
 import React, { useState, useEffect } from 'react';
 import "./navbar.css"
 import {useAppDispatch,useAppSelector} from "../../hooks/StoreHook"
@@ -15,7 +15,7 @@ import { Publicacion } from '@/app/interfaces/interfaces';
 const Navbar: React.FC = () => {
   const showPrestadores = useAppSelector(state => state.navbar.showPrestadores);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { isSignedIn } = useUser();
+  const { isSignedIn } =  useAuth();
   const publicaciones = useAppSelector(state => state.navbar.publicaciones);
   const selectedContent = useAppSelector(state => state.navbar.selectedContent);
   const dispatch = useAppDispatch(); 
@@ -106,7 +106,7 @@ const Navbar: React.FC = () => {
    const renderAuthButtons = () => {
     if (isSignedIn) {
       return (
-        <div className="flex justify-end mr-10">
+        <div className="flex justify-end mr-10 ">
         
         <ButtonUser />
       </div>

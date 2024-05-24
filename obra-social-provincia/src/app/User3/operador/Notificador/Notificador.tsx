@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import EditorDefault from '../Publicacion/ckeditor';
+// import EditorDefault from '../Publicacion/ckeditor';
 import { useAppSelector } from "../../../hooks/StoreHook";
 import { ToastContainer, toast } from 'react-toastify';
 import NotificadosList from './NotificadosList';
@@ -220,13 +220,13 @@ const Notificador = () => {
         </div>
       )}
 
-      {messageType === 'success' && afiliado && ( 
+      {/* {messageType === 'success' && afiliado && ( 
         <EditorDefault
           value={contenido}
           onChange={handleContenidoChange}
           resetContent={resetEditorContent}
         />
-      )}
+      )} */}
 
       {messageType === 'success' && afiliado && ( 
         <div>

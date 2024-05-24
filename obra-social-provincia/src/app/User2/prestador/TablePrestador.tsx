@@ -157,58 +157,49 @@ const perPage = 8;
     onOpen();
   };
  console.log(filteredData)
-  return (
-   
-    <Card className="h-full w-full ">
-      <CardHeader floated={false} shadow={false} className="rounded-none">
-        <div className="mb-8 flex items-center justify-between gap-8">
-          <div>
-            <Typography variant="h5" color="blue-gray">
-              Lista de Prestadores
-            </Typography>
-            <Typography color="gray" className="mt-1 font-normal">
-              Informacion
-            </Typography>
+ return (
+  <Card className="h-full w-full">
+    <CardHeader floated={false} shadow={false} className="rounded-none">
+      <div className="mb-8 flex items-center justify-between gap-8">
+        <div>
+          <Typography variant="h5" color="blue-gray">
+            Lista de Prestadores
+          </Typography>
+          <Typography color="gray" className="mt-1 font-normal">
+            Informacion
+          </Typography>
+        </div>
+      </div>
+      <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
+        <Tabs value="all" className="w-full md:w-max">
+          <TabsHeader>
+            {TABS.map(({ label, value }) => (
+              <Tab key={value} value={value} onClick={() => handleTabChange(value)}>
+                &nbsp;&nbsp;{label}&nbsp;&nbsp;
+              </Tab>
+            ))}
+          </TabsHeader>
+        </Tabs>
+        <div className="flex items-center">
+          <div className="flex-grow mr-4">
+            <FilterUser prestadores={prestadores} openModal={handleAvatarButtonClick} />
+          </div>
+          <div className="flex-grow mb-2">
+            <FilterEspecialidad prestadores={prestadores} setFilteredData={setFilteredData} />
           </div>
         </div>
-        <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-
-          <Tabs value="all" className="w-full md:w-max">
-            <TabsHeader>
-            {TABS.map(({ label, value }) => (
-            <Tab key={value} value={value} onClick={() => handleTabChange(value)}>
-      &nbsp;&nbsp;{label}&nbsp;&nbsp;
-    </Tab>
-  ))}
-            </TabsHeader>
-          </Tabs>
-          
-          <div className="flex items-center">
-  <div className="flex-grow mr-4">
-    <FilterUser prestadores={prestadores} openModal={openModal} />
-  </div>
-  <div className="flex-grow mb-2">
-    <FilterEspecialidad prestadores={prestadores} setFilteredData={setFilteredData} />
-  </div>
-</div>
-
-        </div>
-      </CardHeader>
-      <Suspense fallback={<Skeleton height={400} count={8} />}>
-      <CardBody className="overflow-x-auto px-0 ">
+      </div>
+    </CardHeader>
+    <CardBody className="overflow-x-auto px-0">
+      {loading ? (
+        <Skeleton height={400} count={8} />
+      ) : (
         <table className="mt-4 w-full min-w-max table-auto text-left">
           <thead>
             <tr>
               {TABLE_HEAD.map((head) => (
-                <th
-                  key={head}
-                  className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
-                >
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal leading-none opacity-70"
-                  >
+                <th key={head} className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                  <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
                     {head}
                   </Typography>
                 </th>
@@ -216,133 +207,100 @@ const perPage = 8;
             </tr>
           </thead>
           <tbody>
-          {filteredData.map(({ id, name, apellido, imageUrl, phone, phoneOpc, especialidad, address, tipo, descripcion, checkedPhone, especialidad2, especialidad3 }, index) => {
+            {filteredData.map((prestador, index) => {
               const isLast = index === filteredData.length - 1;
-                const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
- 
-                return (
-                  <tr key={name}>
-                    <td className={classes}>
+              const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
+              return (
+                <tr key={prestador.id}>
+                  <td className={classes}>
                     <div className="flex items-center gap-3">
-                      <button className="avatar-button"  onClick={() => handleAvatarButtonClick({  id, name, apellido, imageUrl, phone, phoneOpc, especialidad, address, tipo,
-                       descripcion, checkedPhone,especialidad2,especialidad3,email:"" })}>
-                     <Avatar src={imageUrl} alt={apellido} size="sm" />
-                     </button>
-
-                  <Modal
-                 size={"2xl"}
-                 isOpen={isOpen}
-                 onClose={onClose}
-                 placement="center"
-                 scrollBehavior={"outside"}
-                 backdrop={"blur"}
-                 classNames={{
-                 body: "py-6 ",
-                 backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
-                 base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]  ",
-                header: "border-b-[1px] border-[#292f46] ",
-               footer: "border-t-[1px] border-[#292f46]",
-               closeButton: "hover:bg-white/5 active:bg-white/10 ",
-              
-                }}>
-                <ModalContent>
-                   {(onClose) => (
-                       <>
-              <ModalHeader className="flex flex-col gap-1 z-100">Obra Social Provincia</ModalHeader>
-              <ModalBody>
-              {selectedPrestador && (
-            <PrestadorCard {...selectedPrestador} />
-          )}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="danger" variant="light" onPress={onClose}>
-            Cerrar
-            </Button>
-          </ModalFooter>
-        </>
-      )}
-    </ModalContent>
-  </Modal>
-                        <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
-                            {name} {apellido}
-                          </Typography>
-                        
-                        </div>
-                      </div>
-                    </td>
-                    <td className={classes}>
+                      <button className="avatar-button" onClick={() => handleAvatarButtonClick(prestador)}>
+                        <Avatar src={prestador.imageUrl} alt={prestador.apellido} size="sm" />
+                      </button>
                       <div className="flex flex-col">
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal  p-4 border-b border-blue-gray-50 bg-blue-gray-50/50" 
-                        >   
-                         <td className="align-middle  ">
+                        <Typography variant="small" color="blue-gray" className="font-normal">
+                          {prestador.name} {prestador.apellido}
+                        </Typography>
+                      </div>
+                    </div>
+                  </td>
+                  <td className={classes}>
+                    <div className="flex flex-col">
+                      <Typography variant="small" color="blue-gray" className="font-normal p-4 border-b border-blue-gray-50 bg-blue-gray-50/50">
+                        <div className="align-middle">
                           <MedicalInformationOutlinedIcon className="mr-2 mb-1" />
-                          {especialidad} <ChevronRightOutlinedIcon fontSize="small"/>
-                          {especialidad2}<ChevronRightOutlinedIcon fontSize="small"/> 
-                          {especialidad3}
-                          </td>
-                          
-                        </Typography>
-
-                      </div>
-                    </td>
-                    <td className={classes}>
-                      <div className="w-max">
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal opacity-70">
-                          <td className="align-middle ">
-                         { checkedPhone && (
-                        <> <LocalPhoneOutlinedIcon className="mr-2" />{phone}<ChevronRightOutlinedIcon fontSize="small"/></>)}
-                         {phoneOpc && ( <><LocalPhoneOutlinedIcon className="mr-2" /> {phoneOpc} </>   )}
-                          </td>
-                        </Typography>
-                      </div>
-                    </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal  p-4 border-b border-blue-gray-50 bg-blue-gray-50/50">
-                        <td className="align-middle"><AddLocationOutlinedIcon className="mr-2 mb-1" />{address}</td>            
+                          {prestador.especialidad} <ChevronRightOutlinedIcon fontSize="small" />
+                          {prestador.especialidad2} <ChevronRightOutlinedIcon fontSize="small" />
+                          {prestador.especialidad3}
+                        </div>
                       </Typography>
-                    </td>
-                    <td className={classes}>
-                    {tipo === "FIDELIZADO" && <AddTaskSharpIcon className="mr-2 mb-1" />}{tipo}
-                    </td>
-                  </tr>
-                );
-              },
-            )}
+                    </div>
+                  </td>
+                  <td className={classes}>
+                    <div className="w-max">
+                      <Typography variant="small" color="blue-gray" className="font-normal opacity-70">
+                        <div className="align-middle">
+                          {prestador.checkedPhone && (
+                            <>
+                              <LocalPhoneOutlinedIcon className="mr-2" />
+                              {prestador.phone} <ChevronRightOutlinedIcon fontSize="small" />
+                            </>
+                          )}
+                          {prestador.phoneOpc && (
+                            <>
+                              <LocalPhoneOutlinedIcon className="mr-2" />
+                              {prestador.phoneOpc}
+                            </>
+                          )}
+                        </div>
+                      </Typography>
+                    </div>
+                  </td>
+                  <td className={classes}>
+                    <Typography variant="small" color="blue-gray" className="font-normal p-4 border-b border-blue-gray-50 bg-blue-gray-50/50">
+                      <div className="align-middle">
+                        <AddLocationOutlinedIcon className="mr-2 mb-1" />
+                        {prestador.address}
+                      </div>
+                    </Typography>
+                  </td>
+                  <td className={classes}>
+                    {prestador.tipo === "FIDELIZADO" && <AddTaskSharpIcon className="mr-2 mb-1" />}
+                    {prestador.tipo}
+                  </td>
+                </tr>
+              );
+            })}
           </tbody>
         </table>
-      </CardBody>
-      <CardFooter className="flex items-center justify-between border-t  border-blue-gray-50 p-4">
-        <div className=" items-center justify-center w-full ">
-     <PaginationButtons
-      page={page}
-      setPage={setPage}
-      maxPage={maxPage}
-      data={prestadores} 
-    />
-  </div>
-</CardFooter>
-</Suspense>
-    </Card>
-  );
+      )}
+    </CardBody>
+    <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+      <div className="items-center justify-center w-full">
+        <PaginationButtons page={page} setPage={setPage} maxPage={maxPage} data={prestadores} />
+      </div>
+    </CardFooter>
+    <Modal size={"2xl"} isOpen={isOpen} onClose={onClose} placement="center" scrollBehavior={"outside"} backdrop={"blur"}
+      classNames={{ body: "py-6", backdrop: "bg-[#292f46]/50 backdrop-opacity-40", base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]", header: "border-b-[1px] border-[#292f46]", footer: "border-t-[1px] border-[#292f46]", closeButton: "hover:bg-white/5 active:bg-white/10" }}>
+      <ModalContent>
+        {(onClose) => (
+          <>
+            <ModalHeader className="flex flex-col gap-1 z-100">Obra Social Provincia</ModalHeader>
+            <ModalBody>
+              {selectedPrestador && <PrestadorCard {...selectedPrestador} />}
+            </ModalBody>
+            <ModalFooter>
+              <Button color="danger" variant="light" onClick={onClose}>Cerrar</Button>
+            </ModalFooter>
+          </>
+        )}
+      </ModalContent>
+    </Modal>
+  </Card>
+);
 }
 
 export default Prestadores;
-
-
 
 
 

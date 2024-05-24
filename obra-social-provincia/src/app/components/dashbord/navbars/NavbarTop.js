@@ -3,8 +3,7 @@ import { Menu } from 'react-feather';
 import Link from 'next/link';
 import {
 	Nav,
-	Navbar,
-	Form
+	Navbar
 } from 'react-bootstrap';
 import QuickMenu from '../QuickMenu.tsx';
 

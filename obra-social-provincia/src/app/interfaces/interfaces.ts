@@ -176,7 +176,7 @@ export interface Afiliado {
   address?: string;
 }
 
-export interface Notificacion {
+export interface Notificador {
   id: string;
   titulo: string;
   contenido: string;
@@ -194,4 +194,14 @@ export interface Country {
   name: string;
   flags: { svg: string };
   countryCallingCode: string;
+}
+
+export interface Notificacion {
+  id: string;
+  titulo: string;
+  contenido: string;
+  autor: string;
+  receptor: string;
+  status: string;
+  createdAt: string | number | Date;
 }

@@ -2,15 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { OrderList } from 'primereact/orderlist';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale'
-interface Notificacion {
-    id: string;
-    titulo: string;
-    contenido: string;
-    autor: string;
-    receptor: string;
-    status: string;
-    createdAt: string | number | Date;
-}
+import { Notificacion } from '@/app/interfaces/interfaces';
 interface Props {
     autorId: string | null;
   }

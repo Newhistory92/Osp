@@ -17,16 +17,9 @@ import useMounted from '../../hooks/useMounted';
 import { UserButton, useUser } from '@clerk/nextjs';
 import NotificationsAccordion from '../../User3/operador/Notificador/Notification-history';
 import MailRoundedIcon from '@mui/icons-material/MailRounded';
+import ButtonUser from '../UserComponent/ButtomUser';
+import {Notificacion  } from '@/app/interfaces/interfaces';
 
-interface Notificacion {
-    id: string;
-    titulo: string;
-    contenido: string;
-    autor: string;
-    receptor: string;
-    status: string;
-    createdAt: string | number | Date;
-}
 
 const QuickMenu = () => {
     const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
@@ -40,7 +33,7 @@ const QuickMenu = () => {
     useEffect(() => {
         const getNotificaciones = async () => {
           try {
-            const response = await fetch(`/api/datos/notificados?receptorId=${receptorId}`, {
+            const response = await fetch(`/api/Datos/notificados?receptorId=${receptorId}`, {
               method: 'GET',
               headers: {
                 'Content-Type': 'application/json',
@@ -55,9 +48,10 @@ const QuickMenu = () => {
               setNotificaciones(data);
             }
           } catch (error) {
-            console.error('Error al obtener las notificaciones:', error);
-            throw error;
-          }
+            if (error instanceof Error && error.message !== 'Error al obtener las notificaciones') {
+              console.error('Error inesperado al obtener las notificaciones:', error);
+            }
+        }
         };
     
         getNotificaciones(); // Llama a la función getNotificaciones para obtener las notificaciones cuando el componente se monta
@@ -153,7 +147,7 @@ const QuickMenu = () => {
                     className="rounded-circle"
                     id="dropdownUser">
                     <div className="avatar avatar-md avatar-indicators avatar-online ">
-                    <UserButton />
+                    <ButtonUser />
                     </div>
                 </Dropdown.Toggle>
             </Dropdown>
@@ -204,7 +198,7 @@ const QuickMenuMobile = () => {
                         </div>
                         <Notifications />
                         <div className="border-top px-3 pt-3 pb-3">
-                            {/* Botón para abrir el modal */}
+                        
                             <Button variant="link" onClick={() => setShowModal(true)}>Ver todas las notificaciones</Button>
                         </div>
                     </Dropdown.Item>
@@ -216,8 +210,8 @@ const QuickMenuMobile = () => {
                     bsPrefix=' '
                     className="rounded-circle"
                     id="dropdownUser">
-                    <div className="avatar avatar-md avatar-indicators avatar-online ">
-                    <UserButton />
+                     <div className="avatar avatar-md avatar-indicators avatar-online ">
+                    <ButtonUser />
                     </div>
                 </Dropdown.Toggle>
             </Dropdown>

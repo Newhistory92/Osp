@@ -22,11 +22,13 @@ import RecentActorsIcon from '@mui/icons-material/RecentActors';
 import DialogSelect from './SubComponentes/DialogSelect';
 import MapComponent from "./SubComponentes/MapComponent"
 import  {getFormattedAddress} from "./SubComponentes/Maps/MapApi"
-import { setCurrentUser, setLoading, setErrorMessage } from "../../redux/Slice/userSlice";
+import { setCurrentUser, setLoading} from "../../redux/Slice/userSlice";
 import { useAppDispatch } from "../../hooks/StoreHook";
 import Description from "../Perfil/Description";
 import { Toast } from 'primereact/toast';
 import { UserCardProps,  Country} from "@/app/interfaces/interfaces";
+
+import "primereact/resources/themes/lara-light-cyan/theme.css";
 
 const UserCard: React.FC<UserCardProps> = ({
   id,
@@ -61,7 +63,7 @@ const UserCard: React.FC<UserCardProps> = ({
 const [checked, setChecked] = React.useState( checkedPhone);
 const [telefonoPublico, setTelefonoPublico] = React.useState<string | null>(null);
 const [description, setDescription] =React.useState<string | null>(null);
-
+const [currentAddress, setCurrentAddress] = React.useState<string | null>(address ?? null); 
 const handleConfirmChanges = async () => {
   dispatch(setLoading(true));
   try {
@@ -82,7 +84,7 @@ const handleConfirmChanges = async () => {
 
     if (response.status === 200) {
       dispatch(setCurrentUser(response.data.updatedPrestador));
-      toast.current?.show({ severity: 'success', summary: 'Success', detail: 'Datos confirmados con éxito', life: 3000 });
+      toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'Datos confirmados con éxito', life: 3000 });
       setHasChanges(false);
     } else {
       dispatch(setLoading(false));
@@ -128,6 +130,7 @@ const closeModal = async (fromSelected: google.maps.LatLngLiteral) => {
     setCiudadOrigen(city);
     setPaisOrigen(fromArray[fromArray.length - 1]);
     setFrom(fromArray[0]);
+    setCurrentAddress(`${fromArray[0]} ${city} ${fromArray[fromArray.length - 1]}`); 
     setHasChanges(true)
   }
 };
@@ -255,7 +258,8 @@ return (
                     <Typography><CheckCircleIcon />Estado: {tipo}</Typography>
                   </div>
                 </div>
-                <Typography><PlaceIcon/>Direccion: {from} {ciudadOrigen} {paisOrigen}</Typography>
+                <Typography><PlaceIcon />Dirección: {currentAddress}</Typography>
+
                 <div className="mt-5">
                   <button className="rounded text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium text-sm px-2 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 me-2 mb-2"
                     onClick={fromHandler}> 
@@ -279,7 +283,7 @@ return (
                     <Typography><LocationCityIcon className="mr-1"/>Dependencia: {dependencia}</Typography>
                     <Typography><RecentActorsIcon className="mr-1"/>DNI: {dni}</Typography>
                     <Typography><AddIcCallIcon className="mr-1"/>Phone: {phone}</Typography>
-                    <Typography><PlaceIcon/>Address: {from} {ciudadOrigen} {paisOrigen}</Typography>
+                    <Typography><PlaceIcon />Dirección: {currentAddress}</Typography>
                     <div className="mt-5">
                       <button className="rounded text-white bg-[#FF9119] hover:bg-[#FF9119]/80 focus:ring-4 focus:outline-none focus:ring-[#FF9119]/50 font-medium text-sm px-2 py-2.5 text-center inline-flex items-center dark:hover:bg-[#FF9119]/80 dark:focus:ring-[#FF9119]/40 me-2 mb-2"
                         onClick={fromHandler}> 
@@ -300,7 +304,7 @@ return (
                     </Typography>
                     <Typography>Phone: {phone}</Typography>
                     <Typography>Número Operador: {numeroOperador}</Typography>
-                    <Typography>Direccion: {address}</Typography>
+                    <Typography><PlaceIcon />Dirección: {currentAddress}</Typography>
                   </>
                 )}
               </div>
@@ -317,7 +321,7 @@ return (
       </CardFooter>
     </Card>
     <div className="card flex justify-content-center">
-            <Toast ref={toast} />
+            <Toast ref={toast} position="bottom-center"/>
             
         </div>
   </>

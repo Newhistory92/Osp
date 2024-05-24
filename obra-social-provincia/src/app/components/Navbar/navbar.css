@@ -61,7 +61,7 @@ h1,h2,h4,h5,h6 {
 .header {
   background: transparent;
   position: absolute;
-  z-index: 80;
+  z-index: 50;
   margin-left: 0;
   margin-right: 0;
   height: 20%;
