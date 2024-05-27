@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -6,7 +6,8 @@ import NativeSelect from '@mui/material/NativeSelect';
 import { Button, TextField, List, ListItem, ListItemText, Modal, ListSubheader, Fab, Typography } from '@mui/material';
 import { crearPublicacion, actualizarPublicacion,deletePublicacion } from '../../../api/Datos/Publicacion/ApiPublicacion';
 import { useAppSelector } from "../../../hooks/StoreHook";
-import EditorDefault from './ckeditor';
+//import EditorDefault from './ckeditor';
+import BundledEditor from "../../../components/tinymc/BundledEditor"
 import { ToastContainer, toast } from 'react-toastify';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
@@ -31,6 +32,13 @@ export default function EditPublicacion() {
     const [deletingPublicacion, setDeletingPublicacion] = useState< PublicacionEdit | null>(null);
     const currentUser = useAppSelector(state => state.user.currentUser);
 
+
+    const editorRef = useRef(null);
+    const log = () => {
+      if (editorRef.current) {
+     
+      }
+    };
     let autorId;
 
 
@@ -155,20 +163,24 @@ export default function EditPublicacion() {
     };
 
     return (
-        <div>
+        <div className='bg-white rounded-lg'>
             <Box sx={{ minWidth: 120 }}>
             <Fab size="medium" color="secondary" aria-label="add">
         <AddIcon />
       </Fab>
-      <Fab color="secondary" size="medium" aria-label="edit">
+      <Fab  color="secondary" size="medium" aria-label="edit">
   <DeleteSweepIcon />
 </Fab>
                 <FormControl fullWidth>
-                    <InputLabel variant="standard" htmlFor="select-categoria">
+                    <InputLabel 
+                    variant="standard" 
+                    htmlFor="select-categoria"
+                    className='ml-5'>
                         Seleccionar categoría
                     </InputLabel>
                     <NativeSelect
                         value={published}
+                        className='ml-5'
                         onChange={handleSelectChange}
                         inputProps={{
                             name: 'published',
@@ -182,6 +194,7 @@ export default function EditPublicacion() {
                         <option value="prestadores">Prestadores</option>
                         <option value="servicios">Servicios</option>
                         <option value="programas">Programas</option>
+                       
                     </NativeSelect>
                 </FormControl>
             </Box>
@@ -212,7 +225,7 @@ export default function EditPublicacion() {
                                
                            }
                        />
-                       <ModeEditIcon className='mr-2' onClick={() => handleEditPublicacion(publicacion)} />
+                       <ModeEditIcon className='mr-2 ' onClick={() => handleEditPublicacion(publicacion)} />
                        <DeleteSweepIcon onClick={() => { setShowDeleteConfirmation(true); setDeletingPublicacion(publicacion); }} />
                    </ListItem>
                ))}
@@ -222,7 +235,7 @@ export default function EditPublicacion() {
                 aria-labelledby="modal-delete-publicacion"
                 aria-describedby="modal-delete-publicacion-description"
             >
-                <div className='fixed inset-0 flex items-center justify-center'>
+                <div className='fixed inset-0 flex items-center justify-center '>
                     <div className='bg-white p-8 rounded-lg'>
                         <Typography variant="h6" gutterBottom>
                             ¿Deseas eliminar esta publicación?
@@ -244,8 +257,8 @@ export default function EditPublicacion() {
 
             {!showForm && published && (
                 <Box sx={{ '& > :not(style)': { m: 1 } }}>
-                    <Fab onClick={() => setShowForm(true)} variant="extended" size="small" color="primary">
-                        < DrawIcon sx={{ mr: 1 }} />
+                    <Fab onClick={() => setShowForm(true)}  variant="extended" size="small" color="primary">
+                        < DrawIcon sx={{ mr: 1 }}  />
                         Crear Nueva Publicación
                     </Fab>
                 </Box>
@@ -261,7 +274,25 @@ export default function EditPublicacion() {
                         required
                         margin="normal"
                     />
-                    <EditorDefault value={contenido} onChange={handleContenidoChange} resetContent={resetEditorContent} />
+                     <BundledEditor
+        onInit={(_evt: any, editor: null) => editorRef.current = editor}
+        onChange={handleContenidoChange}
+        initialValue='<p>This is the initial content of the editor.</p>'
+        init={{
+          height: 500,
+          menubar: false,
+          plugins: [
+            'advlist', 'anchor', 'autolink', 'help', 'image', 'link', 'lists',
+            'searchreplace', 'table', 'wordcount'
+          ],
+          toolbar: 'undo redo | blocks | ' +
+            'bold italic forecolor | alignleft aligncenter ' +
+            'alignright alignjustify | bullist numlist outdent indent | ' +
+            'removeformat | help',
+          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+        }}
+      />
+                    {/* <EditorDefault value={contenido} onChange={handleContenidoChange} resetContent={resetEditorContent} /> */}
                     <Button className='ms-5 mt-5' type="submit" variant="contained" color="primary">
                         Publicar
                     </Button>
@@ -293,7 +324,7 @@ export default function EditPublicacion() {
                 margin="normal"
                 className='mb-4'
             />
-            <EditorDefault value={contenido} onChange={handleContenidoChange} resetContent={resetEditorContent} />
+            {/* <EditorDefault value={contenido} onChange={handleContenidoChange} resetContent={resetEditorContent} /> */}
             <div className='mt-4 flex justify-between'>
                 <Button onClick={handleAcceptEdit} variant="contained" color="primary">
                     Aceptar

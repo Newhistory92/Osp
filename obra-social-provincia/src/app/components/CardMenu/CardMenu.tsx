@@ -92,7 +92,7 @@ const CardMenu: React.FC = () => {
                                 <ul>
                                     <li>
                                     {publicaciones.map((publicacion, index) => (
-                 publicacion.published === "istitucional" && (
+                 publicacion.published === "institucional" && (
                     <a key={index} href="#"  onClick={() => handleTitleClick(publicacion.contenido)}>
                     {publicacion.titulo}
                   </a> )))}
@@ -111,7 +111,7 @@ const CardMenu: React.FC = () => {
                             <ul>
                                     <li>
                                     {publicaciones.map((publicacion, index) => (
-                 publicacion.published === "istitucional" && (
+                 publicacion.published === "programas" && (
                     <a key={index} href="#"  onClick={() => handleTitleClick(publicacion.contenido)}>
                     {publicacion.titulo}
                   </a> )))}
