@@ -3,13 +3,21 @@ import { useUser,SignOutButton} from '@clerk/clerk-react';
 import { ClerkLoading } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
-
+import { useAppDispatch } from "../../hooks/StoreHook";
+import { clearState } from '../../redux/Slice/userSlice';
 const ButtonUser = () => {
   const { user } = useUser();
+  const dispatch = useAppDispatch ();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleToggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const handleSignOut = () => {
+    // Despacha la acción para limpiar el estado
+    dispatch(clearState());
+   
   };
 
   if (!user) {
@@ -45,8 +53,8 @@ return <ClerkLoading>
               <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Inicio</p>
             </Link>
             <div className="py-1">
-              <SignOutButton>
-                <button className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Cierre de Sesion</button>
+            <SignOutButton >
+                <button onClick={handleSignOut} className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Cierre de Sesion</button>
               </SignOutButton>
             </div>
           </div>

@@ -39,6 +39,8 @@ export default function EditPublicacion() {
      
       }
     };
+
+
     let autorId;
 
 
@@ -275,21 +277,75 @@ export default function EditPublicacion() {
                         margin="normal"
                     />
                      <BundledEditor
+                       apiKey='0haatfl7x4pbf6bmbt9lleeg1naxzpdssmbl9csdor4lepi0'
         onInit={(_evt: any, editor: null) => editorRef.current = editor}
         onChange={handleContenidoChange}
         initialValue='<p>This is the initial content of the editor.</p>'
         init={{
           height: 500,
-          menubar: false,
+          indentation: '20pt',
+          indent_use_margin: true,
+          branding:false,
+          preview_styles: false,
+          browser_spellcheck: true,
+          spellchecker_language: 'Spanish=es',
+          table_header_type: 'sectionCells',
+          table_sizing_mode: 'responsive',
+          table_column_resizing: 'resizetable',
+          link_default_target: '_blank',
+          autosave_interval: '20s',
+          emoticons_database: 'emojiimages',
+   
           plugins: [
-            'advlist', 'anchor', 'autolink', 'help', 'image', 'link', 'lists',
-            'searchreplace', 'table', 'wordcount'
+            'advlist', 'anchor', 'autolink', 'image', 'lists',
+            'searchreplace', 'table', 'wordcount','accordion','tinymcespellchecker','link autolink','autosave','searchreplace','emoticons',
           ],
           toolbar: 'undo redo | blocks | ' +
-            'bold italic forecolor | alignleft aligncenter ' +
-            'alignright alignjustify | bullist numlist outdent indent | ' +
-            'removeformat | help',
-          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }'
+            'bold italic forecolor | alignleft aligncenter ' + 'fontfamily | fontsize'+
+            'alignright alignjustify | bullist numlist outdent indent | searchreplace' +
+             ' link image | code | restoredraft '+ 'emoticons',
+          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+          formats: {
+            alignleft: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video', classes: 'left' },
+            aligncenter: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video', classes: 'center' },
+            alignright: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video', classes: 'right' },
+            alignjustify: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video', classes: 'full' }
+            
+          },
+          font_family_formats: 'Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats',
+          font_size_formats: '8pt 10pt 12pt 14pt 16pt 18pt 24pt 36pt 48pt',
+          images_file_types: 'jpg,svg,webp',
+          image_title: true,
+          automatic_uploads: true,
+          file_picker_callback: (cb, value, meta) => {
+            const input = document.createElement('input');
+            input.setAttribute('type', 'file');
+            input.setAttribute('accept', 'image/*');
+        
+            input.addEventListener('change', (e) => {
+              const file = e.target.files[0];
+        
+              const reader = new FileReader();
+              reader.addEventListener('load', () => {
+                /*
+                  Note: Now we need to register the blob in TinyMCEs image blob
+                  registry. In the next release this part hopefully won't be
+                  necessary, as we are looking to handle it internally.
+                */
+                const id = 'blobid' + (new Date()).getTime();
+                const blobCache =  tinymce.activeEditor.editorUpload.blobCache;
+                const base64 = reader.result.split(',')[1];
+                const blobInfo = blobCache.create(id, file, base64);
+                blobCache.add(blobInfo);
+        
+                /* call the callback and populate the Title field with the file name */
+                cb(blobInfo.blobUri(), { title: file.name });
+              });
+              reader.readAsDataURL(file);
+            });
+        
+            input.click();
+          },
         }}
       />
                     {/* <EditorDefault value={contenido} onChange={handleContenidoChange} resetContent={resetEditorContent} /> */}

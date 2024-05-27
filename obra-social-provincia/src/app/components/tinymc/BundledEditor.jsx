@@ -52,7 +52,7 @@ import '../../tinymce/skins/ui/oxide/content.js';
 export default function BundledEditor(props) {
   return (
     <Editor
-      licenseKey='your-lisense-key'
+      licenseKey='gpl'
       {...props}
     />
   );

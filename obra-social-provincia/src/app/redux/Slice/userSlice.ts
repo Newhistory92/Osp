@@ -45,9 +45,12 @@ const userSlice = createSlice({
       console.log("setSuccessMessage action dispatched with payload:", action.payload);
       state.successMessage = action.payload;
     },
+    clearState(state) {
+      return initialState;
+    }
   },
 });
 
-export const { setCurrentUser, setPartialCurrentUser, setLoading, setErrorMessage,setSuccessMessage } = userSlice.actions;
+export const { setCurrentUser, setPartialCurrentUser, setLoading, setErrorMessage, setSuccessMessage, clearState } = userSlice.actions;
 
 export default userSlice.reducer;

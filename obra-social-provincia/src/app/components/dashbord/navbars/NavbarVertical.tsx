@@ -20,7 +20,7 @@ import PostAddOutlinedIcon from '@mui/icons-material/PostAddOutlined';
 import EditNotificationsRoundedIcon from '@mui/icons-material/EditNotificationsRounded';
 import { useAppSelector } from "../../../hooks/StoreHook";
 import { PropsNavbarVertical } from '@/app/interfaces/interfaces';
-
+//import "../../../styles/theme.scss"
 
 const NavbarVertical: React.FC<PropsNavbarVertical> = ({ onProfileClick, onSettingClick, onFamilyGroupClick, onOrdenesClick ,onPublicacionClick, onDenunciaClick, onNotificadorClick,onAuditorClick}) => {
   const { user } = useUser();

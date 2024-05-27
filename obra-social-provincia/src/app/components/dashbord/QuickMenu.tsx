@@ -14,12 +14,12 @@ import {
 import Link from 'next/link';
 import SimpleBar from 'simplebar-react';
 import useMounted from '../../hooks/useMounted';
-import { UserButton, useUser } from '@clerk/nextjs';
+import {useUser } from '@clerk/nextjs';
 import NotificationsAccordion from '../../User3/operador/Notificador/Notification-history';
 import MailRoundedIcon from '@mui/icons-material/MailRounded';
 import ButtonUser from '../UserComponent/ButtomUser';
 import {Notificacion  } from '@/app/interfaces/interfaces';
-
+import "../../styles/theme.scss"
 
 const QuickMenu = () => {
     const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
