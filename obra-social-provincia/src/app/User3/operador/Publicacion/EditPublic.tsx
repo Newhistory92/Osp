@@ -6,8 +6,6 @@ import NativeSelect from '@mui/material/NativeSelect';
 import { Button, TextField, List, ListItem, ListItemText, Modal, ListSubheader, Fab, Typography } from '@mui/material';
 import { crearPublicacion, actualizarPublicacion,deletePublicacion } from '../../../api/Datos/Publicacion/ApiPublicacion';
 import { useAppSelector } from "../../../hooks/StoreHook";
-//import EditorDefault from './ckeditor';
-import BundledEditor from "../../../components/tinymc/BundledEditor"
 import { ToastContainer, toast } from 'react-toastify';
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
@@ -16,8 +14,11 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale'
 import AddIcon from '@mui/icons-material/Add';
 import { PublicacionEdit } from '@/app/interfaces/interfaces';
+import dynamic from 'next/dynamic';
 
-
+const BundledEditor = dynamic(() => import ("../../../../BundledEditor"),{
+    ssr:false
+})
 
 export default function EditPublicacion() {
     const [showForm, setShowForm] = useState(false);
@@ -31,9 +32,9 @@ export default function EditPublicacion() {
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [deletingPublicacion, setDeletingPublicacion] = useState< PublicacionEdit | null>(null);
     const currentUser = useAppSelector(state => state.user.currentUser);
-
-
     const editorRef = useRef(null);
+
+
     const log = () => {
       if (editorRef.current) {
      
@@ -66,28 +67,32 @@ export default function EditPublicacion() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        event.preventDefault();
 
-        const nuevaPublicacion = {
-            published: published,
-            titulo: titulo,
-            contenido: contenido,
-            autorId: autorId
-        };
+        if (editorRef.current) {
+            const contenido = editorRef.current.getContent();
 
-        try {
-            await crearPublicacion(nuevaPublicacion);
-            toast.success('La publicación se creó exitosamente');
-        } catch (error:any) {
-            console.error('Error al crear la publicación:', error);
-            toast.error('Error al crear la publicación: ' + (error.message as string));
+            const nuevaPublicacion = {
+                published: published,
+                titulo: titulo,
+                contenido: contenido,
+                autorId: autorId
+            };
+
+            try {
+                await crearPublicacion(nuevaPublicacion);
+                toast.success('La publicación se creó exitosamente');
+            } catch (error) {
+                console.error('Error al crear la publicación:', error);
+                toast.error('Error al crear la publicación: ' + error.message);
+            }
+
+            setTitulo('');
+            setContenido('');
+            setPublished('');
+            setShowForm(false);
         }
-
-        setTitulo('');
-        setContenido('');
-        setPublished('');
-        setShowForm(false);
     };
-
     const GetPublic = async () => {
         try {
             const response = await fetch(`/api/Publicaciones?published=${published}`, {
@@ -279,7 +284,7 @@ export default function EditPublicacion() {
                      <BundledEditor
                        apiKey='0haatfl7x4pbf6bmbt9lleeg1naxzpdssmbl9csdor4lepi0'
         onInit={(_evt: any, editor: null) => editorRef.current = editor}
-        onChange={handleContenidoChange}
+  
         initialValue='<p>This is the initial content of the editor.</p>'
         init={{
           height: 500,
@@ -295,15 +300,14 @@ export default function EditPublicacion() {
           link_default_target: '_blank',
           autosave_interval: '20s',
           emoticons_database: 'emojiimages',
-   
           plugins: [
             'advlist', 'anchor', 'autolink', 'image', 'lists',
-            'searchreplace', 'table', 'wordcount','accordion','tinymcespellchecker','link autolink','autosave','searchreplace','emoticons',
+            'searchreplace', 'table', 'wordcount','tinymcespellchecker','link autolink','autosave','searchreplace','emoticons',
           ],
           toolbar: 'undo redo | blocks | ' +
             'bold italic forecolor | alignleft aligncenter ' + 'fontfamily | fontsize'+
             'alignright alignjustify | bullist numlist outdent indent | searchreplace' +
-             ' link image | code | restoredraft '+ 'emoticons',
+            'link image code emoticons',
           content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
           formats: {
             alignleft: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video', classes: 'left' },
@@ -354,7 +358,8 @@ export default function EditPublicacion() {
                     </Button>
                     <Button onClick={() => {
                         setShowForm(false);
-                        setResetEditorContent(true); // Limpiar el contenido del editor al cancelar
+                        setTitulo('');
+                        setContenido('');
                     }} className='ms-5 mt-5' variant="contained" color="secondary">
                         Cancelar
                     </Button>
