@@ -35,7 +35,6 @@ const actualizarPublicacion = async (id: number, datosActualizados: { titulo: st
     }
   } catch (error) {
     console.error('Error al actualizar la publicación:', error);
-    // Manejar errores aquí
   }
 };
 
@@ -51,8 +50,7 @@ const deletePublicacion = async (id: number) => {
       const responseData = await response.json();
       console.log('Respuesta del backend:', responseData);
       if (responseData.status === 200) {
-          // La publicación se eliminó correctamente
-          // Manejar cualquier lógica adicional aquí
+       
       }
   } catch (error) {
       console.error('Error al eliminar la publicación:', error);
