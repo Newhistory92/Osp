@@ -228,8 +228,6 @@ const Notificador = () => {
             <BundledEditor
                        apiKey='0haatfl7x4pbf6bmbt9lleeg1naxzpdssmbl9csdor4lepi0'
         onInit={(_evt: any, editor: null) => editorRef.current = editor}
-  
-        initialValue='<p>This is the initial content of the editor.</p>'
         init={{
           height: 500,
           indentation: '20pt',

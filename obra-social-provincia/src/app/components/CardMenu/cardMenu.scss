@@ -152,6 +152,11 @@ $transition-time: 2.3s;
   
 	@media (max-width: 1024px) {
 	  width: 50%;
+	  .card-back{
+		a{
+			padding: 10px 0px;
+		}
+	}
 	}
   
 	@media (max-width: 768px) {
@@ -165,7 +170,11 @@ $transition-time: 2.3s;
         .card-menu {
             height: 200px;
         }
-
+		.card-back{
+			a{
+				padding: 10px 0px;
+			}
+		}
         .cover-menu h1 {
             font-size: 1.5em; 
         }

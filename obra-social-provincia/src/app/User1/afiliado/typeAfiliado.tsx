@@ -34,7 +34,7 @@ const TypeAfiliado = () => {
 
         if (response.ok) {
           if (data.status === 200) {
-            dispatch(setPartialCurrentUser(data.user));
+            dispatch(setCurrentUser(data.users[0]));
             window.location.href = '/page/dashboard';
           } else if (data.status === 401) {
             window.location.href = '/page/signin';
@@ -163,7 +163,7 @@ const TypeAfiliado = () => {
           )}
         </div>
     )}
-    <Alert severity="info">Por favor ingrese su matrícula para continuar.</Alert>
+    <Alert severity="info">Por favor ingrese su DNI para continuar.</Alert>
   </div>
   <div className='mt-12 relative'>
         {loading && <Loading />}

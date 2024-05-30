@@ -11,31 +11,39 @@ interface Props {
     const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
 
     useEffect(() => {
-        const getNotificaciones = async () => {
-          try {
-            const response = await fetch(`/api/datos/notificados?receptorId=${autorId}`,  {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-            if (!response.ok) {
-              throw new Error('Error al obtener las notificaciones');
-            }
-            const data = await response.json();
-            console.log(data);
-            if (response.ok) {
-              
-              setNotificaciones(data);
-            }
-          } catch (error) {
-            console.error('Error al obtener las notificaciones:', error);
-            throw error;
+      const getNotificaciones = async () => {
+        try {
+          const response = await fetch(`/api/Datos/notificados?receptorId=${autorId}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+  
+          if (response.status === 404) {
+            console.log('No se encontraron notificaciones.');
+            return;
           }
-        };
-    
+  
+          if (!response.ok) {
+            throw new Error('Error al obtener las notificaciones');
+          }
+  
+          const data = await response.json();
+          console.log(data);
+  
+          if (response.ok) {
+            setNotificaciones(data);
+          }
+        } catch (error) {
+          console.error('Error al obtener las notificaciones:', error);
+        }
+      };
+  
+      if (autorId) {
         getNotificaciones(); // Llama a la función getNotificaciones para obtener las notificaciones cuando el componente se monta
-      }, [autorId]);
+      }
+    }, [autorId]);
 
     const itemTemplate = (item: Notificacion) => {
         return (
