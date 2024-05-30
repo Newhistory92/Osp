@@ -99,6 +99,8 @@ $transition-time: 2.3s;
 		}
 		
 	}
+
+	
 	.card-back{
 		position: absolute;
 		height: 100%;
@@ -110,7 +112,7 @@ $transition-time: 2.3s;
 		display: flex;
 		align-items: center;
 		justify-content: center;
-		a{
+		a {
 			transform-style: preserve-3d;
 			transition: ease transform $transition-time, ease background .5s;
 			transform: translateZ(-1px) rotatey(-180deg);
@@ -119,14 +121,29 @@ $transition-time: 2.3s;
 			font-weight: 200;
 			font-size: 1.3em;
 			color: white;
-			padding: 14px 32px;
+			padding: 10px 15px;
 			outline: none;
 			text-decoration: none;
+			white-space: nowrap; /* Evita que el texto se envuelva */
+			overflow: hidden; /* Oculta el desbordamiento */
+			text-overflow: ellipsis; /* Añade puntos suspensivos al final si el texto es muy largo */
+			max-width: 100%; /* Asegúrate de que el enlace no supere el ancho del contenedor */
+			transition: font-size 0.2s ease; /* Transición suave para el ajuste del tamaño de fuente */
 			&:hover{
 				background-color: white;
 				color: #0b0f08;
+				
 			}
 		}
+		ul {
+			list-style: none;
+			padding: 0;
+			transition: ease transform $transition-time, ease background .5s;
+			transform: translateZ(-1px) rotatey(-180deg);
+		  }
+		  li {
+			margin-bottom: 10px; /* Espaciado entre los items */
+		  }
 	}
 }
 .col-md-4 {

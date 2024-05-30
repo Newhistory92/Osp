@@ -13,7 +13,7 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setCurrentUser(state, action: PayloadAction<UserInfo>) {
-      console.log("setCurrentUser action dispatched with payload:", action.payload);
+      // console.log("setCurrentUser action dispatched with payload:", action.payload);
       state.currentUser = action.payload;
     },
     setPartialCurrentUser(state, action: PayloadAction<PartialUserInfo>) {
@@ -34,15 +34,15 @@ const userSlice = createSlice({
       };
     },
     setLoading(state, action: PayloadAction<boolean>) {
-      console.log("setLoading action dispatched with payload:", action.payload);
+      // console.log("setLoading action dispatched with payload:", action.payload);
       state.loading = action.payload;
     },
     setErrorMessage(state, action: PayloadAction<string | null>) {
-      console.log("setErrorMessage action dispatched with payload:", action.payload);
+      // console.log("setErrorMessage action dispatched with payload:", action.payload);
       state.errorMessage = action.payload;
     },
     setSuccessMessage(state, action: PayloadAction<string | null>) {
-      console.log("setSuccessMessage action dispatched with payload:", action.payload);
+      // console.log("setSuccessMessage action dispatched with payload:", action.payload);
       state.successMessage = action.payload;
     },
     clearState(state) {

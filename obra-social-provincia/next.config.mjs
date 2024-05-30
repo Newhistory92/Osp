@@ -8,11 +8,7 @@ const nextConfig = {
       { protocol: 'https', hostname: 'img.icons8.com' },
     ],
   },
-  webpack: (config, { isServer }) => {
-    // Adicionales configuraciones de Webpack si es necesario
-    return config;
-  }
+  
 };
-
 export default nextConfig;
 

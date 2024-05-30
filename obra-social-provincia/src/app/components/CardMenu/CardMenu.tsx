@@ -89,38 +89,38 @@ const CardMenu: React.FC = () => {
                         <div className="cover-menu item-b">
                             <h1>Istitucional</h1>                           
                             <div className="card-back">
-                                <ul>
-                                    <li>
-                                    {publicaciones.map((publicacion, index) => (
-                 publicacion.published === "institucional" && (
-                    <a key={index} href="#"  onClick={() => handleTitleClick(publicacion.contenido)}>
-                    {publicacion.titulo}
-                  </a> )))}
-                                    </li>
-                                </ul>
-                               
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div className="col-md-4 col-sm-6 col-xs-12">
-                    <div className="card-menu">
-                        <div className="cover-menu item-c">
-                            <h1>Programas</h1>
-                            <div className="card-back">
-                            <ul>
-                                    <li>
-                                    {publicaciones.map((publicacion, index) => (
-                 publicacion.published === "programas" && (
-                    <a key={index} href="#"  onClick={() => handleTitleClick(publicacion.contenido)}>
-                    {publicacion.titulo}
-                  </a> )))}
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              <ul>
+                {publicaciones.filter(publicacion => publicacion.published === "institucional").map((publicacion, index) => (
+                  <li key={index}>
+                    <a href="#" onClick={() => handleTitleClick(publicacion.contenido)}>
+                      {publicacion.titulo}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="col-md-4 col-sm-6 col-xs-12">
+        <div className="card-menu">
+          <div className="cover-menu item-c">
+            <h1>Programas</h1>
+            <div className="card-back">
+              <ul>
+                {publicaciones.filter(publicacion => publicacion.published === "programas").map((publicacion, index) => (
+                  <li key={index}>
+                    <a href="#" onClick={() => handleTitleClick(publicacion.contenido)}>
+                      {publicacion.titulo}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
             
              <Modal
                 backdrop="opaque"

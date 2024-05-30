@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from 'react';
-// import EditorDefault from '../Publicacion/ckeditor';
+import React, { useEffect, useState,useRef } from 'react';
 import { useAppSelector } from "../../../hooks/StoreHook";
 import { ToastContainer, toast } from 'react-toastify';
 import NotificadosList from './NotificadosList';
 import { Afiliado } from '@/app/interfaces/interfaces';
+import dynamic from 'next/dynamic';
+const BundledEditor = dynamic(() => import ('@/BundledEditor'),{
+  ssr:false
+})
 
 
 const Notificador = () => {
@@ -16,6 +19,7 @@ const Notificador = () => {
   const [contenido, setContenido] = useState('');
   const [resetEditorContent, setResetEditorContent] = useState(false);
   const [archivo, setArchivo] = useState<File | null>(null);
+  const editorRef = useRef<any>(null);
 
 
 
@@ -102,10 +106,12 @@ const Notificador = () => {
     }
   };
 
-  const handleContenidoChange = (content:string) => {
-    setContenido(content);
+  const handleContenidoChange = () => {
+    if (editorRef.current) {
+      const contenido = editorRef.current.getContent();
+    setContenido(contenido);
   };
-
+}
   const handleEnviar = async () => {
     try {
         if (!archivo) {
@@ -219,14 +225,51 @@ const Notificador = () => {
           </div>
         </div>
       )}
-
-      {/* {messageType === 'success' && afiliado && ( 
-        <EditorDefault
-          value={contenido}
-          onChange={handleContenidoChange}
-          resetContent={resetEditorContent}
-        />
-      )} */}
+            <BundledEditor
+                       apiKey='0haatfl7x4pbf6bmbt9lleeg1naxzpdssmbl9csdor4lepi0'
+        onInit={(_evt: any, editor: null) => editorRef.current = editor}
+  
+        initialValue='<p>This is the initial content of the editor.</p>'
+        init={{
+          height: 500,
+          indentation: '20pt',
+          indent_use_margin: true,
+          branding:false,
+          preview_styles: false,
+          content_css: false,
+          table_header_type: 'sectionCells',
+          table_sizing_mode: 'responsive',
+          table_column_resizing: 'resizetable',
+          link_default_target: '_blank',
+          autosave_interval: '20s',
+          emoticons_database: 'emojiimages',
+          plugins: [
+            'advlist', 'anchor', 'link', 'image', 'lists','media','preview',
+            'searchreplace', 'table', 'wordcount','link ','autosave','searchreplace','emoticons',
+          ],
+          toolbar: 'undo redo | blocks | ' +
+            'bold italic forecolor | alignleft aligncenter ' + 'fontfamily | fontsize'+
+            'alignright alignjustify | bullist numlist outdent indent | searchreplace' +
+            'link  media image code emoticons' +'preview',
+          content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+          formats: {
+            alignleft: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video', classes: 'left' },
+            aligncenter: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video', classes: 'center' },
+            alignright: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video', classes: 'right' },
+            alignjustify: { selector: 'p,h1,h2,h3,h4,h5,h6,td,th,div,ul,ol,li,table,img,audio,video', classes: 'full' }
+            
+          },
+          font_family_formats: 'Andale Mono=andale mono,times; Arial=arial,helvetica,sans-serif; Arial Black=arial black,avant garde; Book Antiqua=book antiqua,palatino; Comic Sans MS=comic sans ms,sans-serif; Courier New=courier new,courier; Georgia=georgia,palatino; Helvetica=helvetica; Impact=impact,chicago; Symbol=symbol; Tahoma=tahoma,arial,helvetica,sans-serif; Terminal=terminal,monaco; Times New Roman=times new roman,times; Trebuchet MS=trebuchet ms,geneva; Verdana=verdana,geneva; Webdings=webdings; Wingdings=wingdings,zapf dingbats',
+          font_size_formats: '8pt 10pt 12pt 14pt 16pt 18pt 24pt 36pt 48pt',
+          file_picker_types: 'file image media',
+          image_title: true,
+          automatic_uploads: true,
+          image_advtab: true,
+          media_live_embeds: true,
+          
+        }}
+      />
+   
 
       {messageType === 'success' && afiliado && ( 
         <div>
