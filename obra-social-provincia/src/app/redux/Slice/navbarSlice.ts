@@ -19,19 +19,19 @@ const navbarSlice = createSlice({
   reducers: {
     setShowPrestadores(state, action: PayloadAction<boolean>) {
       state.showPrestadores = action.payload;
-      console.log('showPrestadores dispatch:', action.payload)
+      // console.log('showPrestadores dispatch:', action.payload)
     },
     setSelectedContent(state, action: PayloadAction<string | null>) {
       state.selectedContent = action.payload; 
-      console.log('selectedContent dispatch:', action.payload)
+      // console.log('selectedContent dispatch:', action.payload)
     },
     setShowWelcome(state, action: PayloadAction<boolean>) {
       state.showWelcome = action.payload;
-      console.log('showWelcome dispatch:', action.payload)
+      // console.log('showWelcome dispatch:', action.payload)
     },
     setPublicaciones(state, action: PayloadAction<Publicacion[]>) { 
       state.publicaciones = action.payload;
-      console.log('publicidad dispatch:', action.payload);
+      // console.log('publicidad dispatch:', action.payload);
     },
   },
 });

@@ -65,8 +65,9 @@ const Navbar: React.FC = () => {
           throw new Error('Error al obtener las publicaciones: ' + response.statusText);
         }
         const data = await response.json();
+
         if (data.status === 200) {
-          setPublicaciones(data.publicaciones);
+          dispatch(setPublicaciones(data.publicaciones));
         } else {
           console.error('Error: La respuesta del servidor no es válida.');
         }
@@ -179,7 +180,7 @@ const Navbar: React.FC = () => {
 </li>
           <li  className="dropdown" onMouseEnter={handleDropdownEnter} onMouseLeave={handleDropdownLeave}>
             <a href="#two" className="link link-theme link-arrow animate-zoom-in animate-duration-1000" data-toggle="dropdown">Afiliaciones</a>
-            {publicaciones.map((publicacion: Publicacion, id: number) => (
+            {publicaciones.map((publicacion:Publicacion, id: number) => (
                  publicacion.published === "afiliaciones" && (
             <div className="dropdown-menu" key={id}>
               <a href="#" className="dropdown-item" onClick={() => handleTitleClick(publicacion.contenido)}>
