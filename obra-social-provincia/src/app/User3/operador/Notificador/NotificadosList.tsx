@@ -3,6 +3,7 @@ import { OrderList } from 'primereact/orderlist';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale'
 import { Notificacion } from '@/app/interfaces/interfaces';
+import "primereact/resources/themes/lara-light-cyan/theme.css";
 interface Props {
     autorId: string | null;
   }

@@ -36,18 +36,35 @@ export async function GET(req: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-        console.log("Recibida solicitud POST para crear una nueva notificacion");
+        console.log("Recibida solicitud POST para crear una nueva notificación");
         const nuevaNotificacion = await request.json();
-      
-        console.log("Datos de la nueva publicación:", nuevaNotificacion );
+
+        console.log("Datos de la nueva publicación:", nuevaNotificacion);
+
+        const { titulo, contenido, url, autorId, receptorId } = nuevaNotificacion;
+
+        if (!autorId || !receptorId) {
+            throw new Error("Missing author or recipient ID");
+        }
+
         const publicacionCreada = await prisma.notificacion.create({
-            data: nuevaNotificacion ,
+            data: {
+                titulo,
+                contenido,
+                url: url || null,
+                autor: {
+                    connect: { id: autorId }, 
+                },
+                receptor: {
+                    connect: { id: receptorId },
+                }
+            },
         });
-        console.log("Notificacion creada exitosamente:", nuevaNotificacion );
+        console.log("Notificación creada exitosamente:", publicacionCreada);
         
-        return NextResponse.json({ status: 200, message: "Notificacionn creada exitosamente", publicacion: nuevaNotificacion  });
-    } catch (error:any) {
-        console.error("Error al verificar la autenticación del usuario:", error);
-        return NextResponse.json({ status: 500, message: `Error al crear la Notificacion: ${error.message}` });
+        return NextResponse.json({ status: 200, message: "Notificación creada exitosamente", publicacion: publicacionCreada });
+    } catch (error: any) {
+        console.error("Error al crear la notificación:", error);
+        return NextResponse.json({ status: 500, message: `Error al crear la Notificación: ${error.message}` });
     }
 }

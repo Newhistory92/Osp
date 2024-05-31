@@ -1,8 +1,15 @@
 import React, { useEffect, useState,useRef } from 'react';
 import { useAppSelector } from "../../../hooks/StoreHook";
-import { ToastContainer, toast } from 'react-toastify';
 import NotificadosList from './NotificadosList';
 import { Afiliado } from '@/app/interfaces/interfaces';
+import { Toast } from 'primereact/toast';
+import "primereact/resources/themes/lara-light-cyan/theme.css";
+import Loading from '@/app/components/Loading/loading';
+import { FileUpload } from 'primereact/fileupload';
+import { ConfirmDialog, confirmDialog } from 'primereact/confirmdialog';
+
+import { Button } from 'primereact/button';
+
 import dynamic from 'next/dynamic';
 const BundledEditor = dynamic(() => import ('@/BundledEditor'),{
   ssr:false
@@ -17,11 +24,10 @@ const Notificador = () => {
   const [showButtons, setShowButtons] = useState(false); 
   const [titulo, setTitulo] = useState('');
   const [contenido, setContenido] = useState('');
-  const [resetEditorContent, setResetEditorContent] = useState(false);
   const [archivo, setArchivo] = useState<File | null>(null);
   const editorRef = useRef<any>(null);
-
-
+  const toast = useRef<Toast>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const currentUser = useAppSelector(state => state.user.currentUser);
 
@@ -37,7 +43,8 @@ const Notificador = () => {
     obtenerAfiliadoPorDNI(dni);
   }, [dni]);
 
-  const obtenerAfiliadoPorDNI = async (dni:string) => {
+  const obtenerAfiliadoPorDNI = async (dni: string) => {
+    setIsLoading(true);
     try {
       const response = await fetch(`/api/Notificador?dni=${dni}`, {
         method: 'GET',
@@ -53,42 +60,40 @@ const Notificador = () => {
           setAfiliado(data.afiliado);
           setMessage(`Afiliado encontrado: ${data.afiliado.name} ${data.afiliado.apellido}`);
           setMessageType('success');
-          setShowButtons(true); // Mostrar los botones cuando haya éxito
+          setShowButtons(true);
         } else if (data.status === 404) {
           console.log('Afiliado no encontrado');
           setMessage('Afiliado no encontrado');
           setMessageType('error');
-          setShowButtons(false); // Ocultar los botones si no se encuentra el afiliado
+          setShowButtons(false);
         }
       } else {
         console.error('Error en la solicitud:', data.error);
         setMessage('Error en la solicitud');
         setMessageType('error');
-        setShowButtons(false); // Ocultar los botones en caso de error en la solicitud
+        setShowButtons(false);
       }
     } catch (error) {
       console.error('Error al obtener el Afiliado:', error);
       setMessage('Error al obtener el Afiliado');
       setMessageType('error');
-      setShowButtons(false); // Ocultar los botones en caso de error al obtener el afiliado
+      setShowButtons(false);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const handleTituloChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitulo(event.target.value);
   };
-
-  const handleArchivoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
+  const handleFileUpload = (event: { files: any; }) => {
+    const { files } = event;
     if (files && files.length > 0) {
-      const file = files[0];
-      setArchivo(file);
-    } else {
-      // Manejo si no se selecciona ningún archivo
-      console.error('No se ha seleccionado ningún archivo');
+        const file = files[0];
+        setArchivo(file.objectURL);
     }
-  };
-  
+};
+
 
   const handleDniChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newDni = event.target.value;
@@ -102,68 +107,82 @@ const Notificador = () => {
       setShowButtons(false);
       setTitulo('');
       setContenido('');
-      setResetEditorContent(true); // Esto reiniciará el contenido del editor
+  
     }
   };
 
-  const handleContenidoChange = () => {
-    if (editorRef.current) {
-      const contenido = editorRef.current.getContent();
-    setContenido(contenido);
-  };
-}
   const handleEnviar = async () => {
-    try {
-        if (!archivo) {
-            console.error('No se ha seleccionado ningún archivo');
-            return;
-        }
+    
 
-        const formData = new FormData();
-        formData.append('archivo', archivo);
+    const contenido = editorRef.current ? editorRef.current.getContent() : '';
 
-        const response = await fetch('/api/subir-archivo', {
-            method: 'POST',
-            body: formData,
-        });
-
-        if (response.ok) {
-            const data = await response.json();
-            const archivoUrl = data.url;
-
-            const nuevaNotificacion = {
-                receptorId: afiliado?.id,
-                autorId: autorId,
-                titulo: titulo,
-                contenido: contenido,
-                url: archivoUrl
-            };
-
-            const responseNotificacion = await fetch('/api/Publicaciones', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(nuevaNotificacion),
-            });
-
-            // Aquí puedes manejar la respuesta si es necesario
-            const responseData = await responseNotificacion.json();
-            toast.success('Notificación enviada con éxito:');
-
-            // Reinicia el estado del título, contenido y editor después de enviar
-            setTitulo('');
-            setContenido('');
-            setResetEditorContent(true); // Esto reiniciará el contenido del editor
-        } else {
-          toast.error('Error al cargar el archivo');
-        }
-    } catch (error:any) {
-      toast.info('Error al enviar la notificación:', error);
-        // Puedes manejar el error de manera adecuada aquí, como mostrar un mensaje al usuario
+    if (!titulo || !contenido) {
+      toast.current?.show({ severity: 'warn', summary: 'Advertencia', detail: 'El título y el contenido son requeridos', life: 3000 });
+      return;
     }
-};
 
+    // let archivoUrl = '';
+
+    // if (archivo) {
+    //   const formData = new FormData();
+    //   formData.append('archivo', archivo);
+
+    //   try {
+    //     const response = await fetch('/api/subir-archivo', {
+    //       method: 'POST',
+    //       body: formData,
+    //     });
+
+    //     if (response.ok) {
+    //       const data = await response.json();
+    //       archivoUrl = data.url;
+    //     } else {
+    //       toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al subir el archivo', life: 3000 });
+    //       return;
+    //     }
+    //   } catch (error) {
+    //     console.error('Error al subir el archivo:', error);
+    //     toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al subir el archivo', life: 3000 });
+    //     return;
+    //   }
+    // }
+
+    const notificacionData = {
+      titulo,
+      contenido,
+      url: archivo, 
+      autorId,
+      receptorId: afiliado?.id 
+    };
+
+    setIsLoading(true);
+
+    try {
+      const response = await fetch('/api/Notificador', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(notificacionData),
+      });
+
+      if (response.ok) {
+        toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'Notificación enviada exitosamente', life: 3000 });
+        setTitulo('');
+        if (editorRef.current) {
+          editorRef.current.setContent('');
+        }
+        setArchivo(null);
+      } else {
+        toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al enviar la notificación', life: 3000 });
+      }
+    } catch (error) {
+      console.error('Error al enviar la notificación:', error);
+      toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al enviar la notificación', life: 3000 });
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   const handleCancelar = () => {
     // Restablece el estado de todos los campos a su valor inicial
@@ -174,11 +193,41 @@ const Notificador = () => {
     setShowButtons(false);
     setTitulo('');
     setContenido('');
-    setResetEditorContent(true); // Esto reiniciará el contenido del editor
   };
+  
 
+
+  const confirmEnviar = (event: { currentTarget: any; }) => {
+    confirmDialog({
+      message: 'Are you sure you want to proceed?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      defaultFocus: 'accept',
+        accept: handleEnviar,
+        reject: () => {
+            toast.current?.show({ severity: 'info', summary: 'Cancelado', detail: 'La operación fue cancelada', life: 3000 });
+        }
+    });
+};
+
+const confirmCancelar = (event: { currentTarget: any; }) => {
+  confirmDialog({
+    message: 'Do you want to delete this record?',
+    header: 'Delete Confirmation',
+    icon: 'pi pi-info-circle',
+    defaultFocus: 'reject',
+    acceptClassName: 'p-button-danger',
+    accept: handleCancelar,
+        reject: () => {
+            toast.current?.show({ severity: 'info', summary: 'Cancelado', detail: 'La operación no fue cancelada', life: 3000 });
+        }
+    });
+};
+
+  
   return (
     <div>
+       { isLoading && <Loading />} 
       <div className="mb-6">
         <label htmlFor="dni" className="block mb-2 text-sm font-medium text-black dark:text-black">
           Ingresa el Número de DNI del Afiliado
@@ -270,30 +319,25 @@ const Notificador = () => {
    
 
       {messageType === 'success' && afiliado && ( 
-        <div>
-          <label className="block mb-2 text-sm font-medium text-gray-900 dark:text-white" htmlFor="file_input">Cargar Archivo</label>
-          <input
-            onChange={handleArchivoChange}
-            className="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
-            aria-describedby="file_input_help"
-            id="file_input"
-            type="file"
-          />
-          <p className="mt-1 text-sm text-gray-500 dark:text-gray-300" id="file_input_help">PDF, WORD.</p>
-        </div>
+     <div className="card">
+     <FileUpload 
+                       name="demo[]"
+                        url="/api/subir-archivo" 
+                        accept=".pdf" 
+                        maxFileSize={1000000} 
+                         onUpload={handleFileUpload} 
+                        emptyTemplate={<p className="m-0">Arrastre y suelte archivos aquí para cargarlos.</p>} 
+                    />
+     </div>
       )}
 
       {showButtons && (
-        <div className="flex justify-between">
-          <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onClick={handleEnviar}>
-            Enviar
-          </button>
-          <button className="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onClick={handleCancelar}>
-            Cancelar
-          </button>
-        </div>
+        <><Toast ref={toast} /><ConfirmDialog /><div className="card flex flex-wrap gap-2 justify-content-center">
+          <Button onClick={confirmEnviar} icon="pi pi-check" label="Confirm" className="mr-2"></Button>
+          <Button onClick={confirmCancelar} icon="pi pi-times" label="Delete"></Button>
+        </div></>
       )}
-     <ToastContainer/>
+             
     
      {messageType !== 'success' && <NotificadosList autorId={autorId} />} 
     
