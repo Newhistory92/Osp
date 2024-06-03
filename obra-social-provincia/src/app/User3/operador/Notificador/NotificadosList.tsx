@@ -1,79 +1,70 @@
 import React, { useState, useEffect } from 'react';
-import { OrderList } from 'primereact/orderlist';
+import { DataTable } from 'primereact/datatable';
+import { Column } from 'primereact/column';
+import { Button } from 'primereact/button';
 import { format } from 'date-fns';
-import { es } from 'date-fns/locale'
+import { es } from 'date-fns/locale';
 import { Notificacion } from '@/app/interfaces/interfaces';
-import "primereact/resources/themes/lara-light-cyan/theme.css";
+
 interface Props {
     autorId: string | null;
-  }
+}
 
-  export default function NotificadosList({ autorId }: Props) {
+export default function NotificadosList({ autorId }: Props) {
     const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
-
+console.log(notificaciones)
     useEffect(() => {
-      const getNotificaciones = async () => {
-        try {
-          const response = await fetch(`/api/Datos/notificados?receptorId=${autorId}`, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-  
-          if (response.status === 404) {
-            console.log('No se encontraron notificaciones.');
-            return;
-          }
-  
-          if (!response.ok) {
-            throw new Error('Error al obtener las notificaciones');
-          }
-  
-          const data = await response.json();
-          console.log(data);
-  
-          if (response.ok) {
-            setNotificaciones(data);
-          }
-        } catch (error) {
-          console.error('Error al obtener las notificaciones:', error);
-        }
-      };
-  
-      if (autorId) {
-        getNotificaciones(); // Llama a la función getNotificaciones para obtener las notificaciones cuando el componente se monta
-      }
+        const getNotificaciones = async () => {
+            try {
+                const response = await fetch(`/api/Datos/notificados?autorId=${autorId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error('Error al obtener las notificaciones del autor');
+                }
+                const data = await response.json();
+                setNotificaciones(data);
+            } catch (error) {
+                console.error('Error inesperado al obtener las notificaciones del autor:', error);
+            }
+        };
+        getNotificaciones();
     }, [autorId]);
 
-    const itemTemplate = (item: Notificacion) => {
-        return (
-            <div className="flex flex-wrap p-2 align-items-center gap-3">
-                <div className="flex-1 flex flex-column gap-2 xl:mr-8">
-                    <span className="font-bold">{item.titulo}</span>
-                    <div className="flex align-items-center gap-2">
-                        <span>Autor: {item.autor}</span>
-                        <span>Receptor: {item.receptor}</span>
-                        <span>Estado: {item.status}</span>
-                        <span>Enviado:  {`Actualizado: ${format(new Date(item.createdAt), 'eeee d/MM/yyyy', { locale: es })}`}</span>
-                    </div>
-                </div>
-                <span className="font-bold text-900">Contenido: {item.contenido}</span>
-            </div>
-        );
-    };
+    const paginatorLeft = <Button type="button" icon="pi pi-refresh" text />;
+    const paginatorRight = <Button type="button" icon="pi pi-download" text />;
 
     return (
-        <div className="card xl:flex xl:justify-content-center">
-            <OrderList
-                dataKey="id"
+        <div className="card">
+            <DataTable
                 value={notificaciones}
-                onChange={(e) => setNotificaciones(e.value)}
-                itemTemplate={itemTemplate}
+                paginator
+                rows={5}
+                rowsPerPageOptions={[5, 10, 25, 50]}
+                tableStyle={{ minWidth: '50rem' }}
+                paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+                currentPageReportTemplate="{first} to {last} of {totalRecords}"
+                paginatorLeft={paginatorLeft}
+                paginatorRight={paginatorRight}
                 header="Notificaciones"
-                filter
-                filterBy="titulo"
-            ></OrderList>
+            >
+                <Column field="titulo" header="Título" sortable style={{ width: '20%' }}></Column>
+                <Column field="contenido" header="Contenido" sortable style={{ width: '20%' }}></Column>
+                <Column field="autor.name" header="Autor" sortable style={{ width: '15%' }}></Column>
+                <Column field="receptor.name" header="Receptor" sortable style={{ width: '15%' }}></Column>
+                <Column field="status" header="Estado" sortable style={{ width: '10%' }}></Column>
+                <Column
+                    field="createdAt"
+                    header="Enviado"
+                    sortable
+                    style={{ width: '20%' }}
+                    body={(rowData) => format(new Date(rowData.createdAt), 'eeee d/MM/yyyy', { locale: es })}
+                ></Column>
+            </DataTable>
         </div>
     );
 }
+

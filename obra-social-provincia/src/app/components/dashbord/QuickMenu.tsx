@@ -29,33 +29,26 @@ const QuickMenu = () => {
     const receptorId = userData ? userData.id : null;
     const hasMounted = useMounted();
 
-
     useEffect(() => {
         const getNotificaciones = async () => {
-          try {
-            const response = await fetch(`/api/Datos/notificados?receptorId=${receptorId}`, {
-              method: 'GET',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-            });
-            if (!response.ok) {
-              throw new Error('Error al obtener las notificaciones');
+            try {
+                const response = await fetch(`/api/Datos/notificados?receptorId=${receptorId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error('Error al obtener las notificaciones del receptor');
+                }
+                const data = await response.json();
+                setNotificaciones(data);
+            } catch (error) {
+                console.error('Error inesperado al obtener las notificaciones del receptor:', error);
             }
-            const data = await response.json();
-            console.log(data);
-            if (response.ok) {
-              setNotificaciones(data);
-            }
-          } catch (error) {
-            if (error instanceof Error && error.message !== 'Error al obtener las notificaciones') {
-              console.error('Error inesperado al obtener las notificaciones:', error);
-            }
-        }
         };
-    
-        getNotificaciones(); // Llama a la función getNotificaciones para obtener las notificaciones cuando el componente se monta
-      }, [receptorId])
+        getNotificaciones();
+    }, [receptorId]);
   
 
 
