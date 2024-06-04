@@ -118,7 +118,7 @@ const handleAudidorClick =() =>{
     <div className='navbar-vertical'>
       <List style={{ maxHeight: "100vh", width: '100%', maxWidth: 360 }} component="nav">
         <div className="nav-scroller ml-5 navbar-brand">
-          <Image src={Logo} alt="" width={90} height={60} />
+          <Image src={Logo} alt="" width={90} height={60}   priority />
         </div>
         <div className="navbar-heading nav-item">
           {user ? `Bienvenido ${user.fullName}` : ""}

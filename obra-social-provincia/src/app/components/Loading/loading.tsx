@@ -13,6 +13,7 @@ const Loading = () => {
         className="load-img" 
         width={50}  
         height={50}
+        priority
       />
     <div className="waviy">
    <span >c</span>
