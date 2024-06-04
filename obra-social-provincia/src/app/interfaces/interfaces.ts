@@ -93,7 +93,6 @@ export interface UserCardProps {
   especialidad?: string;
   especialidad2?: string; 
   especialidad3?: string;
-  puntuacion?: string;
   descripcion?: string;
   tipo?: string;
   numeroOperador?: string;

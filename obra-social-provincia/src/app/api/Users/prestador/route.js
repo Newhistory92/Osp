@@ -81,7 +81,6 @@ export async function POST(request) {
                 especialidad: especialidad,
                 especialidad2:null,
                 especialidad3:null,
-                puntuacion: null,
                 phoneOpc:null,
                 descripcion:null,
                 address:null,

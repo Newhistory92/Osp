@@ -42,6 +42,7 @@ const QuickMenu = () => {
                     throw new Error('Error al obtener las notificaciones del receptor');
                 }
                 const data = await response.json();
+                console.log(data)
                 setNotificaciones(data);
             } catch (error) {
                 console.error('Error inesperado al obtener las notificaciones del receptor:', error);
