@@ -46,7 +46,6 @@ CREATE TABLE "Prestador" (
     "especialidad" VARCHAR(100) NOT NULL,
     "especialidad2" VARCHAR(100),
     "especialidad3" VARCHAR(100),
-    "puntuacion" INTEGER,
     "descripcion" VARCHAR(600),
     "role" "Role" DEFAULT 'PROVIDER',
     "tipo" "Tipo" DEFAULT 'FIDELIZADO',

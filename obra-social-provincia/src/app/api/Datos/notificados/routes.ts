@@ -75,3 +75,4 @@ export async function GET() {
         return NextResponse.json({ status: 400, error: 'Error en el servidor' });
     }
 }
+

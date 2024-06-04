@@ -58,33 +58,37 @@ const QuickMenu = () => {
   
 
     useEffect(() => {
-        fetchPrestadores();
-      }, []);
-    
-      const fetchPrestadores = async () => {
-        try {
-          const url = '/api/Datos/notificados';
-          const response = await fetch(url, {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json',
+        const getNotificaciones = async () => {
+            try {
+                const response = await fetch(`/api/Datos/notificados?receptorId=${receptorId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (!response.ok) {
+                    throw new Error('Error al obtener las notificaciones del receptor');
+                }
+                const data = await response.json();
+                console.log(data)
+                setNotificaciones(data);
+            } catch (error) {
+                console.error('Error inesperado al obtener las notificaciones del receptor:', error);
             }
-          });
-          const responseData: Prestador[] = await response.json();
-          console.log()
-          if (Array.isArray(responseData)) {
-            setPrestadores(responseData);
-            setFilteredData(responseData);
-          } else {
-            console.error('La respuesta de la API no es un arreglo:', responseData);
-          }
-        } catch (error) {
-          console.error('Error al obtener los prestadores:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-    
+        };
+        getNotificaciones();
+    }, [receptorId]);
+  
+
+
+      const countNewMessages = () => {
+        const newMessages = notificaciones.filter(notificacion => notificacion.status === 'No_leido');
+        setNewMessagesCount(newMessages.length);
+    };
+
+    useEffect(() => {
+        countNewMessages();
+    }, [notificaciones]);
 
     const isDesktop = useMediaQuery({
         query: '(min-width: 1224px)'

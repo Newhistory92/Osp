@@ -88,38 +88,7 @@ const Denuncia: React.FC<DenunciaProps> = ({ closeModal }) => {
         },
     }));
 
-    const customIcons: {
-        [index: string]: {
-            icon: React.ReactElement;
-            label: string;
-        };
-    } = {
-        1: {
-            icon: <SentimentVeryDissatisfiedIcon color="error" />,
-            label: 'Very Dissatisfied',
-        },
-        2: {
-            icon: <SentimentDissatisfiedIcon color="error" />,
-            label: 'Dissatisfied',
-        },
-        3: {
-            icon: <SentimentSatisfiedIcon color="warning" />,
-            label: 'Neutral',
-        },
-        4: {
-            icon: <SentimentSatisfiedAltIcon color="success" />,
-            label: 'Satisfied',
-        },
-        5: {
-            icon: <SentimentVerySatisfiedIcon color="success" />,
-            label: 'Very Satisfied',
-        },
-    };
 
-    function IconContainer(props: IconContainerProps) {
-        const { value, ...other } = props;
-        return <span {...other}>{customIcons[value].icon}</span>;
-    }
 
     return (
         
@@ -133,19 +102,6 @@ const Denuncia: React.FC<DenunciaProps> = ({ closeModal }) => {
                         <div className="flex items-start justify-between p-5 border-b border-solid border-blueGray-200 rounded-t">
                             <blockquote>
                                 <p className="text-2xl font-semibold text-gray-900 dark:text-white">Cuentanos tu Experiencia con el Prestador</p>
-                                <div >
-                                    <label htmlFor="rating" className="block text-sm font-medium text-gray-700 mb-1">Valoración</label>
-                                    <StyledRating
-                                        name="rating"
-                                        defaultValue={3}
-                                        IconContainerComponent={IconContainer}
-                                        getLabelText={(value: number) => customIcons[value].label}
-                                        value={ratingValue}
-                                        onChange={(event, newValue) => {
-                                            setRatingValue(newValue);
-                                        }}
-                                        />
-                                </div>
                             </blockquote>
                         </div>
                         {/* Cuerpo del modal */}
