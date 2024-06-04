@@ -13,18 +13,21 @@ const isAdminRoute = createRouteMatcher([
 ]);
 
 export default clerkMiddleware((auth, req) => {
+  // Protege solo las rutas que no sean de la API
+  if (!req.url.startsWith('/api')) {
+    if (isUserRoute(req)) auth().protect();
 
-  if (isUserRoute(req)) auth().protect();
-
-  if (isAdminRoute(req)) {
-    auth().protect(has => {
-      return (
-        has({ permission: 'org:sys_memberships:manage' }) ||
-        has({ permission: 'org:sys_domains_manage' })
-      )
-    })
+    if (isAdminRoute(req)) {
+      auth().protect(has => {
+        return (
+          has({ permission: 'org:sys_memberships:manage' }) ||
+          has({ permission: 'org:sys_domains_manage' })
+        );
+      });
+    }
   }
 });
+
 export const config = {
   matcher: ['/((?!.*\\..*|_next).*)', '/', '/(api|trpc)(.*)'],
 };

@@ -20,46 +20,71 @@ import MailRoundedIcon from '@mui/icons-material/MailRounded';
 import ButtonUser from '../UserComponent/ButtomUser';
 import {Notificacion  } from '@/app/interfaces/interfaces';
 import "../../styles/theme.scss"
-
+import { Prestador } from '@/app/interfaces/interfaces';
 const QuickMenu = () => {
     const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
     const currentUser = useAppSelector(state => state.user.currentUser);
     const [newMessagesCount, setNewMessagesCount] = useState<number>(0);
     const userData = currentUser ? (Array.isArray(currentUser) ? currentUser[0] : currentUser) : null;
     const receptorId = userData ? userData.id : null;
-    const hasMounted = useMounted();
+    const hasMounted = useMounted()
+    const [prestadores, setPrestadores] = useState<Prestador[]>([]);
+    const [filteredData, setFilteredData] = useState<Prestador[]>([]);
+    const [loading, setLoading] = useState(true);
+    const [selectedType, setSelectedType] = useState("Todos"); // Estado para almacenar el tipo seleccionado
+    const [selectedPrestador, setSelectedPrestador] = useState<Prestador | null>(null);
+    const [noResults, setNoResults] = useState(false);
 
-    useEffect(() => {
-        const getNotificaciones = async () => {
-            try {
-                const response = await fetch(`/api/Datos/notificados?receptorId=${receptorId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error('Error al obtener las notificaciones del receptor');
-                }
-                const data = await response.json();
-                setNotificaciones(data);
-            } catch (error) {
-                console.error('Error inesperado al obtener las notificaciones del receptor:', error);
-            }
-        };
-        getNotificaciones();
-    }, [receptorId]);
+    // useEffect(() => {
+    //     const getNotificacione = async () => {
+    //         try {
+    //             const response = await fetch(`/api/Datos/notificados`, {
+    //                 method: 'GET',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                 },
+    //             });
+    //             if (!response.ok) {
+    //                 throw new Error('Error al obtener las notificaciones del receptor');
+    //             }
+    //             const data = await response.json();
+    //             setNotificaciones(data);
+    //         } catch (error) {
+    //             console.error('Error inesperado al obtener las notificaciones del receptor:', error);
+    //         }
+    //     };
+    //     getNotificacione();
+    // }, [receptorId]);
   
 
-
-      const countNewMessages = () => {
-        const newMessages = notificaciones.filter(notificacion => notificacion.status === 'No_leido');
-        setNewMessagesCount(newMessages.length);
-    };
-
     useEffect(() => {
-        countNewMessages();
-    }, [notificaciones]);
+        fetchPrestadores();
+      }, []);
+    
+      const fetchPrestadores = async () => {
+        try {
+          const url = '/api/Datos/notificados';
+          const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+          const responseData: Prestador[] = await response.json();
+          console.log()
+          if (Array.isArray(responseData)) {
+            setPrestadores(responseData);
+            setFilteredData(responseData);
+          } else {
+            console.error('La respuesta de la API no es un arreglo:', responseData);
+          }
+        } catch (error) {
+          console.error('Error al obtener los prestadores:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+    
 
     const isDesktop = useMediaQuery({
         query: '(min-width: 1224px)'
