@@ -14,7 +14,7 @@ export async function POST(request) {
         const email = user.emailAddresses[0].emailAddress;
         const userId = user.id;
     
-
+     
         // Verificar si el usuario ya está autenticado en alguna tabla
         const isAuthenticated = await checkUserAuthentication(userId, 'afiliado');
         console.log(isAuthenticated.status,isAuthenticated.message )
@@ -82,7 +82,7 @@ export async function GET(request) {
         
         // Obtener el ID del usuario autenticado
         const userId = user.id;
-
+        
         // Verificar si el ID del usuario está en la base de datos
         const isAuthenticatedAndInDatabase = await checkUserAuthentication(userId, 'afiliado');
         if (isAuthenticatedAndInDatabase.status === 200) {

@@ -1,15 +1,6 @@
 import React, { useState, FormEvent } from 'react';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import CancelIcon from '@mui/icons-material/Cancel';
-import Rating, { IconContainerProps } from '@mui/material/Rating';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
-import SentimentDissatisfiedIcon from '@mui/icons-material/SentimentDissatisfied';
-import SentimentSatisfiedIcon from '@mui/icons-material/SentimentSatisfied';
-import SentimentSatisfiedAltIcon from '@mui/icons-material/SentimentSatisfiedAltOutlined';
-import SentimentVerySatisfiedIcon from '@mui/icons-material/SentimentVerySatisfied';
-import { styled } from '@mui/material/styles';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import ErrorOutlineRoundedIcon from '@mui/icons-material/ErrorOutlineRounded';
 import ReportGmailerrorredRoundedIcon from '@mui/icons-material/ReportGmailerrorredRounded';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
@@ -19,7 +10,7 @@ interface DenunciaProps {
 
 const Denuncia: React.FC<DenunciaProps> = ({ closeModal }) => {
     const [denuncia, setDenuncia] = useState('');
-    const [ratingValue, setRatingValue] = useState<number | null>(3); // Valor inicial para el Rating
+
     const [isSuccessToastVisible, setIsSuccessToastVisible] = useState(false);
     const [isWarningToastVisible, setIsWarningToastVisible] = useState(false);
     const [isErrorToastVisible, setIsErrorToastVisible] = useState(false);
@@ -82,12 +73,6 @@ const Denuncia: React.FC<DenunciaProps> = ({ closeModal }) => {
         setDenuncia(event.target.value);
     };
 
-    const StyledRating = styled(Rating)(({ theme }) => ({
-        '& .MuiRating-iconEmpty .MuiSvgIcon-root': {
-            color: theme.palette.action.disabled,
-        },
-    }));
-
 
 
     return (
@@ -113,14 +98,7 @@ const Denuncia: React.FC<DenunciaProps> = ({ closeModal }) => {
                 <div className="flex items-center justify-between px-3 py-2 border-b dark:border-gray-800">
                     <div className="flex flex-wrap items-center divide-gray-200 sm:divide-x sm:rtl:divide-x-reverse dark:divide-gray-600">
                         <div className="flex items-center space-x-1 rtl:space-x-reverse sm:pe-4">
-                            <button type="button" className="p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
-                            <AttachFileIcon fontSize="small"/>
-                                <span className="sr-only">Adjuntar archivo</span>
-                            </button>
-                            <button type="button" className="p-2 text-gray-500 rounded cursor-pointer hover:text-gray-900 hover:bg-gray-100 dark:text-gray-400 dark:hover:text-white dark:hover:bg-gray-600">
-                                <InsertPhotoIcon fontSize="small"/>
-                                <span className="sr-only">Cargar imagen</span>
-                            </button>
+                           
                         </div>
                     </div>
                 </div>

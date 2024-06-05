@@ -123,6 +123,7 @@ CREATE TABLE "Notificacion" (
     "status" "StatusMensaje" NOT NULL DEFAULT 'No_leido',
     "url" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "Notificacion_pkey" PRIMARY KEY ("id")
 );

@@ -203,4 +203,18 @@ export interface Notificacion {
   receptor: string;
   status: string;
   createdAt: string | number | Date;
+  updatedAt: string | number | Date;
+}
+
+export interface NotificationsProps {
+  notificaciones: Notificacion[];
+  handleButtonClick: (item: Notificacion) => void;
+}
+
+export interface QuickMenuDesktopProps {
+  newMessagesCount: number;
+  notificaciones: Notificacion[];
+  handleButtonClick: (item: Notificacion) => void;
+  showModal: boolean;
+  setShowModal: (show: boolean) => void;
 }

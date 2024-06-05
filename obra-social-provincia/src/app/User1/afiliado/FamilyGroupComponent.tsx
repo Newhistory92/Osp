@@ -24,9 +24,9 @@ export default function FamilyGroup() {
                 variant="body2"
                 color="text.primary"
               >
-                Ali Connors
+                Perez Juan
               </Typography>
-              {" — I'll be in your neighborhood doing errands this…"}
+              {" Dni:5982368"}
             </React.Fragment>
           }
         />
@@ -46,9 +46,9 @@ export default function FamilyGroup() {
                 variant="body2"
                 color="text.primary"
               >
-                to Scott, Alex, Jennifer
+                julieta perez
               </Typography>
-              {" — Wish I could come, but I'm out of town this…"}
+              {"Dni:5887142"}
             </React.Fragment>
           }
         />
@@ -68,9 +68,9 @@ export default function FamilyGroup() {
                 variant="body2"
                 color="text.primary"
               >
-                Sandra Adams
+                Sandra Olivera
               </Typography>
-              {' — Do you have Paris recommendations? Have you ever…'}
+              {' Dni:3658745'}
             </React.Fragment>
           }
         />

@@ -31,7 +31,7 @@ const TypeAfiliado = () => {
         });
 
         const data = await response.json();
-
+          console.log(data)
         if (response.ok) {
           if (data.status === 200) {
             dispatch(setCurrentUser(data.users[0]));

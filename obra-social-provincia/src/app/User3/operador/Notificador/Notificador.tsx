@@ -154,7 +154,7 @@ const Notificador = () => {
     };
 
     setIsLoading(true);
-
+    console.log(notificacionData)
     try {
       const response = await fetch('/api/Notificador', {
         method: 'POST',
@@ -163,6 +163,7 @@ const Notificador = () => {
         },
         body: JSON.stringify(notificacionData),
       });
+   
 
       if (response.ok) {
         toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'Notificación enviada exitosamente', life: 3000 });

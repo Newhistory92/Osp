@@ -59,3 +59,26 @@ export async function GET(req: NextRequest) {
         return NextResponse.json({ error: "Error al obtener las notificaciones" }, { status: 500 });
     }
 }
+
+
+export async function PUT(req: NextRequest) {
+    console.log("Request received");
+    
+    try {
+        const { id, status } = await req.json();
+        console.log("Parsed request body:", { id, status });
+        
+        // Actualiza el estado de la notificación
+        const updatedNotification = await prisma.notificacion.update({
+            where: { id },
+            data: { status },
+        });
+
+        console.log("Notification updated:", updatedNotification);
+
+        return new NextResponse(JSON.stringify(updatedNotification), { status: 200 });
+    } catch (error:any) {
+        console.error("Error updating notification:", error);
+        return new NextResponse(JSON.stringify({ message: error.message }), { status: 500 });
+    }
+}
