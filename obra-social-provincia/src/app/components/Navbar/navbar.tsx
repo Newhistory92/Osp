@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Logo from "../../../../public/Logo.png";
 import {  useAuth} from '@clerk/clerk-react';
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 import "./navbar.css"
 import {useAppDispatch,useAppSelector} from "../../hooks/StoreHook"
 import {setSelectedContent,setPublicaciones,setShowPrestadores} from '../../redux/Slice/navbarSlice'
@@ -12,7 +12,7 @@ import { Publicacion } from '@/app/interfaces/interfaces';
 
 
 
-const Navbar: React.FC = memo(() => {
+const Navbar: React.FC =() => {
   const showPrestadores = useAppSelector(state => state.navbar.showPrestadores);
   const [isScrolled, setIsScrolled] = useState(false);
   const { isSignedIn } =  useAuth();
@@ -230,7 +230,7 @@ const Navbar: React.FC = memo(() => {
       </ul>
     </header>
   );
-});
+};
 
 
 export default Navbar;

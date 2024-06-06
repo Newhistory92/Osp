@@ -1,4 +1,4 @@
-import React, { useState, useEffect, memo } from 'react';
+import React, { useState, useEffect } from 'react';
 import { DataTable,DataTableFilterMeta  } from 'primereact/datatable';
 import { Column } from 'primereact/column';
 import { Button } from 'primereact/button';
@@ -16,7 +16,7 @@ interface Props {
 const defaultFilters: DataTableFilterMeta = {
     global: { value: null, matchMode: 'contains' },
 };
-const NotificadosList = memo(({ autorId }: Props) => {
+const NotificadosList = ({ autorId }: Props) => {
     const [notificaciones, setNotificaciones] = useState<Notificacion[]>([]);
     const [visible, setVisible] = useState<boolean>(false);
     const [selectedNotification, setSelectedNotification] = useState<Notificacion | null>(null);
@@ -173,6 +173,6 @@ const NotificadosList = memo(({ autorId }: Props) => {
             )}
         </div>
     );
-});
+};
 
 export default NotificadosList;

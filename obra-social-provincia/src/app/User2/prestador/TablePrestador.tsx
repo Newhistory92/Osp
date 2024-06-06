@@ -1,6 +1,6 @@
 
 
-import React, { useState, useEffect, memo} from "react";
+import React, { useState, useEffect} from "react";
 import "./Styles/buttomAvatar.css"
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 import MedicalInformationOutlinedIcon from '@mui/icons-material/MedicalInformationOutlined';
@@ -45,7 +45,7 @@ const TABLE_HEAD = ["Prestador", "Especialidad", "Teléfono", "Direccion", "Tipo
  
 
 
-const Prestadores = memo( () => {
+const Prestadores = () => {
   const [prestadores, setPrestadores] = useState<Prestador[]>([]);
   const [filteredData, setFilteredData] = useState<Prestador[]>([]);
   const [loading, setLoading] = useState(true);
@@ -342,7 +342,7 @@ const perPage = 8;
 
     </Card>
   );
-})
+}
 
 export default Prestadores;
 
