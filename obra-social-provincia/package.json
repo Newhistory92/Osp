@@ -10,7 +10,6 @@
     "postinstall": "prisma generate"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-react": "^6.3.0",
     "@clerk/nextjs": "^5.0.6",
     "@clerk/themes": "^1.7.9",
     "@emotion/is-prop-valid": "^1.2.2",
@@ -48,11 +47,9 @@
     "react-owl-carousel": "^2.3.3",
     "react-redux": "^9.1.0",
     "react-responsive": "^10.0.0",
-    "react-toastify": "^10.0.4",
     "react-youtube": "^10.1.0",
     "redux-persist": "^6.0.0",
     "sass": "^1.71.1",
-    "script-loader": "^0.7.2",
     "simplebar-react": "^3.2.5",
     "tinymce": "^7.1.1",
     "use-react-countries": "^2.0.1"
