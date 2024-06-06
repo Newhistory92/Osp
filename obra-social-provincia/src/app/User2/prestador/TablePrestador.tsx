@@ -1,6 +1,6 @@
 
 
-import React, { useState, useEffect} from "react";
+import React, { useState, useEffect,useCallback, useMemo} from "react";
 import "./Styles/buttomAvatar.css"
 import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
 import MedicalInformationOutlinedIcon from '@mui/icons-material/MedicalInformationOutlined';
@@ -25,6 +25,7 @@ import {
 } from "@material-tailwind/react";
 import Skeleton from "react-loading-skeleton";
 import { Prestador } from "@/app/interfaces/interfaces";
+import { Virtuoso } from 'react-virtuoso';
 
 const TABS = [
   {
@@ -49,13 +50,11 @@ const Prestadores = () => {
   const [prestadores, setPrestadores] = useState<Prestador[]>([]);
   const [filteredData, setFilteredData] = useState<Prestador[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selectedType, setSelectedType] = useState("Todos"); // Estado para almacenar el tipo seleccionado
+  const [selectedType, setSelectedType] = useState("Todos");
   const [selectedPrestador, setSelectedPrestador] = useState<Prestador | null>(null);
-  const [noResults, setNoResults] = useState(false);
-  const {isOpen, onOpen, onClose} = useDisclosure()
-//console.log (prestadores)
-const [page, setPage] = useState(1);
-const perPage = 8;
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [page, setPage] = useState(1);
+  const perPage = 8;
   
   
 
@@ -68,83 +67,75 @@ const perPage = 8;
       const url = '/api/Datos/prestador';
       const response = await fetch(url, {
         method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        }
+        headers: { 'Content-Type': 'application/json' },
       });
-      const responseData: Prestador[] = await response.json();
-      console.log()
+      const responseData = await response.json();
       if (Array.isArray(responseData)) {
-        setPrestadores(responseData);
-        setFilteredData(responseData);
+        // Agrupar las actualizaciones de estado para mejorar el renderizao
+        setPrestadoresAndLoading(responseData, false);
       } else {
         console.error('La respuesta de la API no es un arreglo:', responseData);
       }
     } catch (error) {
       console.error('Error al obtener los prestadores:', error);
-    } finally {
-      setLoading(false);
+      setLoading(false); 
     }
+  };
+  
+  const setPrestadoresAndLoading = (prestadoresData: Prestador[], isLoading: boolean) => {
+    setPrestadores(prestadoresData);
+    setFilteredData(prestadoresData);
+    setLoading(isLoading);
   };
 
 
 
 
 
-
   useEffect(() => {
-    const totalPrestadores = prestadores.length;
-    const totalPages = Math.ceil(totalPrestadores / perPage);
+    const totalPages = Math.ceil(prestadores.length / perPage);
     if (totalPages === 0 || page > totalPages) {
       setPage(totalPages);
       return;
     }
-  
     setLoading(false);
-    setNoResults(false);
   }, [prestadores, page, perPage]);
+;
+
   
 
   useEffect(() => {
     filterPrestadores();
-  }, [prestadores, selectedType])
- 
-  const filterPrestadores = () => {
-    if (selectedType === "Todos") {
+  }, [selectedType]);
+
+  const filterPrestadores = useCallback(() => {
+    if (selectedType === 'Todos') {
       setFilteredData(prestadores);
     } else {
       const filtered = prestadores.filter((prestador) => prestador.tipo === selectedType);
       setFilteredData(filtered);
     }
-  };
+  }, [prestadores, selectedType]);
 
-  const maxPage = Math.ceil(selectedType === "Todos" ? prestadores.length : filteredData.length / perPage);
+  //const maxPage = Math.ceil(selectedType === "Todos" ? prestadores.length : filteredData.length / perPage);
+  const maxPage = useMemo(() => Math.ceil(filteredData.length / perPage), [filteredData.length, perPage]);
 
-
-
-  const handleTabChange = (selectedType: string) => {
-    console.log("Tipo seleccionado:", selectedType);
-    
-    // Filtrar los datos basados en el tipo seleccionado
-    const filtered = prestadores.filter(prestador => {
-      if (selectedType === "Todos") {
-        return true; // Mostrar todos los prestadores
-      } else if (selectedType === "Fidelizado") {
-        return prestador.tipo.toLowerCase().includes("fidelizado"); // Mostrar prestadores con tipo que contiene "fidelizado"
-      } else if (selectedType === "No Fidelizado") {
-        return prestador.tipo.toLowerCase().includes("no_fidelizado"); // Mostrar prestadores con tipo que contiene "no fidelizado"
+  const handleTabChange = useCallback((selectedType: string) => {
+    setSelectedType(selectedType);
+    const filtered = prestadores.filter((prestador) => {
+      if (selectedType === 'Todos') {
+        return true;
+      } else if (selectedType === 'Fidelizado') {
+        return prestador.tipo.toLowerCase().includes('fidelizado');
+      } else if (selectedType === 'No Fidelizado') {
+        return prestador.tipo.toLowerCase().includes('no_fidelizado');
       } else {
-        return prestador.tipo.toLowerCase() === selectedType.toLowerCase(); // Mostrar prestadores del tipo seleccionado
+        return prestador.tipo.toLowerCase() === selectedType.toLowerCase();
       }
     });
-  
-    // Actualizar el estado de los datos filtrados
-    console.log("Datos filtrados:", filtered);
     setFilteredData(filtered);
-  
-    // Reiniciar la página a la primera al cambiar de tipo
     setPage(1);
-  };
+  }, [prestadores]);
   
   
  
@@ -156,7 +147,6 @@ const perPage = 8;
     setSelectedPrestador(prestador);
     onOpen();
   };
- console.log(filteredData)
   return (
    
     <Card className="h-full w-full ">
@@ -345,8 +335,3 @@ const perPage = 8;
 }
 
 export default Prestadores;
-
-
-
-
-
