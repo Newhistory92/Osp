@@ -46,7 +46,7 @@ return <ClerkLoading>
             <Link href="/page/dashboard">
               <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Panel de Usuario</p>
             </Link>
-            <Link href="/user-profile">
+            <Link href="/page/user-profile">
               <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Perfil</p>
             </Link>
             <Link href="/">

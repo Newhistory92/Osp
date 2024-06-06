@@ -6,7 +6,7 @@ import Contenido from "./components/Contenido/Contenido";
 import CardMenu from "./components/CardMenu/CardMenu";
 import Statistic from "./components/Statistic/Statistic";
 import Footer from "./components/Footer/Footer";
-
+// million-ignore
 export default function Home() {
   return (
     <main className="container-home" >

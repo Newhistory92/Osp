@@ -169,7 +169,7 @@ const Navbar: React.FC =() => {
   </div>
   <Image src={Logo} alt="Obra Social Provincia" priority />
 </div>
-      <a className="logo animate-fade-in-down animate-duration-1000" href=".page-top">Obra Social Provincia</a>
+      <a className="logo animate-fade-in-down animate-duration-1000" href="/">Obra Social Provincia</a>
       <input className="menu-btn" type="checkbox" id="menu-btn" />
       <label className="menu-icon" htmlFor="menu-btn"><span className="navicon"></span></label>
       <div className=''> 

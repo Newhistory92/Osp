@@ -1,7 +1,7 @@
 import { UserProfile } from "@clerk/nextjs";
 
 const UserProfilePage = () => (
-  <UserProfile path="/user-profile" />
+  <UserProfile path="/page/user-profile" />
 );
 
 export default UserProfilePage;
