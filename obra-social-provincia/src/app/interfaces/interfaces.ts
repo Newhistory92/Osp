@@ -218,3 +218,20 @@ export interface QuickMenuDesktopProps {
   showModal: boolean;
   setShowModal: (show: boolean) => void;
 }
+
+
+
+
+export interface NavbarStateVertical {
+  open: boolean;
+  profileOpen: boolean;
+  settingOpen: boolean;
+  familyGroupOpen: boolean;
+  ordenes: boolean;
+  publicacionOpen: boolean;
+  publicacionedit:boolean;
+  denunciaOpen: boolean;
+  notificadorOpen: boolean;
+  prestadoresOpen: boolean;
+  auditorOpen: boolean;
+}

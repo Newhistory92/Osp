@@ -147,9 +147,10 @@ const Prestadores = () => {
     setSelectedPrestador(prestador);
     onOpen();
   };
+ 
+
   return (
-   
-    <Card className="h-full w-full ">
+    <Card className="h-full w-full">
       <CardHeader floated={false} shadow={false} className="rounded-none">
         <div className="mb-8 flex items-center justify-between gap-8">
           <div>
@@ -162,176 +163,167 @@ const Prestadores = () => {
           </div>
         </div>
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-
           <Tabs value="all" className="w-full md:w-max">
             <TabsHeader>
-            {TABS.map(({ label, value }) => (
-            <Tab key={value} value={value} onClick={() => handleTabChange(value)}>
-      &nbsp;&nbsp;{label}&nbsp;&nbsp;
-    </Tab>
-  ))}
+              {TABS.map(({ label, value }) => (
+                <Tab key={value} value={value} onClick={() => handleTabChange(value)}>
+                  &nbsp;&nbsp;{label}&nbsp;&nbsp;
+                </Tab>
+              ))}
             </TabsHeader>
           </Tabs>
-          
-          <div className="flex items-center">
-  <div className="flex-grow mr-4">
-    <FilterUser prestadores={prestadores} openModal={openModal} />
-  </div>
-  <div className="flex-grow mb-2">
-    <FilterEspecialidad prestadores={prestadores} setFilteredData={setFilteredData} />
-  </div>
-</div>
 
+          <div className="flex flex-col items-center w-full md:flex-row md:w-auto gap-4">
+            <div className="w-full  flex-grow ">
+              <FilterUser prestadores={prestadores} openModal={openModal} />
+            </div>
+            <div className=" w-full  flex-grow mb-2">
+              <FilterEspecialidad prestadores={prestadores} setFilteredData={setFilteredData} />
+            </div>
+          </div>
         </div>
       </CardHeader>
-    
-      <CardBody className="overflow-x-auto px-0 ">
-      {loading ? (
+      <CardBody className="overflow-x-auto px-0">
+        {loading ? (
           <Skeleton height={400} count={8} />
         ) : (
-        <table className="mt-4 w-full min-w-max table-auto text-left">
-          <thead>
-            <tr>
-              {TABLE_HEAD.map((head) => (
-                <th
-                  key={head}
-                  className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
-                >
-                  <Typography
-                    variant="small"
-                    color="blue-gray"
-                    className="font-normal leading-none opacity-70"
-                  >
-                    {head}
-                  </Typography>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-          {filteredData.map(({ id, name, apellido, imageUrl, phone, phoneOpc, especialidad, address, tipo, descripcion, checkedPhone, especialidad2, especialidad3 }, index) => {
-              const isLast = index === filteredData.length - 1;
+          <>
+            <table className="mt-4 w-full min-w-max table-auto text-left">
+              <thead>
+                <tr>
+                  {TABLE_HEAD.map((head) => (
+                    <th
+                      key={head}
+                      className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                    >
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal leading-none opacity-70"
+                      >
+                        {head}
+                      </Typography>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+            </table>
+            <Virtuoso
+              data={filteredData}
+              itemContent={(index, prestador) => {
+                const { id, name, apellido, imageUrl, phone, phoneOpc, especialidad, address, tipo, checkedPhone, especialidad2, especialidad3 } = prestador;
+                const isLast = index === filteredData.length - 1;
                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
- 
-                return (
-                  <tr key={name}>
-                    <td className={classes}>
-                    <div className="flex items-center gap-3">
-                      <button className="avatar-button"  onClick={() => handleAvatarButtonClick({  id, name, apellido, imageUrl, phone, phoneOpc, especialidad, address, tipo,
-                       descripcion, checkedPhone,especialidad2,especialidad3,email:"" })}>
-                     <Avatar src={imageUrl} alt={apellido} size="sm" />
-                     </button>
 
-                  <Modal
-                 size={"2xl"}
-                 isOpen={isOpen}
-                 onClose={onClose}
-                 placement="center"
-                 scrollBehavior={"outside"}
-                 backdrop={"blur"}
-                 classNames={{
-                 body: "py-6 ",
-                 backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
-                 base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]  ",
-                header: "border-b-[1px] border-[#292f46] ",
-               footer: "border-t-[1px] border-[#292f46]",
-               closeButton: "hover:bg-white/5 active:bg-white/10 ",
-              
-                }}>
-                <ModalContent>
-                   {(onClose) => (
-                       <>
-              <ModalHeader className="flex flex-col gap-1 z-100">Obra Social Provincia</ModalHeader>
-              <ModalBody>
-              {selectedPrestador && (
-            <PrestadorCard {...selectedPrestador} />
-          )}
-          </ModalBody>
-          <ModalFooter>
-            <Button color="danger" variant="light" onPress={onClose}>
-            Cerrar
-            </Button>
-          </ModalFooter>
-        </>
-      )}
-    </ModalContent>
-  </Modal>
+                return (
+                  <tr key={id} className="flex flex-wrap md:flex-nowrap">
+                    <td className={`${classes} flex-grow md:w-1/5`}>
+                      <div className="flex items-center gap-3">
+                        <button className="avatar-button" onClick={() => handleAvatarButtonClick(prestador)}>
+                          <Avatar src={imageUrl} alt={apellido} size="sm" />
+                        </button>
+                        <Modal
+                          size={"2xl"}
+                          isOpen={isOpen}
+                          onClose={onClose}
+                          placement="center"
+                          scrollBehavior={"outside"}
+                          backdrop={"blur"}
+                          classNames={{
+                            body: "py-6",
+                            backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
+                            base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
+                            header: "border-b-[1px] border-[#292f46]",
+                            footer: "border-t-[1px] border-[#292f46]",
+                            closeButton: "hover:bg-white/5 active:bg-white/10",
+                          }}
+                        >
+                          <ModalContent>
+                            {(onClose) => (
+                              <>
+                                <ModalHeader className="flex flex-col gap-1 z-100">Obra Social Provincia</ModalHeader>
+                                <ModalBody>
+                                  {selectedPrestador && <PrestadorCard {...selectedPrestador} />}
+                                </ModalBody>
+                                <ModalFooter>
+                                  <Button color="danger" variant="light" onPress={onClose}>
+                                    Cerrar
+                                  </Button>
+                                </ModalFooter>
+                              </>
+                            )}
+                          </ModalContent>
+                        </Modal>
                         <div className="flex flex-col">
-                          <Typography
-                            variant="small"
-                            color="blue-gray"
-                            className="font-normal"
-                          >
+                          <Typography variant="small" color="blue-gray" className="font-normal">
                             {name} {apellido}
                           </Typography>
-                        
                         </div>
                       </div>
                     </td>
-                    <td className={classes}>
+                    <td className={`${classes} flex-grow md:w-1/5`}>
                       <div className="flex flex-col">
                         <Typography
                           variant="small"
                           color="blue-gray"
-                          className="font-normal  p-4 border-b border-blue-gray-50 bg-blue-gray-50/50" 
-                        >   
-                         <td className="align-middle  ">
-                          <MedicalInformationOutlinedIcon className="mr-2 mb-1" />
-                          {especialidad} <ChevronRightOutlinedIcon fontSize="small"/>
-                          {especialidad2}<ChevronRightOutlinedIcon fontSize="small"/> 
-                          {especialidad3}
+                          className="font-normal p-4 border-b border-blue-gray-50 bg-blue-gray-50/50"
+                        >
+                          <td className="align-middle">
+                            <MedicalInformationOutlinedIcon className="mr-2 mb-1" />
+                            {especialidad} <ChevronRightOutlinedIcon fontSize="small" />
+                            {especialidad2}
+                            <ChevronRightOutlinedIcon fontSize="small" />
+                            {especialidad3}
                           </td>
-                          
                         </Typography>
-
                       </div>
                     </td>
-                    <td className={classes}>
+                    <td className={`${classes} flex-grow md:w-1/5`}>
                       <div className="w-max">
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal opacity-70">
-                          <td className="align-middle ">
-                         { checkedPhone && (
-                        <> <LocalPhoneOutlinedIcon className="mr-2" />{phone}<ChevronRightOutlinedIcon fontSize="small"/></>)}
-                         {phoneOpc && ( <><LocalPhoneOutlinedIcon className="mr-2" /> {phoneOpc} </>   )}
+                        <Typography variant="small" color="blue-gray" className="font-normal opacity-70">
+                          <td className="align-middle">
+                            {checkedPhone && (
+                              <>
+                                <LocalPhoneOutlinedIcon className="mr-2" />
+                                {phone}
+                                <ChevronRightOutlinedIcon fontSize="small" />
+                              </>
+                            )}
+                            {phoneOpc && (
+                              <>
+                                <LocalPhoneOutlinedIcon className="mr-2" /> {phoneOpc}
+                              </>
+                            )}
                           </td>
                         </Typography>
                       </div>
                     </td>
-                    <td className={classes}>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal  p-4 border-b border-blue-gray-50 bg-blue-gray-50/50">
-                        <td className="align-middle"><AddLocationOutlinedIcon className="mr-2 mb-1" />{address}</td>            
+                    <td className={`${classes} flex-grow md:w-1/5`}>
+                      <Typography variant="small" color="blue-gray" className="font-normal p-4 border-b border-blue-gray-50 bg-blue-gray-50/50">
+                        <td className="align-middle">
+                          <AddLocationOutlinedIcon className="mr-2 mb-1" />
+                          {address}
+                        </td>
                       </Typography>
                     </td>
-                    <td className={classes}>
-                    {tipo === "FIDELIZADO" && <AddTaskSharpIcon className="mr-2 mb-1" />}{tipo}
+                    <td className={`${classes} flex-grow md:w-1/5`}>
+                      {tipo === "FIDELIZADO" && <AddTaskSharpIcon className="mr-2 mb-1" />}
+                      {tipo}
                     </td>
                   </tr>
                 );
-              },
-            )}
-          </tbody>
-        </table>
+              }}
+            />
+          </>
         )}
       </CardBody>
-      <CardFooter className="flex items-center justify-between border-t  border-blue-gray-50 p-4">
-        <div className=" items-center justify-center w-full ">
-     <PaginationButtons
-      page={page}
-      setPage={setPage}
-      maxPage={maxPage}
-      data={prestadores} 
-    />
-  </div>
-</CardFooter>
-
+      <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
+        <div className="items-center justify-center w-full">
+          <PaginationButtons page={page} setPage={setPage} maxPage={maxPage} data={filteredData} />
+        </div>
+      </CardFooter>
     </Card>
   );
-}
+};
 
 export default Prestadores;

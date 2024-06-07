@@ -180,39 +180,41 @@ const QuickMenu = () => {
    
     if (!user) return null;
 
-    const handleButtonClick = async (notification: Notificacion) => {
-        console.log("Selected notification:", notification);
-        setSelectedNotification(notification);
-        setVisible(true);
-    
-        try {
-            const requestBody = { id: notification.id, status: 'Leido' };
-            console.log("Request body:", requestBody);
-    
-            const response = await fetch('/api/Datos/notificados', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestBody),
-            });
-    
-            console.log("Response status:", response.status);
-            console.log("Response body:", await response.text());
-    
-            if (!response.ok) {
-                throw new Error('Error al actualizar el estado de la notificación');
-            }
-    
-            setNotificaciones(prevNotificaciones =>
-                prevNotificaciones.map(n =>
-                    n.id === notification.id ? { ...n, status: 'Leido' } : n
-                )
-            );
-        } catch (error) {
-            console.error('Error al actualizar el estado de la notificación:', error);
+   
+const handleButtonClick = async (notification: Notificacion) => {
+
+    setSelectedNotification(notification);
+    setVisible(true);
+
+    try {
+        const requestBody = { id: notification.id, status: 'Leido' };
+        console.log("Request body:", requestBody);
+
+        const response = await fetch('/api/Datos/notificados', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+        });
+
+        console.log("Response status:", response.status);
+        console.log("Response body:", await response.text());
+
+        if (!response.ok) {
+            throw new Error('Error al actualizar el estado de la notificación');
         }
-    };
+
+        setNotificaciones(prevNotificaciones =>
+            prevNotificaciones.map(n =>
+                n.id === notification.id ? { ...n, status: 'Leido' } : n
+            )
+        );
+    } catch (error) {
+        console.error('Error al actualizar el estado de la notificación:', error);
+    }
+}
+
     
 
     const footerContent = selectedNotification && (
