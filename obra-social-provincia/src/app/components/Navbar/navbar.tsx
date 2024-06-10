@@ -11,7 +11,7 @@ import ButtonUser from '../UserComponent/ButtomUser';
 import { Publicacion } from '@/app/interfaces/interfaces';
 
 
-
+// million-ignore
 const Navbar: React.FC =() => {
   const showPrestadores = useAppSelector(state => state.navbar.showPrestadores);
   const [isScrolled, setIsScrolled] = useState(false);

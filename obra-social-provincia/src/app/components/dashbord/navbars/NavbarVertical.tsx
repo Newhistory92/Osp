@@ -23,7 +23,7 @@ import { useAppSelector,useAppDispatch } from "../../../hooks/StoreHook";
 import { NavbarStateVertical } from '@/app/interfaces/interfaces';
 import { toggle, closeAll } from '../../../redux/Slice/navbarVerticalSlice';
 //import "../../../styles/theme.scss"
-const NavbarVertical: React.FC = () => {
+const NavbarVertical: React.FC = React.memo(() => {
   const { user } = useUser();
   const dispatch = useAppDispatch();
   const {
@@ -72,6 +72,7 @@ const NavbarVertical: React.FC = () => {
 
   return (
     <div className='navbar-vertical'>
+      
       <List style={{ maxHeight: "100vh", width: '100%', maxWidth: 360 }} component="nav">
         <div className="nav-scroller ml-5 navbar-brand">
           <Image src={Logo} alt="" width={90} height={60} priority />
@@ -83,7 +84,6 @@ const NavbarVertical: React.FC = () => {
           <div className="navbar-heading navbar navbar-brand">
             MENU
           </div>
-
           <ListItemButton className="nav-item navbar" onClick={() => handleClick('open')}>
             <DynamicFeedOutlinedIcon className='ms-3'/>
             <ListItemText className="nav-link ms-1" primary="Datos Personales" />
@@ -157,6 +157,6 @@ const NavbarVertical: React.FC = () => {
       </List>
     </div>
   );
-};
+});
 
 export default NavbarVertical;

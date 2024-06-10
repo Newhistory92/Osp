@@ -11,12 +11,9 @@ import Ordenes from "../../User1/afiliado/Ordenes/Ordenes"
 import EditPublicacion from '../../User3/operador/Publicacion/EditPublic';
 import DenunciasTable from '../../User3/operador/Publicacion/GestionDenuncia';
 import Notificador from '../../User3/operador/Notificador/Notificador';
-import { toggle, closeAll } from '../../redux/Slice/navbarVerticalSlice';
-import { NavbarStateVertical } from '@/app/interfaces/interfaces';
 
 const DefaultDashboardLayout: React.FC = () => {
   const [showMenu, setShowMenu] = useState<boolean>(true);
-  const dispatch = useAppDispatch();
   const {
     profileOpen,
     settingOpen,

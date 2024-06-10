@@ -22,6 +22,7 @@
     "@million/lint": "^1.0.0-rc.26",
     "@mui/icons-material": "^5.15.12",
     "@mui/material": "^5.15.17",
+    "@next/font": "^14.2.3",
     "@nextui-org/react": "^2.3.6",
     "@prisma/client": "^5.14.0",
     "@radix-ui/react-slot": "^1.0.2",
@@ -36,6 +37,7 @@
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",
     "html-react-parser": "^5.1.10",
+    "lodash": "^4.17.21",
     "material-ui-colors": "^1.0.0",
     "million": "^3.1.11",
     "next": "14.2.3",
@@ -58,6 +60,7 @@
     "use-react-countries": "^2.0.1"
   },
   "devDependencies": {
+    "@fullhuman/postcss-purgecss": "^6.0.0",
     "@types/autosuggest-highlight": "^3.2.3",
     "@types/node": "^20",
     "@types/react": "18.2.42",

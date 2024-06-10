@@ -1,6 +1,7 @@
 
 
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect,useRef,useCallback } from 'react';
+import { debounce } from 'lodash';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -33,7 +34,6 @@ export default function EditPublicacion() {
     const [publicaciones, setPublicaciones] = useState< PublicacionEdit[]>([]);
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [editingPublicacion, setEditingPublicacion] = useState< PublicacionEdit | null>(null);
-    const [resetEditorContent, setResetEditorContent] = useState(false); 
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [deletingPublicacion, setDeletingPublicacion] = useState< PublicacionEdit | null>(null);
     const currentUser = useAppSelector(state => state.user.currentUser);
@@ -53,16 +53,15 @@ export default function EditPublicacion() {
         autorId = currentUser ? currentUser.id : null;
     }
 
-    const handleTituloChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleTituloChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
         setTitulo(event.target.value);
-    };
-
+    }, []);
  
 
-    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleSelectChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
         setPublished(event.target.value);
         setShowForm(false);
-    };
+    }, []);
     
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -92,7 +91,6 @@ export default function EditPublicacion() {
             setShowForm(false);
         }
     };
-    
     const GetPublic = async () => {
         try {
             const response = await fetch(`/api/Publicaciones?published=${published}`, {
@@ -105,7 +103,6 @@ export default function EditPublicacion() {
                 throw new Error('Error al obtener las publicaciones: ' + response.statusText);
             }
             const data = await response.json();
-            // console.log(data)
             if (data.status === 200) {
                 setPublicaciones(data.publicaciones);
             } else {
@@ -116,13 +113,19 @@ export default function EditPublicacion() {
             console.error('Error al obtener las publicaciones:', error);
         }
     };
-    
+
+    const debouncedGetPublic = useCallback(debounce(GetPublic, 300), [published]);
 
     useEffect(() => {
         if (published) {
-            GetPublic();
+            debouncedGetPublic();
         }
-    }, [published]);
+
+        return () => {
+            debouncedGetPublic.cancel();
+        };
+    }, [published, debouncedGetPublic]);
+
 
     const handleEditPublicacion = (publicacion:PublicacionEdit) => {
         console.log(publicacion)
@@ -169,7 +172,6 @@ export default function EditPublicacion() {
 
     const handleCloseModal = () => {
         setEditModalOpen(false);
-        setResetEditorContent(true); // Establecer el estado para limpiar el contenido del editor
     };
 
 
