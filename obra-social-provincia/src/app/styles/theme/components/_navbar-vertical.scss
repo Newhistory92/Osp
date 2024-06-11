@@ -78,7 +78,7 @@
           display: block;
           content: "";
           background: url(../../../../../public/chevron-down.svg);          
-          font-family: Feather;
+          font-family: var(--font-maven-pro);
           margin-left: auto;
           transition: 0.5s ease;
           position: absolute;

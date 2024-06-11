@@ -7,7 +7,7 @@ import { store, persistor } from "./redux/Store/store";
 import { ClerkProvider} from '@clerk/nextjs'
 import { dark,shadesOfPurple } from '@clerk/themes';
 import {NextUIProvider} from "@nextui-org/react";
-import { notoSerif, mavenPro, sedanSC } from './fonts';
+import { notoSerif, mavenPro ,sourceSerifPro } from './fonts';
 import '@fontsource-variable/onest';
 import "./globals.css";
 
@@ -21,7 +21,7 @@ export default function RootLayout({
     <ClerkProvider appearance={{baseTheme: shadesOfPurple}}>
     <html lang="es">
    
-    <body className={`${notoSerif.variable} ${mavenPro.variable} ${sedanSC.variable} font-onest`}>
+    <body className={`${notoSerif.variable} ${mavenPro.variable} ${sourceSerifPro.variable} font-onest`}>
        <PersistGate loading={null} persistor={persistor}>
        <Provider store={store}>
        <NextUIProvider>

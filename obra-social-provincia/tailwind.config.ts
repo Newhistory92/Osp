@@ -36,9 +36,7 @@ export default withMT({
   plugins: [
     [nextui()],
     animations,
-    purgecss({
-      content: ['./**/*.html']
-    })
+   
   ],
 });
 

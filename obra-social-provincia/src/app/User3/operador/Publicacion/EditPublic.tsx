@@ -53,15 +53,15 @@ export default function EditPublicacion() {
         autorId = currentUser ? currentUser.id : null;
     }
 
-    const handleTituloChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
-        setTitulo(event.target.value);
-    }, []);
  
+    const handleTituloChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setTitulo(event.target.value);
+    };
 
-    const handleSelectChange = useCallback((event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleSelectChange =(event: React.ChangeEvent<HTMLSelectElement>) => {
         setPublished(event.target.value);
         setShowForm(false);
-    }, []);
+    }
     
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -118,13 +118,9 @@ export default function EditPublicacion() {
 
     useEffect(() => {
         if (published) {
-            debouncedGetPublic();
+            GetPublic();
         }
-
-        return () => {
-            debouncedGetPublic.cancel();
-        };
-    }, [published, debouncedGetPublic]);
+    }, [published]);
 
 
     const handleEditPublicacion = (publicacion:PublicacionEdit) => {

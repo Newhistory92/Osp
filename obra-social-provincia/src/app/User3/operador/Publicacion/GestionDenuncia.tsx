@@ -56,7 +56,7 @@ export default function DenunciasTable() {
         setCustomers(dataDenuncias);
         setLoading(false);
         console.log("selectedDenuncia:", selectedDenuncia);
-    }, []);
+    }, [selectedDenuncia]);
     
 
     const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {

@@ -58,11 +58,9 @@ const Prestadores = () => {
   
   
 
-  useEffect(() => {
-    fetchPrestadores();
-  }, []);
 
-  const fetchPrestadores = async () => {
+
+  const fetchPrestadores = useCallback(async () => {
     try {
       const url = '/api/Datos/prestador';
       const response = await fetch(url, {
@@ -71,16 +69,15 @@ const Prestadores = () => {
       });
       const responseData = await response.json();
       if (Array.isArray(responseData)) {
-        // Agrupar las actualizaciones de estado para mejorar el renderizao
         setPrestadoresAndLoading(responseData, false);
       } else {
         console.error('La respuesta de la API no es un arreglo:', responseData);
       }
     } catch (error) {
       console.error('Error al obtener los prestadores:', error);
-      setLoading(false); 
+      setLoading(false);
     }
-  };
+  }, []);
   
   const setPrestadoresAndLoading = (prestadoresData: Prestador[], isLoading: boolean) => {
     setPrestadores(prestadoresData);
@@ -89,7 +86,9 @@ const Prestadores = () => {
   };
 
 
-
+  useEffect(() => {
+    fetchPrestadores();
+  }, [fetchPrestadores]);
 
 
   useEffect(() => {
@@ -103,19 +102,21 @@ const Prestadores = () => {
 ;
 
   
-
-  useEffect(() => {
-    filterPrestadores();
-  }, [selectedType]);
-
-  const filterPrestadores = useCallback(() => {
+useEffect(() => {
+  const filterPrestadores = () => {
     if (selectedType === 'Todos') {
       setFilteredData(prestadores);
     } else {
       const filtered = prestadores.filter((prestador) => prestador.tipo === selectedType);
       setFilteredData(filtered);
     }
-  }, [prestadores, selectedType]);
+  };
+
+  filterPrestadores();
+}, [selectedType, prestadores]);
+
+
+
 
   //const maxPage = Math.ceil(selectedType === "Todos" ? prestadores.length : filteredData.length / perPage);
   const maxPage = useMemo(() => Math.ceil(filteredData.length / perPage), [filteredData.length, perPage]);

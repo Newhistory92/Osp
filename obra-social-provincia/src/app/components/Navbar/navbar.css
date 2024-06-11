@@ -1,4 +1,8 @@
 
+
+
+
+
 html {
   color: #222;
   font-size: 70%;
@@ -8,7 +12,6 @@ html {
 
 body {
   margin: 0;
-  font-family: var(--font-noto-serif);
   font-optical-sizing: auto;
   font-weight: 675;
   font-style: normal;
@@ -104,7 +107,7 @@ h3 {
   padding: 2px 0px;
   text-decoration: none;
   margin-left: 10px;
-  font-family: var(--font-sedan-sc);
+  font-family: var(--font-source-serif-pro);
   font-weight: 400;
   text-shadow: 10px 10px 10px rgba(0, 0, 0, 0.5), 20px 20px 20px rgba(0, 0, 0, 0.4), 30px 30px 30px rgba(0, 0, 0, 0.1);
 }
@@ -310,7 +313,7 @@ header.fixed-top .menu-icon .navicon {
   border: none;
   padding-bottom: 4px;
   text-transform: uppercase;
-  font-family:Noto Serif, sans-serif;
+  font-family: var(--font-noto-serif);
   font-size: medium;
   color: black;
   
@@ -432,7 +435,7 @@ header.fixed-top .menu-icon .navicon {
   background: transparent;
   cursor: pointer;
   text-decoration: none;
-  font-family: 'Montserrat', sans-serif;
+  font-family: var(--font-noto-serif);
   font-weight: 600;
   letter-spacing: 0.045em;
   position: relative; 

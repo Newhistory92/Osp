@@ -77,7 +77,7 @@ const Navbar: React.FC =() => {
     };
 
     getPublicaciones();
-  }, []);
+  }, [dispatch]);
 
 
 

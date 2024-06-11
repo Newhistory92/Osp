@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback } from 'react';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -22,7 +22,7 @@ import EditNotificationsRoundedIcon from '@mui/icons-material/EditNotificationsR
 import { useAppSelector,useAppDispatch } from "../../../hooks/StoreHook";
 import { NavbarStateVertical } from '@/app/interfaces/interfaces';
 import { toggle, closeAll } from '../../../redux/Slice/navbarVerticalSlice';
-//import "../../../styles/theme.scss"
+
 const NavbarVertical: React.FC = React.memo(() => {
   const { user } = useUser();
   const dispatch = useAppDispatch();
@@ -47,9 +47,14 @@ const NavbarVertical: React.FC = React.memo(() => {
     userRole = currentUser.length > 0 ? currentUser[0].role : null;
   } else {
     userRole = currentUser ? currentUser.role : null;
-  }
+  }  
+  
+  
+  
+  
+  
+  const handleClick = useCallback((sectionClick: keyof NavbarStateVertical) => {
 
-  const handleClick = (sectionClick: keyof NavbarStateVertical) => {
     if (sectionClick === 'open' || sectionClick === 'publicacionOpen') {
       dispatch(toggle(sectionClick));
     } else {
@@ -68,7 +73,7 @@ const NavbarVertical: React.FC = React.memo(() => {
         dispatch(toggle(sectionClick));
       }
     }
-  };
+  }, [dispatch, profileOpen, settingOpen, familyGroupOpen, ordenes, publicacionedit, denunciaOpen, notificadorOpen, auditorOpen, prestadoresOpen]);
 
   return (
     <div className='navbar-vertical'>
@@ -158,5 +163,6 @@ const NavbarVertical: React.FC = React.memo(() => {
     </div>
   );
 });
+NavbarVertical.displayName = 'NavbarVertical';
 
 export default NavbarVertical;
