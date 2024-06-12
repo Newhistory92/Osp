@@ -140,27 +140,28 @@ const QuickMenu = () => {
    
     useEffect(() => {
         const getNotificaciones = async () => {
-            try {
-                const response = await fetch(`/api/Datos/notificados?receptorId=${receptorId}`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error('Error al obtener las notificaciones del receptor');
-                }
-                const data = await response.json();
-                console.log(data)
-                setNotificaciones(data);
-            } catch (error) {
-                console.error('Error inesperado al obtener las notificaciones del receptor:', error);
+          if (!receptorId) return;
+    
+          try {
+            const response = await fetch(`/api/Datos/notificados?receptorId=${receptorId}`, {
+              method: 'GET',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+            if (!response.ok) {
+              throw new Error('Error al obtener las notificaciones del receptor');
             }
+            const data = await response.json();
+            console.log(data);
+            setNotificaciones(data);
+          } catch (error) {
+            console.error('Error inesperado al obtener las notificaciones del receptor:', error);
+          }
         };
-        if (receptorId) {
-            getNotificaciones();
-        }
-    }, [receptorId]);
+    
+        getNotificaciones();
+      }, [receptorId]);
 
     const countNewMessages = useCallback(() => {
         const newMessages = notificaciones.filter(notificacion => notificacion.status === 'No_leido');

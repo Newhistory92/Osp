@@ -1,18 +1,19 @@
 
 import "./styles/home.css"
+import dynamic from 'next/dynamic';
 import Navbar from "./components/Navbar/navbar";
 import Carrusel from "./components/Carousel/Carrusel"
-import Contenido from "./components/Contenido/Contenido";
 import CardMenu from "./components/CardMenu/CardMenu";
 import Statistic from "./components/Statistic/Statistic";
 import Footer from "./components/Footer/Footer";
-// million-ignore
+const DynamicContenido = dynamic(() => import('./components/Contenido/Contenido'));
+
 export default function Home() {
   return (
     <main className="container-home" >
       <div><Navbar/></div>
       <div><Carrusel/></div>
-      <div> <Contenido/></div>
+      <div> <DynamicContenido /></div>
       <div>< CardMenu /></div>
       <div><Statistic/></div>
       <div><Footer/></div>

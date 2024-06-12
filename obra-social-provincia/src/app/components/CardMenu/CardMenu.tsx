@@ -4,7 +4,14 @@ import React from 'react';
 import "./cardMenu.scss"
 import {setSelectedContent} from '../../redux/Slice/navbarSlice'
 import {useAppDispatch,useAppSelector} from "../../hooks/StoreHook"
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure,Input} from "@nextui-org/react";
+import dynamic from 'next/dynamic';
+const DynamicModal = dynamic(() => import('@nextui-org/react').then(mod => mod.Modal));
+const DynamicModalContent = dynamic(() => import('@nextui-org/react').then(mod => mod.ModalContent));
+const DynamicModalHeader = dynamic(() => import('@nextui-org/react').then(mod => mod.ModalHeader));
+const DynamicModalBody = dynamic(() => import('@nextui-org/react').then(mod => mod.ModalBody));
+const DynamicModalFooter = dynamic(() => import('@nextui-org/react').then(mod => mod.ModalFooter));
+const DynamicButton = dynamic(() => import('@nextui-org/react').then(mod => mod.Button));
+import { useDisclosure,Input} from "@nextui-org/react";
 import parse from 'html-react-parser';
 import YouTube from 'react-youtube';
 
@@ -106,6 +113,7 @@ const CardMenu: React.FC = () => {
       <div className="col-md-4 col-sm-6 col-xs-12">
         <div className="card-menu">
           <div className="cover-menu item-c">
+            
             <h1>Programas</h1>
             <div className="card-back">
               <ul>
@@ -122,7 +130,7 @@ const CardMenu: React.FC = () => {
         </div>
       </div>
             
-             <Modal
+             <DynamicModal
                 backdrop="opaque"
                 size={"4xl"} 
                 isOpen={isOpen} 
@@ -136,11 +144,11 @@ const CardMenu: React.FC = () => {
                   footer: "border-t-[1px] border-[#1f2833]",
                   closeButton: "hover:bg-white/5 active:bg-white/10",
                 }} >
-                <ModalContent>
+                <DynamicModalContent>
                    {(onClose) => (
                        <>
-              <ModalHeader className="flex flex-col gap-1">Obra Social Provincia</ModalHeader>
-              <ModalBody>
+              <DynamicModalHeader className="flex flex-col gap-1">Obra Social Provincia</DynamicModalHeader>
+              <DynamicModalBody>
              
               <Input 
                type="text"
@@ -183,19 +191,19 @@ const CardMenu: React.FC = () => {
             return null;
           })}
               
-              </ModalBody>
-              <ModalFooter>
-                <Button color="primary" variant="light" onPress={onClose}>
+              </DynamicModalBody>
+              <DynamicModalFooter>
+                <DynamicButton color="primary" variant="light" onPress={onClose}>
                   Close
-                </Button>
-                <Button className="bg-[#FE8400] shadow-lg shadow-indigo-500/20" onPress={onClose}>
+                </DynamicButton>
+                <DynamicButton className="bg-[#FE8400] shadow-lg shadow-indigo-500/20" onPress={onClose}>
                   Imprimir
-                </Button>
-              </ModalFooter>
+                </DynamicButton>
+              </DynamicModalFooter>
             </>
           )}
-        </ModalContent>
-      </Modal>
+        </DynamicModalContent>
+      </DynamicModal>
         </section>
     );
 }

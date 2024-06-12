@@ -1,16 +1,17 @@
 "use client"
-import React, { useState, useEffect,useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import NavbarVertical from '../../components/dashbord/navbars/NavbarVertical';
 import NavbarTop from '../../components/dashbord/navbars/NavbarTop';
-import Prestadores from "../../User2/prestador/TablePrestador";
-import Profile from "../../components/Perfil/Perfil";
-import { useAppSelector,useAppDispatch } from "../../hooks/StoreHook"
-import { UserProfile } from '@clerk/nextjs';
-import FamilyGroup from "../../User1/afiliado/FamilyGroupComponent"
-import Ordenes from "../../User1/afiliado/Ordenes/Ordenes"
-import EditPublicacion from '../../User3/operador/Publicacion/EditPublic';
-import DenunciasTable from '../../User3/operador/Publicacion/GestionDenuncia';
-import Notificador from '../../User3/operador/Notificador/Notificador';
+import { useAppSelector} from "../../hooks/StoreHook"
+const DynamicProfile = dynamic(() => import('../../components/Perfil/Perfil'));
+const DynamicUserProfile = dynamic(() => import('@clerk/nextjs').then(mod => mod.UserProfile));
+const DynamicFamilyGroup = dynamic(() => import('../../User1/afiliado/FamilyGroupComponent'));
+const DynamicOrdenes = dynamic(() => import('../../User1/afiliado/Ordenes/Ordenes'));
+const DynamicEditPublicacion = dynamic(() => import('../../User3/operador/Publicacion/EditPublic'));
+const DynamicDenunciasTable = dynamic(() => import('../../User3/operador/Publicacion/GestionDenuncia'));
+const DynamicNotificador = dynamic(() => import('../../User3/operador/Notificador/Notificador'));
+const DynamicPrestadores = dynamic(() => import('../../User2/prestador/TablePrestador'));
 
 const DefaultDashboardLayout: React.FC = () => {
   const [showMenu, setShowMenu] = useState<boolean>(true);
@@ -65,14 +66,14 @@ const DefaultDashboardLayout: React.FC = () => {
           />
         </div>
         <div className='px-6 border-top py-3'>
-          {profileOpen && <Profile />}
-          {settingOpen && <UserProfile />}
-          {familyGroupOpen && <FamilyGroup />}
-          {ordenes && <Ordenes />}
-          {publicacionedit && <EditPublicacion />}
-          {denunciaOpen && <DenunciasTable />}
-          {notificadorOpen && <Notificador />}
-          {prestadoresOpen && <Prestadores />}
+        {profileOpen && <DynamicProfile />}
+      {settingOpen && <DynamicUserProfile />}
+      {familyGroupOpen && <DynamicFamilyGroup />}
+      {ordenes && <DynamicOrdenes />}
+      {publicacionedit && <DynamicEditPublicacion />}
+      {denunciaOpen && <DynamicDenunciasTable />}
+      {notificadorOpen && <DynamicNotificador />}
+      {prestadoresOpen && <DynamicPrestadores />}
         </div>
       </div>
     </div>

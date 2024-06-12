@@ -27,6 +27,7 @@ const NotificadosList = ({ autorId }: Props) => {
 
     useEffect(() => {
         const getNotificaciones = async () => {
+            if (!autorId) return;
             try {
                 const response = await fetch(`/api/Datos/notificados?autorId=${autorId}`, {
                     method: 'GET',
@@ -44,10 +45,9 @@ const NotificadosList = ({ autorId }: Props) => {
                 console.error('Error inesperado al obtener las notificaciones del autor:', error);
             }
         };
-        if (autorId) {
-            getNotificaciones();
-        }
-    }, [autorId]);
+       
+    getNotificaciones();
+}, [autorId]);
 
     const getSeverity = (value: string) => {
         switch (value) {

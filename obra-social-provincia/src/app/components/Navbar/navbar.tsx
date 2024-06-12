@@ -2,20 +2,19 @@
 
 import Image from 'next/image';
 import Logo from "../../../../public/Logo.png";
-import {  useAuth} from '@clerk/clerk-react';
+import { useAuth} from '@clerk/clerk-react';
 import React, { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import "./navbar.css"
 import {useAppDispatch,useAppSelector} from "../../hooks/StoreHook"
 import {setSelectedContent,setPublicaciones,setShowPrestadores} from '../../redux/Slice/navbarSlice'
-import ButtonUser from '../UserComponent/ButtomUser';
 import { Publicacion } from '@/app/interfaces/interfaces';
+const DynamicButtonUser  = dynamic(() => import('../UserComponent/ButtomUser'));
 
-
-// million-ignore
 const Navbar: React.FC =() => {
   const showPrestadores = useAppSelector(state => state.navbar.showPrestadores);
   const [isScrolled, setIsScrolled] = useState(false);
-  const { isSignedIn } =  useAuth();
+  const { isSignedIn,  isLoaded } =  useAuth();
   const publicaciones = useAppSelector(state => state.navbar.publicaciones);
   const selectedContent = useAppSelector(state => state.navbar.selectedContent);
   const dispatch = useAppDispatch(); 
@@ -105,11 +104,15 @@ const Navbar: React.FC =() => {
 
 
    const renderAuthButtons = () => {
+    if (!isLoaded) {
+      // Handle loading state however you like
+      return <div>Loading...</div>;
+    }
     if (isSignedIn) {
       return (
         <div className="flex justify-end mr-10 ">
         
-        <ButtonUser />
+        <DynamicButtonUser />
       </div>
         
       );

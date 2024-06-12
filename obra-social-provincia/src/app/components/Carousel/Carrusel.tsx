@@ -12,7 +12,7 @@ function ControlledCarousel() {
   return (
     <Carousel data-bs-theme="dark">
     <Carousel.Item interval={1000}>
-      <Image src="https://i.pinimg.com/564x/a1/ab/41/a1ab4144dd8d6b5a05da36f82156dbfd.jpg" alt={''}   width={1500}
+      <Image  rel="preconnect" src="https://i.pinimg.com/564x/a1/ab/41/a1ab4144dd8d6b5a05da36f82156dbfd.jpg" alt={''}   width={1500}
     height ={100} />
       <Carousel.Caption>
       <div className="header-content">
@@ -25,7 +25,7 @@ function ControlledCarousel() {
       </Carousel.Caption>
     </Carousel.Item>
     <Carousel.Item interval={500}>
-      <Image src="https://i.pinimg.com/564x/43/6d/f0/436df0ed55ec0bfa723a8f12299d2cb1.jpg" alt={''}  width={1500}
+      <Image  rel="preconnect" src="https://i.pinimg.com/564x/43/6d/f0/436df0ed55ec0bfa723a8f12299d2cb1.jpg" alt={''}  width={1500}
     height ={100} />
       <Carousel.Caption>
       <div className="header-content">
@@ -38,7 +38,7 @@ function ControlledCarousel() {
       </Carousel.Caption>
     </Carousel.Item>
     <Carousel.Item>
-      <Image src="https://i.pinimg.com/736x/b4/57/17/b457174d0d1634bde68e79e08473f41f.jpg" alt={''}   width={1500}
+      <Image  rel="preconnect" src="https://i.pinimg.com/736x/b4/57/17/b457174d0d1634bde68e79e08473f41f.jpg" alt={''}   width={1500}
     height ={100}/>        
       <Carousel.Caption>
       <div className="header-content">

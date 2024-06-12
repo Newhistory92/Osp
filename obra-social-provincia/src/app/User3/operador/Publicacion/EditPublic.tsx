@@ -25,27 +25,21 @@ const BundledEditor = dynamic(() => import ('@/BundledEditor'),{
     ssr:false
 })
 
-
 export default function EditPublicacion() {
     const [showForm, setShowForm] = useState(false);
     const [titulo, setTitulo] = useState('');
     const [contenido, setContenido] = useState('');
     const [published, setPublished] = useState('');
-    const [publicaciones, setPublicaciones] = useState< PublicacionEdit[]>([]);
+    const [publicaciones, setPublicaciones] = useState<PublicacionEdit[]>([]);
     const [editModalOpen, setEditModalOpen] = useState(false);
-    const [editingPublicacion, setEditingPublicacion] = useState< PublicacionEdit | null>(null);
+    const [editingPublicacion, setEditingPublicacion] = useState<PublicacionEdit | null>(null);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
-    const [deletingPublicacion, setDeletingPublicacion] = useState< PublicacionEdit | null>(null);
+    const [deletingPublicacion, setDeletingPublicacion] = useState<PublicacionEdit | null>(null);
     const currentUser = useAppSelector(state => state.user.currentUser);
     const toast = useRef<Toast>(null);
     const editorRef = useRef<any>(null);
 
-
-
-
-
     let autorId;
-
 
     if (Array.isArray(currentUser)) {
         autorId = currentUser.length > 0 ? currentUser[0].id : null;
@@ -53,30 +47,28 @@ export default function EditPublicacion() {
         autorId = currentUser ? currentUser.id : null;
     }
 
- 
     const handleTituloChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitulo(event.target.value);
     };
 
-    const handleSelectChange =(event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
         setPublished(event.target.value);
         setShowForm(false);
     }
-    
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-    
+
         if (editorRef.current) {
             const contenido = editorRef.current.getContent();
-            
-    
+
             const nuevaPublicacion = {
                 published: published,
                 titulo: titulo,
                 contenido: contenido,
                 autorId: autorId
             };
-    
+
             try {
                 await crearPublicacion(nuevaPublicacion);
                 toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'La publicación se creó exitosamente', life: 3000 });
@@ -84,13 +76,14 @@ export default function EditPublicacion() {
                 console.error('Error al crear la publicación:', error);
                 toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al crear la publicación', life: 3000 });
             }
-    
+
             setTitulo('');
             setContenido('');
             setPublished('');
             setShowForm(false);
         }
     };
+
     const GetPublic = async () => {
         try {
             const response = await fetch(`/api/Publicaciones?published=${published}`, {
@@ -114,17 +107,21 @@ export default function EditPublicacion() {
         }
     };
 
-    const debouncedGetPublic = useCallback(debounce(GetPublic, 300), [published]);
-
     useEffect(() => {
         if (published) {
-            GetPublic();
+            const handler = debounce(() => {
+                GetPublic();
+            }, 300);
+
+            handler();
+
+            return () => {
+                handler.cancel();
+            };
         }
     }, [published]);
 
-
-    const handleEditPublicacion = (publicacion:PublicacionEdit) => {
-        console.log(publicacion)
+    const handleEditPublicacion = (publicacion: PublicacionEdit) => {
         setEditingPublicacion(publicacion);
         setTitulo(publicacion.titulo);
         setContenido(publicacion.contenido);
@@ -134,7 +131,6 @@ export default function EditPublicacion() {
     const handleAcceptEdit = async () => {
         try {
             if (editingPublicacion) {
-                console.log("ID de la publicación a actualizar:", editingPublicacion.id);
                 await actualizarPublicacion(editingPublicacion.id, {
                     titulo: titulo,
                     contenido: contenido
@@ -151,20 +147,19 @@ export default function EditPublicacion() {
             toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al actualizar la publicación', life: 3000 });
         }
     };
-    
-    
+
     const handleDeletePublicacion = async (publicacion: PublicacionEdit) => {
         try {
-          await deletePublicacion (publicacion.id);
-          toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'La publicación se eliminó exitosamente', life: 3000 });
+            await deletePublicacion(publicacion.id);
+            toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'La publicación se eliminó exitosamente', life: 3000 });
 
-          setShowDeleteConfirmation(false);
-          setDeletingPublicacion(null);
-        } catch (error:any) {
-          console.error('Error al eliminar la publicación:', error);
-          toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al eliminar la publicación', life: 3000 });
+            setShowDeleteConfirmation(false);
+            setDeletingPublicacion(null);
+        } catch (error: any) {
+            console.error('Error al eliminar la publicación:', error);
+            toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al eliminar la publicación', life: 3000 });
         }
-      };
+    };
 
     const handleCloseModal = () => {
         setEditModalOpen(false);

@@ -25,6 +25,7 @@ export default function RootLayout({
        <PersistGate loading={null} persistor={persistor}>
        <Provider store={store}>
        <NextUIProvider>
+      
         {children}
     </NextUIProvider>
       </Provider>

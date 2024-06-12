@@ -1,17 +1,24 @@
 
 
-import React, { useState, useEffect,useCallback, useMemo} from "react";
+import React, { useState, useEffect,useCallback, useMemo,Suspense,lazy} from "react";
 import "./Styles/buttomAvatar.css"
-import {Modal, ModalContent, ModalHeader, ModalBody, ModalFooter, Button, useDisclosure} from "@nextui-org/react";
+import dynamic from 'next/dynamic';
+const DynamicModal = dynamic(() => import('@nextui-org/react').then(mod => mod.Modal));
+const DynamicModalContent = dynamic(() => import('@nextui-org/react').then(mod => mod.ModalContent));
+const DynamicModalHeader = dynamic(() => import('@nextui-org/react').then(mod => mod.ModalHeader));
+const DynamicModalBody = dynamic(() => import('@nextui-org/react').then(mod => mod.ModalBody));
+const DynamicModalFooter = dynamic(() => import('@nextui-org/react').then(mod => mod.ModalFooter));
+const DynamicButton = dynamic(() => import('@nextui-org/react').then(mod => mod.Button));
+import { useDisclosure} from "@nextui-org/react";
 import MedicalInformationOutlinedIcon from '@mui/icons-material/MedicalInformationOutlined';
 import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import AddLocationOutlinedIcon from '@mui/icons-material/AddLocationOutlined';
 import AddTaskSharpIcon from '@mui/icons-material/AddTaskSharp';
 import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
-import PrestadorCard from './CardsPrestador';
-import FilterUser from "./Filtros/UseAutocomplete";
-import PaginationButtons from "../../components/Pagination/Pagination";
-import FilterEspecialidad from "./Filtros/FilterEspecialidad";
+const DynamicPrestadorCard = dynamic(() => import('./CardsPrestador'));
+const FilterUser = lazy(() => import('./Filtros/UseAutocomplete'));
+const FilterEspecialidad = lazy(() => import('./Filtros/FilterEspecialidad'));
+const PaginationButtons = lazy(() => import('../../components/Pagination/Pagination'));
 import {
   Card,
   CardHeader,
@@ -173,13 +180,16 @@ useEffect(() => {
               ))}
             </TabsHeader>
           </Tabs>
-
           <div className="flex flex-col items-center w-full md:flex-row md:w-auto gap-4">
-            <div className="w-full  flex-grow ">
-              <FilterUser prestadores={prestadores} openModal={openModal} />
+            <div className="w-full flex-grow">
+              <Suspense fallback={<Skeleton height={40} />}>
+                <FilterUser prestadores={prestadores} openModal={openModal} />
+              </Suspense>
             </div>
-            <div className=" w-full  flex-grow mb-2">
-              <FilterEspecialidad prestadores={prestadores} setFilteredData={setFilteredData} />
+            <div className="w-full flex-grow mb-2">
+              <Suspense fallback={<Skeleton height={40} />}>
+                <FilterEspecialidad prestadores={prestadores} setFilteredData={setFilteredData} />
+              </Suspense>
             </div>
           </div>
         </div>
@@ -193,15 +203,8 @@ useEffect(() => {
               <thead>
                 <tr>
                   {TABLE_HEAD.map((head) => (
-                    <th
-                      key={head}
-                      className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
-                    >
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal leading-none opacity-70"
-                      >
+                    <th key={head} className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                      <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
                         {head}
                       </Typography>
                     </th>
@@ -215,7 +218,7 @@ useEffect(() => {
                 const { id, name, apellido, imageUrl, phone, phoneOpc, especialidad, address, tipo, checkedPhone, especialidad2, especialidad3 } = prestador;
                 const isLast = index === filteredData.length - 1;
                 const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
-
+  
                 return (
                   <tr key={id} className="flex flex-wrap md:flex-nowrap">
                     <td className={`${classes} flex-grow md:w-1/5`}>
@@ -223,38 +226,40 @@ useEffect(() => {
                         <button className="avatar-button" onClick={() => handleAvatarButtonClick(prestador)}>
                           <Avatar src={imageUrl} alt={apellido} size="sm" />
                         </button>
-                        <Modal
-                          size={"2xl"}
-                          isOpen={isOpen}
-                          onClose={onClose}
-                          placement="center"
-                          scrollBehavior={"outside"}
-                          backdrop={"blur"}
-                          classNames={{
-                            body: "py-6",
-                            backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
-                            base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
-                            header: "border-b-[1px] border-[#292f46]",
-                            footer: "border-t-[1px] border-[#292f46]",
-                            closeButton: "hover:bg-white/5 active:bg-white/10",
-                          }}
-                        >
-                          <ModalContent>
-                            {(onClose) => (
-                              <>
-                                <ModalHeader className="flex flex-col gap-1 z-100">Obra Social Provincia</ModalHeader>
-                                <ModalBody>
-                                  {selectedPrestador && <PrestadorCard {...selectedPrestador} />}
-                                </ModalBody>
-                                <ModalFooter>
-                                  <Button color="danger" variant="light" onPress={onClose}>
-                                    Cerrar
-                                  </Button>
-                                </ModalFooter>
-                              </>
-                            )}
-                          </ModalContent>
-                        </Modal>
+                        <Suspense fallback={<Skeleton height={40} />}>
+                          <DynamicModal
+                            size={"2xl"}
+                            isOpen={isOpen}
+                            onClose={onClose}
+                            placement="center"
+                            scrollBehavior={"outside"}
+                            backdrop={"blur"}
+                            classNames={{
+                              body: "py-6",
+                              backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
+                              base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
+                              header: "border-b-[1px] border-[#292f46]",
+                              footer: "border-t-[1px] border-[#292f46]",
+                              closeButton: "hover:bg-white/5 active:bg-white/10",
+                            }}
+                          >
+                            <DynamicModalContent>
+                              {(onClose) => (
+                                <>
+                                  <DynamicModalHeader className="flex flex-col gap-1 z-100">Obra Social Provincia</DynamicModalHeader>
+                                  <DynamicModalBody>
+                                    {selectedPrestador && <DynamicPrestadorCard {...selectedPrestador} />}
+                                  </DynamicModalBody>
+                                  <DynamicModalFooter>
+                                    <DynamicButton color="danger" variant="light" onPress={onClose}>
+                                      Cerrar
+                                    </DynamicButton>
+                                  </DynamicModalFooter>
+                                </>
+                              )}
+                            </DynamicModalContent>
+                          </DynamicModal>
+                        </Suspense>
                         <div className="flex flex-col">
                           <Typography variant="small" color="blue-gray" className="font-normal">
                             {name} {apellido}
@@ -320,11 +325,12 @@ useEffect(() => {
       </CardBody>
       <CardFooter className="flex items-center justify-between border-t border-blue-gray-50 p-4">
         <div className="items-center justify-center w-full">
-          <PaginationButtons page={page} setPage={setPage} maxPage={maxPage} data={filteredData} />
+          <Suspense fallback={<Skeleton height={40} />}>
+            <PaginationButtons page={page} setPage={setPage} maxPage={maxPage} data={filteredData} />
+          </Suspense>
         </div>
       </CardFooter>
     </Card>
   );
-};
-
+}  
 export default Prestadores;
