@@ -31,7 +31,7 @@ export default function EditPublicacion() {
     const [titulo, setTitulo] = useState('');
     const [contenido, setContenido] = useState('');
     const [published, setPublished] = useState('');
-    const [publicaciones, setPublicaciones] = useState< PublicacionEdit[]>([]);
+    const [publicaciones, setPublicaciones] = useState<PublicacionEdit[]>([]);
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [editingPublicacion, setEditingPublicacion] = useState< PublicacionEdit | null>(null);
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
@@ -118,12 +118,19 @@ export default function EditPublicacion() {
 
     useEffect(() => {
         if (published) {
-            GetPublic();
-        }
+            const handler = debounce(() => {
+                GetPublic();
+            }, 300);
+
+            handler();
+
+            return () => {
+                handler.cancel();
+            };  }
     }, [published]);
 
 
-    const handleEditPublicacion = (publicacion:PublicacionEdit) => {
+    const handleEditPublicacion = (publicacion: PublicacionEdit) => {
         console.log(publicacion)
         setEditingPublicacion(publicacion);
         setTitulo(publicacion.titulo);
@@ -155,16 +162,14 @@ export default function EditPublicacion() {
     
     const handleDeletePublicacion = async (publicacion: PublicacionEdit) => {
         try {
-          await deletePublicacion (publicacion.id);
-          toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'La publicación se eliminó exitosamente', life: 3000 });
-
+            await deletePublicacion(publicacion.id);
+            toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'La publicación se eliminó exitosamente', life: 3000 });
           setShowDeleteConfirmation(false);
           setDeletingPublicacion(null);
-        } catch (error:any) {
-          console.error('Error al eliminar la publicación:', error);
-          toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al eliminar la publicación', life: 3000 });
-        }
-      };
+        } catch (error: any) {
+            console.error('Error al eliminar la publicación:', error);
+            toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al eliminar la publicación', life: 3000 });
+      };}
 
     const handleCloseModal = () => {
         setEditModalOpen(false);

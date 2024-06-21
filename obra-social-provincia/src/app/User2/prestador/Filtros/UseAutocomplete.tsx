@@ -49,7 +49,6 @@ const FilterUser: React.FC<FilterUserProps> = ({ prestadores, openModal }) => {
   }, [inputValue, filterOptions]);
 
 
-
   const capitalizeFirstLetter = (word: string) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
   };

@@ -140,6 +140,7 @@ const QuickMenu = () => {
    
     useEffect(() => {
         const getNotificaciones = async () => {
+            if (!receptorId) return;
             try {
                 const response = await fetch(`/api/Datos/notificados?receptorId=${receptorId}`, {
                     method: 'GET',
@@ -157,9 +158,7 @@ const QuickMenu = () => {
                 console.error('Error inesperado al obtener las notificaciones del receptor:', error);
             }
         };
-        if (receptorId) {
-            getNotificaciones();
-        }
+        getNotificaciones();
     }, [receptorId]);
 
     const countNewMessages = useCallback(() => {
