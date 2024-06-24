@@ -69,6 +69,9 @@ export interface Prestador {
   tipo: string,
   email:string,
   checkedPhone:boolean,
+  createdAt?: string;
+  updatedAt?: string;
+  
 }
 
 
@@ -234,4 +237,29 @@ export interface NavbarStateVertical {
   notificadorOpen: boolean;
   prestadoresOpen: boolean;
   auditorOpen: boolean;
+}
+
+
+
+export interface Afiliado {
+  id: string;
+  name: string;
+  apellido: string;
+  email: string;
+  phone: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+
+export interface Operador {
+  id: string;
+  name: string;
+  apellido: string;
+  email: string;
+  phone: string;
+  role: string;
+  createdAt: string;
+  updatedAt: string;
 }

@@ -11,7 +11,6 @@ import NotificationsAccordion from '../../User3/operador/Notificador/Notificatio
 import MailRoundedIcon from '@mui/icons-material/MailRounded';
 import ButtonUser from '../UserComponent/ButtomUser';
 import {Notificacion,QuickMenuDesktopProps,NotificationsProps  } from '@/app/interfaces/interfaces';
-import "../../styles/theme.scss"
 import parse from 'html-react-parser';
 import { Dialog } from 'primereact/dialog';
 import { format } from 'date-fns';

@@ -1,6 +1,4 @@
 'use client'
-
-
 import { Provider } from "react-redux";
 import { PersistGate } from 'redux-persist/integration/react';
 import { store, persistor } from "./redux/Store/store";
@@ -10,6 +8,7 @@ import {NextUIProvider} from "@nextui-org/react";
 import { notoSerif, mavenPro ,sourceSerifPro } from './fonts';
 import '@fontsource-variable/onest';
 import "./globals.css";
+import "./styles/theme.scss"
 
 
 export default function RootLayout({
