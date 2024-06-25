@@ -89,7 +89,7 @@
       font-size: .875rem;
       line-height: 1.25rem;
       padding: 0.25rem 1rem;
-      font-family: $font-family-sans-serif;
+      font-family: var(--font-noto-serif);
       font-weight: 500;
 
       &:hover {

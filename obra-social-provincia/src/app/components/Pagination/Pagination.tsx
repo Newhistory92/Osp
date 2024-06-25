@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Pagination, Button } from "@nextui-org/react";
 import { PaginationButtonsProps } from "@/app/interfaces/interfaces";
 
-export default function PaginationButtons({ page, setPage, maxPage, data }: PaginationButtonsProps) {
+export default function PaginationButtons({ page, setPage, maxPage }: PaginationButtonsProps) {
   const handleChange = (newPage: number) => {
     setPage(newPage);
   };

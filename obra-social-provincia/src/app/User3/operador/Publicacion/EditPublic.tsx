@@ -1,6 +1,7 @@
 
 
-import React, { useState, useEffect,useRef } from 'react';
+import React, { useState, useEffect,useRef,useCallback } from 'react';
+import { debounce } from 'lodash';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -30,10 +31,9 @@ export default function EditPublicacion() {
     const [titulo, setTitulo] = useState('');
     const [contenido, setContenido] = useState('');
     const [published, setPublished] = useState('');
-    const [publicaciones, setPublicaciones] = useState< PublicacionEdit[]>([]);
+    const [publicaciones, setPublicaciones] = useState<PublicacionEdit[]>([]);
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [editingPublicacion, setEditingPublicacion] = useState< PublicacionEdit | null>(null);
-    const [resetEditorContent, setResetEditorContent] = useState(false); 
     const [showDeleteConfirmation, setShowDeleteConfirmation] = useState(false);
     const [deletingPublicacion, setDeletingPublicacion] = useState< PublicacionEdit | null>(null);
     const currentUser = useAppSelector(state => state.user.currentUser);
@@ -53,16 +53,15 @@ export default function EditPublicacion() {
         autorId = currentUser ? currentUser.id : null;
     }
 
+ 
     const handleTituloChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setTitulo(event.target.value);
     };
 
- 
-
-    const handleSelectChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    const handleSelectChange =(event: React.ChangeEvent<HTMLSelectElement>) => {
         setPublished(event.target.value);
         setShowForm(false);
-    };
+    }
     
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -92,7 +91,6 @@ export default function EditPublicacion() {
             setShowForm(false);
         }
     };
-    
     const GetPublic = async () => {
         try {
             const response = await fetch(`/api/Publicaciones?published=${published}`, {
@@ -105,7 +103,6 @@ export default function EditPublicacion() {
                 throw new Error('Error al obtener las publicaciones: ' + response.statusText);
             }
             const data = await response.json();
-            // console.log(data)
             if (data.status === 200) {
                 setPublicaciones(data.publicaciones);
             } else {
@@ -116,15 +113,24 @@ export default function EditPublicacion() {
             console.error('Error al obtener las publicaciones:', error);
         }
     };
-    
+
+    const debouncedGetPublic = useCallback(debounce(GetPublic, 300), [published]);
 
     useEffect(() => {
         if (published) {
-            GetPublic();
-        }
+            const handler = debounce(() => {
+                GetPublic();
+            }, 300);
+
+            handler();
+
+            return () => {
+                handler.cancel();
+            };  }
     }, [published]);
 
-    const handleEditPublicacion = (publicacion:PublicacionEdit) => {
+
+    const handleEditPublicacion = (publicacion: PublicacionEdit) => {
         console.log(publicacion)
         setEditingPublicacion(publicacion);
         setTitulo(publicacion.titulo);
@@ -156,20 +162,17 @@ export default function EditPublicacion() {
     
     const handleDeletePublicacion = async (publicacion: PublicacionEdit) => {
         try {
-          await deletePublicacion (publicacion.id);
-          toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'La publicación se eliminó exitosamente', life: 3000 });
-
+            await deletePublicacion(publicacion.id);
+            toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'La publicación se eliminó exitosamente', life: 3000 });
           setShowDeleteConfirmation(false);
           setDeletingPublicacion(null);
-        } catch (error:any) {
-          console.error('Error al eliminar la publicación:', error);
-          toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al eliminar la publicación', life: 3000 });
-        }
-      };
+        } catch (error: any) {
+            console.error('Error al eliminar la publicación:', error);
+            toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al eliminar la publicación', life: 3000 });
+      };}
 
     const handleCloseModal = () => {
         setEditModalOpen(false);
-        setResetEditorContent(true); // Establecer el estado para limpiar el contenido del editor
     };
 
 

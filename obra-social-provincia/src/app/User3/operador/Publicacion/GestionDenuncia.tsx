@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { FilterMatchMode, FilterService } from 'primereact/api';
+import { FilterMatchMode } from 'primereact/api';
 import { DataTable } from 'primereact/datatable';
 import { Column, ColumnFilterElementTemplateOptions } from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
@@ -10,7 +10,8 @@ import { Dialog } from 'primereact/dialog';
 import dataDenuncias from "../../../../../denuncias.json";
 import { Avatar } from 'primereact/avatar';
 import { Denuncia } from '@/app/interfaces/interfaces';
-
+import 'primereact/resources/themes/saga-blue/theme.css';
+import 'primereact/resources/primereact.min.css';
 
 export default function DenunciasTable() {
     const [customers, setCustomers] = useState<Denuncia[]>([]);
@@ -56,7 +57,7 @@ export default function DenunciasTable() {
         setCustomers(dataDenuncias);
         setLoading(false);
         console.log("selectedDenuncia:", selectedDenuncia);
-    }, []);
+    }, [selectedDenuncia]);
     
 
     const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {

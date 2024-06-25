@@ -1,3 +1,5 @@
+
+
 import React, { useState, useEffect } from 'react';
 import { DataTable,DataTableFilterMeta  } from 'primereact/datatable';
 import { Column } from 'primereact/column';
@@ -25,6 +27,7 @@ const NotificadosList = ({ autorId }: Props) => {
 
     useEffect(() => {
         const getNotificaciones = async () => {
+            if (!autorId) return;
             try {
                 const response = await fetch(`/api/Datos/notificados?autorId=${autorId}`, {
                     method: 'GET',
@@ -42,9 +45,7 @@ const NotificadosList = ({ autorId }: Props) => {
                 console.error('Error inesperado al obtener las notificaciones del autor:', error);
             }
         };
-        if (autorId) {
-            getNotificaciones();
-        }
+        getNotificaciones();
     }, [autorId]);
 
     const getSeverity = (value: string) => {

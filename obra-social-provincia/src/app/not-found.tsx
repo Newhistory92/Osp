@@ -1,6 +1,9 @@
+
+
 import React from 'react';
 import "./styles/GlobalNotFound.scss"
 import NumberTicker from './components/Statistic/number-ticker';
+// million-ignore
 const GlobalNotFound: React.FC = () => {
   
   return (

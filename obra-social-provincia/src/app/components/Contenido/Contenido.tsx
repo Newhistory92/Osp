@@ -1,10 +1,11 @@
 "use client"
 import React from 'react';
+import dynamic from 'next/dynamic';
 import parse from 'html-react-parser';
 import YouTube from 'react-youtube';
 import {useAppDispatch,useAppSelector} from "../../hooks/StoreHook"
 import { setSelectedContent, setShowPrestadores,setShowWelcome } from '../../redux/Slice/navbarSlice';
-import Prestadores from '../../User2/prestador/TablePrestador';
+const DynamicPrestadores = dynamic(() => import('../../User2/prestador/TablePrestador'));
 import Welcome from '../Bienvenido/Bienvenido';
 import "./video.css"
 import "./scrollAnimation.css"
@@ -81,7 +82,7 @@ const Contenido = () => {
     <div className="overflow-y-auto p-8 pr-4 w-full h-screen flex justify-center  mx-auto">
       {showWelcome && <Welcome />}
       {showPrestadores ? (
-        <Prestadores />
+        < DynamicPrestadores />
       ) : selectedContent !== null ? ( 
         renderContentWithVideos(selectedContent)
       ) : null}

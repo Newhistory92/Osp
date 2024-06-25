@@ -7,11 +7,11 @@ import React, { useState, useEffect } from 'react';
 import "./navbar.css"
 import {useAppDispatch,useAppSelector} from "../../hooks/StoreHook"
 import {setSelectedContent,setPublicaciones,setShowPrestadores} from '../../redux/Slice/navbarSlice'
-import ButtonUser from '../UserComponent/ButtomUser';
+const DynamicButtonUser  = dynamic(() => import('../UserComponent/ButtomUser'));
 import { Publicacion } from '@/app/interfaces/interfaces';
+import dynamic from 'next/dynamic';
 
-
-
+// million-ignore
 const Navbar: React.FC =() => {
   const showPrestadores = useAppSelector(state => state.navbar.showPrestadores);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -77,7 +77,7 @@ const Navbar: React.FC =() => {
     };
 
     getPublicaciones();
-  }, []);
+  }, [dispatch]);
 
 
 
@@ -109,7 +109,7 @@ const Navbar: React.FC =() => {
       return (
         <div className="flex justify-end mr-10 ">
         
-        <ButtonUser />
+        <DynamicButtonUser />
       </div>
         
       );
@@ -169,7 +169,7 @@ const Navbar: React.FC =() => {
   </div>
   <Image src={Logo} alt="Obra Social Provincia" priority />
 </div>
-      <a className="logo animate-fade-in-down animate-duration-1000" href=".page-top">Obra Social Provincia</a>
+       <a className="logo animate-fade-in-down animate-duration-1000" href="/">Obra Social Provincia</a>
       <input className="menu-btn" type="checkbox" id="menu-btn" />
       <label className="menu-icon" htmlFor="menu-btn"><span className="navicon"></span></label>
       <div className=''> 

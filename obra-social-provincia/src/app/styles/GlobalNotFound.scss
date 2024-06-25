@@ -2,7 +2,7 @@
 body {
     background: rgb(238, 236, 236);
     margin: 0;
-    font-family: 'PT Sans Caption', sans-serif, 'arial', 'Times New Roman';
+    font-family: var(--font-maven-pro);
   }
 /* Error Page */
     .error .clip .shadow

@@ -55,20 +55,26 @@ export interface NavbarState {
   }
 
 export interface Prestador {
+  denuncias: string;
   id:string,
   imageUrl: string;
   name: string;
   apellido: string;
+  matricula?:string;
   descripcion: string;
   phone: string;
   phoneOpc: string;
   address: string;
   especialidad:string,
-  especialidad2:string,
-  especialidad3:string,
+  especialidad2?:string,
+  especialidad3?:string,
   tipo: string,
+
   email:string,
   checkedPhone:boolean,
+  createdAt?: string;
+  updatedAt?: string;
+  
 }
 
 
@@ -173,6 +179,10 @@ export interface Afiliado {
   dni: string;
   phone: string;
   address?: string;
+  dependencia?:string;
+  denuncias?:string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Notificador {
@@ -217,4 +227,38 @@ export interface QuickMenuDesktopProps {
   handleButtonClick: (item: Notificacion) => void;
   showModal: boolean;
   setShowModal: (show: boolean) => void;
+}
+
+
+
+
+export interface NavbarStateVertical {
+  open: boolean;
+  profileOpen: boolean;
+  settingOpen: boolean;
+  familyGroupOpen: boolean;
+  ordenes: boolean;
+  publicacionOpen: boolean;
+  publicacionedit:boolean;
+  denunciaOpen: boolean;
+  notificadorOpen: boolean;
+  prestadoresOpen: boolean;
+  auditorOpen: boolean;
+}
+
+
+
+
+
+
+export interface Operador {
+  id: string;
+  name: string;
+  apellido: string;
+  email: string;
+  phone: string;
+  role: string;
+  numeroOperador:string;
+  createdAt: string;
+  updatedAt: string;
 }

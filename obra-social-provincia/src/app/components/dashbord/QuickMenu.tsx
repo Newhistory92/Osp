@@ -11,7 +11,6 @@ import NotificationsAccordion from '../../User3/operador/Notificador/Notificatio
 import MailRoundedIcon from '@mui/icons-material/MailRounded';
 import ButtonUser from '../UserComponent/ButtomUser';
 import {Notificacion,QuickMenuDesktopProps,NotificationsProps  } from '@/app/interfaces/interfaces';
-import "../../styles/theme.scss"
 import parse from 'html-react-parser';
 import { Dialog } from 'primereact/dialog';
 import { format } from 'date-fns';
@@ -140,6 +139,7 @@ const QuickMenu = () => {
    
     useEffect(() => {
         const getNotificaciones = async () => {
+            if (!receptorId) return;
             try {
                 const response = await fetch(`/api/Datos/notificados?receptorId=${receptorId}`, {
                     method: 'GET',
@@ -157,9 +157,7 @@ const QuickMenu = () => {
                 console.error('Error inesperado al obtener las notificaciones del receptor:', error);
             }
         };
-        if (receptorId) {
-            getNotificaciones();
-        }
+        getNotificaciones();
     }, [receptorId]);
 
     const countNewMessages = useCallback(() => {
@@ -180,39 +178,41 @@ const QuickMenu = () => {
    
     if (!user) return null;
 
-    const handleButtonClick = async (notification: Notificacion) => {
-        console.log("Selected notification:", notification);
-        setSelectedNotification(notification);
-        setVisible(true);
-    
-        try {
-            const requestBody = { id: notification.id, status: 'Leido' };
-            console.log("Request body:", requestBody);
-    
-            const response = await fetch('/api/Datos/notificados', {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(requestBody),
-            });
-    
-            console.log("Response status:", response.status);
-            console.log("Response body:", await response.text());
-    
-            if (!response.ok) {
-                throw new Error('Error al actualizar el estado de la notificación');
-            }
-    
-            setNotificaciones(prevNotificaciones =>
-                prevNotificaciones.map(n =>
-                    n.id === notification.id ? { ...n, status: 'Leido' } : n
-                )
-            );
-        } catch (error) {
-            console.error('Error al actualizar el estado de la notificación:', error);
+   
+const handleButtonClick = async (notification: Notificacion) => {
+
+    setSelectedNotification(notification);
+    setVisible(true);
+
+    try {
+        const requestBody = { id: notification.id, status: 'Leido' };
+        console.log("Request body:", requestBody);
+
+        const response = await fetch('/api/Datos/notificados', {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(requestBody),
+        });
+
+        console.log("Response status:", response.status);
+        console.log("Response body:", await response.text());
+
+        if (!response.ok) {
+            throw new Error('Error al actualizar el estado de la notificación');
         }
-    };
+
+        setNotificaciones(prevNotificaciones =>
+            prevNotificaciones.map(n =>
+                n.id === notification.id ? { ...n, status: 'Leido' } : n
+            )
+        );
+    } catch (error) {
+        console.error('Error al actualizar el estado de la notificación:', error);
+    }
+}
+
     
 
     const footerContent = selectedNotification && (

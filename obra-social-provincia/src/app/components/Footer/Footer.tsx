@@ -6,7 +6,7 @@ import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
 import { orange } from '@mui/material/colors';
 import ShareLocationOutlinedIcon from '@mui/icons-material/ShareLocationOutlined';
 import MarkEmailReadOutlinedIcon from '@mui/icons-material/MarkEmailReadOutlined';
-
+// million-ignore
 const Footer = () => {
   return (
     <footer className="footer-section overflow-hidden">

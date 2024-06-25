@@ -28,59 +28,49 @@ const GroupItems = styled('ul')({
   padding: 0,
 });
 
-
-
-
 interface FilterUserProps {
   prestadores: PrestadorFilter[];
   openModal: (prestador: Prestador) => void;
 }
 
-const FilterUser: React.FC<FilterUserProps> = ({ prestadores,openModal  }) => {
+const FilterUser: React.FC<FilterUserProps> = ({ prestadores, openModal }) => {
   const [inputValue, setInputValue] = React.useState('');
   const [options, setOptions] = React.useState<PrestadorFilter[]>([]);
 
-  React.useEffect(() => {
-    filterOptions(inputValue);
-  }, [inputValue, prestadores]);
-
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-    filterOptions(event.target.value);
-  };
-  const filterOptions = (value: string) => {
+  const filterOptions = React.useCallback((value: string) => {
     const filtered = prestadores.filter((prestador) =>
       `${prestador.name} ${prestador.apellido}`.toLowerCase().includes(value.toLowerCase())
     );
     setOptions(filtered);
-  };
+  }, [prestadores]);
 
-  
+  React.useEffect(() => {
+    filterOptions(inputValue);
+  }, [inputValue, filterOptions]);
+
+
   const capitalizeFirstLetter = (word: string) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
   };
 
   const handleOpenModal = (prestadorFilter: PrestadorFilter) => {
-    // Aquí puedes convertir prestadorFilter a Prestador, usando valores predeterminados o buscando los datos faltantes
     const prestador: Prestador = {
       ...prestadorFilter,
-      imageUrl: '',       
-      descripcion: '',  
-      phone: '',          
-      phoneOpc: '',      
-      address: '',       
-      especialidad: '',   
-      especialidad2: '', 
-      especialidad3: '', 
+      imageUrl: '',
+      descripcion: '',
+      phone: '',
+      phoneOpc: '',
+      address: '',
+      especialidad: '',
+      especialidad2: '',
+      especialidad3: '',
       tipo: '',
-      email: '',         
-      checkedPhone: false 
+      email: '',
+      checkedPhone: false,
+      denuncias: ''
     };
     openModal(prestador);
   };
-
-
-
 
   return (
     <Autocomplete

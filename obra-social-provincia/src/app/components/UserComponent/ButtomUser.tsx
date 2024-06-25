@@ -43,14 +43,14 @@ return <ClerkLoading>
             <div className="font-medium truncate">{user.emailAddresses[0].emailAddress}</div>
           </div>
           <div className="py-2 text-sm text-gray-700 dark:text-gray-200" role="menu" aria-orientation="vertical" aria-labelledby="avatarButton">
-            <Link href="/page/dashboard">
-              <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Panel de Usuario</p>
+          <Link href="/page/dashboard" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" passHref>
+               Panel de Usuario
+                 </Link>
+            <Link href="/page/user-profile" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" passHref>
+              Perfil
             </Link>
-            <Link href="/user-profile">
-              <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Perfil</p>
-            </Link>
-            <Link href="/">
-              <p className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Inicio</p>
+            <Link href="/" className="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white" passHref>
+               Inicio
             </Link>
             <div className="py-1">
             <SignOutButton >
