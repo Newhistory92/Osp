@@ -56,17 +56,18 @@ const FilterUser: React.FC<FilterUserProps> = ({ prestadores, openModal }) => {
   const handleOpenModal = (prestadorFilter: PrestadorFilter) => {
     const prestador: Prestador = {
       ...prestadorFilter,
-      imageUrl: '',       
-      descripcion: '',  
-      phone: '',          
-      phoneOpc: '',      
-      address: '',       
-      especialidad: '',   
-      especialidad2: '', 
-      especialidad3: '', 
+      imageUrl: '',
+      descripcion: '',
+      phone: '',
+      phoneOpc: '',
+      address: '',
+      especialidad: '',
+      especialidad2: '',
+      especialidad3: '',
       tipo: '',
-      email: '',         
-      checkedPhone: false 
+      email: '',
+      checkedPhone: false,
+      denuncias: ''
     };
     openModal(prestador);
   };
