@@ -55,18 +55,21 @@ export interface NavbarState {
   }
 
 export interface Prestador {
+  denuncias: string;
   id:string,
   imageUrl: string;
   name: string;
   apellido: string;
+  matricula?:string;
   descripcion: string;
   phone: string;
   phoneOpc: string;
   address: string;
   especialidad:string,
-  especialidad2:string,
-  especialidad3:string,
+  especialidad2?:string,
+  especialidad3?:string,
   tipo: string,
+
   email:string,
   checkedPhone:boolean,
   createdAt?: string;
@@ -176,6 +179,10 @@ export interface Afiliado {
   dni: string;
   phone: string;
   address?: string;
+  dependencia?:string;
+  denuncias?:string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Notificador {
@@ -241,16 +248,7 @@ export interface NavbarStateVertical {
 
 
 
-export interface Afiliado {
-  id: string;
-  name: string;
-  apellido: string;
-  email: string;
-  phone: string;
-  role: string;
-  createdAt: string;
-  updatedAt: string;
-}
+
 
 
 export interface Operador {
@@ -260,6 +258,7 @@ export interface Operador {
   email: string;
   phone: string;
   role: string;
+  numeroOperador:string;
   createdAt: string;
   updatedAt: string;
 }
