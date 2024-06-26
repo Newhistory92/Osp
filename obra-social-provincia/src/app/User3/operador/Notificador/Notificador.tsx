@@ -1,10 +1,14 @@
 import React, { useEffect, useState,useRef } from 'react';
 import { useAppSelector } from "../../../hooks/StoreHook";
 import NotificadosList from './NotificadosList';
-import { Afiliado } from '@/app/interfaces/interfaces';
+import { Afiliado,Prestador } from '@/app/interfaces/interfaces';
 import { Toast } from 'primereact/toast';
 import Loading from '@/app/components/Loading/loading';
 import { FileUpload } from 'primereact/fileupload';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import dynamic from 'next/dynamic';
 const BundledEditor = dynamic(() => import ('@/BundledEditor'),{
   ssr:false
@@ -13,7 +17,10 @@ const BundledEditor = dynamic(() => import ('@/BundledEditor'),{
 
 const Notificador = () => {
   const [dni, setDni] = useState('');
+  const [matricula, setMatricula] = useState('');
+  const [userType, setUserType] = useState('');
   const [afiliado, setAfiliado] = useState<Afiliado | null>(null);
+  const [prestador, setPrestador] = useState<Prestador | null>(null);
   const [message, setMessage] = useState('');
   const [messageType, setMessageType] = useState('');
   const [showButtons, setShowButtons] = useState(false); 
@@ -35,8 +42,12 @@ const Notificador = () => {
   }
 
   useEffect(() => {
-    obtenerAfiliadoPorDNI(dni);
-  }, [dni]);
+    if (userType === 'dni') {
+        obtenerAfiliadoPorDNI(dni);
+    } else if (userType === 'matricula') {
+        obtenerPrestadorPorMatricula(matricula);
+    }
+}, [dni, matricula]);
 
   const obtenerAfiliadoPorDNI = async (dni: string) => {
     setIsLoading(true);
@@ -78,6 +89,38 @@ const Notificador = () => {
     }
   };
 
+  const obtenerPrestadorPorMatricula = async (matricula: string) => {
+    console.log(`Buscando prestador por matrícula: ${matricula}`);
+    setIsLoading(true);
+    try {
+        const response = await fetch(`/api/Notificador?matricula=${matricula}`, {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json' },
+        });
+        const data = await response.json();
+        console.log('Respuesta del servidor:', data);
+
+        if (response.ok && data.status === 200) {
+            setPrestador(data.prestador);
+            setMessage(`Prestador encontrado: ${data.prestador.name} ${data.prestador.apellido}`);
+            setMessageType('success');
+            setShowButtons(true);
+        } else {
+            setMessage('Prestador no encontrado');
+            setMessageType('error');
+            setShowButtons(false);
+        }
+    } catch (error) {
+        console.log('Error al obtener el Prestador:', error);
+        setMessage('Error al obtener el Prestador');
+        setMessageType('error');
+        setShowButtons(false);
+    } finally {
+        setIsLoading(false);
+    }
+};
+
+
   const handleTituloChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitulo(event.target.value);
   };
@@ -92,9 +135,7 @@ const Notificador = () => {
 
   const handleDniChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newDni = event.target.value;
-    setDni(newDni); // Actualiza el estado del número de DNI
-
-    // Verifica si el campo de DNI está vacío y restablece el estado si es necesario
+    setDni(newDni); 
     if (newDni === '') {
       setAfiliado(null);
       setMessage('');
@@ -107,7 +148,30 @@ const Notificador = () => {
   };
 
 
+  const handleMatriculaChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const newMatricula = event.target.value;
+    setMatricula(newMatricula);
+    if (newMatricula === '') {
+      setPrestador(null);
+      setMessage('');
+      setMessageType('');
+      setShowButtons(false);
+      setTitulo('');
+      setContenido('');
+    }
+  };
 
+
+  const handleUserTypeChange = (event: SelectChangeEvent) => {
+    setUserType(event.target.value);
+    setDni('');
+    setMatricula('');
+    setAfiliado(null);
+    setPrestador(null);
+    setMessage('');
+    setMessageType('');
+    setShowButtons(false);
+};
 
   const handleEnviar = async () => {
     
@@ -145,12 +209,21 @@ const Notificador = () => {
     //   }
     // }
 
+
+    const receptorId = afiliado ? afiliado.id : null;
+    const receptorPrestadorId = prestador ? prestador.id : null;
+  
+    if (!receptorId && !receptorPrestadorId) {
+      toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Debe seleccionar un afiliado o un prestador', life: 3000 });
+      return;
+    }
     const notificacionData = {
       titulo,
       contenido,
       url: archivo, 
       autorId,
-      receptorId: afiliado?.id 
+      receptorId: receptorId, 
+      receptorPrestadorId: receptorPrestadorId
     };
 
     setIsLoading(true);
@@ -187,7 +260,9 @@ const Notificador = () => {
   const handleCancelar = () => {
     setTitulo('');
     setDni('');
+    setMatricula('');
     setAfiliado(null);
+    setPrestador(null);
     setMessage('');
     setMessageType('');
     setShowButtons(false);
@@ -206,34 +281,46 @@ const Notificador = () => {
       <div className="container mx-auto p-4">
           {isLoading && <Loading />}
           <div className="mb-6">
-              <label htmlFor="dni" className="block mb-2 text-sm font-medium text-gray-900">
-                  Ingresa el Número de DNI del Afiliado
-              </label>
-              <input
-                  type="text"
-                  id="dni"
-                  value={dni}
-                  onChange={handleDniChange}
-                  className={`bg-${messageType === 'success' ? 'green' : 'red'}-50 border border-${messageType === 'success' ? 'green' : 'red'}-500 text-${messageType === 'success' ? 'green' : 'red'}-900 placeholder-${messageType === 'success' ? 'green' : 'red'}-700 text-sm rounded-lg focus:ring-${messageType === 'success' ? 'green' : 'red'}-500 focus:border-${messageType === 'success' ? 'green' : 'red'}-500 block w-full p-2.5`}
-                  placeholder="N° de DNI"
-              />
-              {message && (
-                  <p className={`mt-2 text-sm text-${messageType === 'success' ? 'green' : 'red'}-600`}>
-                      <span className="font-medium">{messageType === 'success' ? 'Bien hecho!' : '¡Ups!'}</span> {message}
-                  </p>
-              )}
-          </div>
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small">
+                    <InputLabel id="user-type-select-label">Buscar por</InputLabel>
+                    <Select
+                        labelId="user-type-select-label"
+                        id="user-type-select"
+                        value={userType}
+                        label="Buscar por"
+                        onChange={handleUserTypeChange}
+                    >
+                        <MenuItem value="dni">DNI</MenuItem>
+                        <MenuItem value="matricula">Matrícula</MenuItem>
+                    </Select>
+                </FormControl>
+                <input
+                    type="text"
+                    id="identifier"
+                    value={userType === 'dni' ? dni : matricula}
+                    onChange={userType === 'dni' ? handleDniChange : handleMatriculaChange}
+                    disabled={!userType}
+                    className={`bg-${messageType === 'success' ? 'green' : 'red'}-50 border border-${messageType === 'success' ? 'green' : 'red'}-500 text-${messageType === 'success' ? 'green' : 'red'}-900 placeholder-${messageType === 'success' ? 'green' : 'red'}-700 text-sm rounded-lg focus:ring-${messageType === 'success' ? 'green' : 'red'}-500 focus:border-${messageType === 'success' ? 'green' : 'red'}-500 block w-full p-2.5`}
+                    placeholder={userType === 'dni' ? "N° de DNI" : "Matrícula"}
+                />
+                {message && (
+                    <p className={`mt-2 text-sm text-${messageType === 'success' ? 'green' : 'red'}-600`}>
+                        <span className="font-medium">{messageType === 'success' ? 'Bien hecho!' : '¡Ups!'}</span> {message}
+                    </p>
+                )}
+            </div>
 
-          {messageType === 'success' && afiliado && (
+
+            {messageType === 'success' && (afiliado || prestador) && (
               <div>
                   <h2 className="text-xl font-semibold mb-4">Información de Contacto:</h2>
-                  <p><strong>Phone:</strong> {afiliado?.phone}</p>
-                  <p><strong>Email:</strong> {afiliado.email}</p>
-                  <p><strong>Dirección:</strong> {afiliado.address}</p>
+                  <p><strong>Phone:</strong> {afiliado?.phone || prestador?.phone}</p>
+                  <p><strong>Email:</strong> {afiliado?.email || prestador?.email}</p>
+                  <p><strong>Dirección:</strong> {afiliado?.address || prestador?.address}</p>
               </div>
           )}
 
-          {messageType === 'success' && afiliado && (
+                {messageType === 'success' && (afiliado || prestador) && (
               <div className="mb-6">
                   <label htmlFor="titulo" className="block mb-2 text-sm font-medium text-gray-900">
                       Título del Mensaje
@@ -257,7 +344,7 @@ const Notificador = () => {
               </div>
           )}
 
-          {messageType === 'success' && afiliado && (
+        {messageType === 'success' && (afiliado || prestador) && (
               
 <BundledEditor
 apiKey='0haatfl7x4pbf6bmbt9lleeg1naxzpdssmbl9csdor4lepi0'
