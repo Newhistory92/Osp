@@ -390,7 +390,7 @@ media_live_embeds: true,
 />
           )}
 
-          {messageType === 'success' && afiliado && (
+{messageType === 'success' && (afiliado || prestador) && (
               <div className="card mt-6">
                   <FileUpload
                       name="demo[]"
@@ -403,7 +403,7 @@ media_live_embeds: true,
               </div>
           )}
 
-          {messageType === 'success' && afiliado && (
+{messageType === 'success' && (afiliado || prestador) && (
               <div className=" flex justify-between flex-wrap justify-content-center gap-3">
               <button className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" onClick={handleEnviar}>
                 Enviar

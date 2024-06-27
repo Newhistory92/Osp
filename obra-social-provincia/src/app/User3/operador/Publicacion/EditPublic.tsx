@@ -14,13 +14,14 @@ import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import DrawIcon from '@mui/icons-material/Draw';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale'
-import AddIcon from '@mui/icons-material/Add';
 import { PublicacionEdit } from '@/app/interfaces/interfaces';
 import dynamic from 'next/dynamic';
 import tinymce from 'tinymce/tinymce';
 import { Toast } from 'primereact/toast';
 import "primereact/resources/themes/lara-light-cyan/theme.css";
-
+import 'primeicons/primeicons.css';
+import EditCarrusel from "./EditCarrusel"
+import DeletCarrusel from "./DeletCarrusel"
 const BundledEditor = dynamic(() => import ('@/BundledEditor'),{
     ssr:false
 })
@@ -212,12 +213,10 @@ export default function EditPublicacion() {
     return (
         <div className='bg-white rounded-lg'>
             <Box sx={{ minWidth: 120 }}>
-            <Fab size="medium" color="secondary" aria-label="add">
-        <AddIcon />
-      </Fab>
-      <Fab  color="secondary" size="medium" aria-label="edit">
-  <DeleteSweepIcon />
-</Fab>
+            <EditCarrusel/>
+            <Fab  color="secondary" size="medium" aria-label="edit">
+            <DeletCarrusel/>
+             </Fab>
                 <FormControl fullWidth>
                     <InputLabel 
                     variant="standard" 

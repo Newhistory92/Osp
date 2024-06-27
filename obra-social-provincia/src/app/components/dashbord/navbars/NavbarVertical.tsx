@@ -37,7 +37,13 @@ const NavbarVertical: React.FC = React.memo(() => {
     denunciaOpen,
     notificadorOpen,
     prestadoresOpen,
-    auditorOpen
+    auditorOpen,
+    internadosOpen,
+    autorizacionesOpen,
+    odontologicoOpen,
+    bioquimicosOpen,
+    facturacionOpen,
+    dialisisOpen,
   } = useAppSelector(state => state.navbarvertical);
   const currentUser = useAppSelector(state => state.user.currentUser);
   
@@ -66,7 +72,14 @@ const NavbarVertical: React.FC = React.memo(() => {
           (sectionClick === 'denunciaOpen' && denunciaOpen) ||
           (sectionClick === 'notificadorOpen' && notificadorOpen) ||
           (sectionClick === 'auditorOpen' && auditorOpen) ||
-          (sectionClick === 'prestadoresOpen' && prestadoresOpen)) {
+          (sectionClick === 'prestadoresOpen' && prestadoresOpen)|| 
+          (sectionClick === 'dialisisOpen' && dialisisOpen) ||
+          (sectionClick === 'autorizacionesOpen' && autorizacionesOpen) ||
+          (sectionClick === 'odontologicoOpen' && odontologicoOpen) ||
+          (sectionClick === 'bioquimicosOpen' && bioquimicosOpen) ||
+          (sectionClick === 'facturacionOpen' && facturacionOpen) ||
+          (sectionClick === 'internadosOpen' && internadosOpen))  
+          {
         dispatch(toggle(sectionClick));
       } else {
         dispatch(closeAll());
@@ -76,11 +89,12 @@ const NavbarVertical: React.FC = React.memo(() => {
   }, [dispatch, profileOpen, settingOpen, familyGroupOpen, ordenes, publicacionedit, denunciaOpen, notificadorOpen, auditorOpen, prestadoresOpen]);
 
   return (
-    <div className='navbar-vertical'>
+    <div className='navbar-vertical overflow-auto'>
       
       <List style={{ maxHeight: "100vh", width: '100%', maxWidth: 360 }} component="nav">
         <div className="nav-scroller ml-12 navbar-brand">
-          <Image src={Logo} alt="" width={90} height={60} priority />
+          <Image src={Logo} alt=""  style={{ width: 'auto', height: 'auto' }} priority 
+          />
         </div>
         <div className="navbar-heading nav-item">
           {user ? `Bienvenido ${user.fullName}` : ""}
@@ -152,11 +166,35 @@ const NavbarVertical: React.FC = React.memo(() => {
           )}
 
           {userRole === 'PROVIDER' && (
-            <ListItemButton onClick={() => handleClick('auditorOpen')}>
-              <DnsRoundedIcon/>
-              <ListItemText className="nav-link ms-1" primary="Sistema Online" />
-              {auditorOpen ? <ExpandLess /> : <ExpandMore />}
-            </ListItemButton>
+             <>
+             <ListItemButton onClick={() => handleClick('auditorOpen')}>
+               <DnsRoundedIcon/>
+               <ListItemText className="nav-link ms-1" primary="Sistema Online" />
+               {auditorOpen ? <ExpandLess /> : <ExpandMore />}
+             </ListItemButton>
+             <Collapse in={auditorOpen} timeout="auto" unmountOnExit>
+               <List component="div" disablePadding>
+                 <ListItemButton onClick={() => handleClick('dialisisOpen')}>
+                   <ListItemText className="nav-link" primary="Sistema On Line Diálisis/Sepelio" />
+                 </ListItemButton>
+                 <ListItemButton onClick={() => handleClick('internadosOpen')}>
+                   <ListItemText className="nav-link" primary="Sistema On Line Internados" />
+                 </ListItemButton>
+                 <ListItemButton onClick={() => handleClick('autorizacionesOpen')}>
+                   <ListItemText className="nav-link" primary="Sistema On Line de Autorizaciones" />
+                 </ListItemButton>
+                 <ListItemButton onClick={() => handleClick('odontologicoOpen')}>
+                   <ListItemText className="nav-link" primary="Sistema On Line Odontológico" />
+                 </ListItemButton>
+                 <ListItemButton onClick={() => handleClick('bioquimicosOpen')}>
+                   <ListItemText className="nav-link" primary="Sistema On Line Bioquímicos" />
+                 </ListItemButton>
+                 <ListItemButton onClick={() => handleClick('facturacionOpen')}>
+                   <ListItemText className="nav-link" primary="Sistema On Line Facturación/Consultas" />
+                 </ListItemButton>
+               </List>
+             </Collapse>
+           </>
           )}
         </div>
       </List>

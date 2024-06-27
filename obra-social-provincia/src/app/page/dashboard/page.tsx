@@ -14,6 +14,7 @@ import Notificador from '../../User3/operador/Notificador/Notificador';
 
 const DefaultDashboardLayout: React.FC = () => {
   const [showMenu, setShowMenu] = useState<boolean>(true);
+  const [iframeUrl, setIframeUrl] = useState<string | null>(null);
   const {
     profileOpen,
     settingOpen,
@@ -22,7 +23,13 @@ const DefaultDashboardLayout: React.FC = () => {
     publicacionedit,
     denunciaOpen,
     notificadorOpen,
-    prestadoresOpen
+    prestadoresOpen,
+    internadosOpen,
+    autorizacionesOpen,
+    odontologicoOpen,
+    bioquimicosOpen,
+    facturacionOpen,
+    dialisisOpen,
   } = useAppSelector(state => state.navbarvertical);
  
   const currentUser = useAppSelector(state => state.user.currentUser);
@@ -48,11 +55,20 @@ const DefaultDashboardLayout: React.FC = () => {
   };
   
 
+  useEffect(() => {
+    if (internadosOpen) setIframeUrl('https://dossanjuan.online/Osp/Login.Aspx?ReturnUrl=%2fOsp');
+    else if (autorizacionesOpen) setIframeUrl('https://dossanjuan.online/OspAmb/Login.Aspx?ReturnUrl=%2fOspAmb%2fdefault.aspx');
+    else if (odontologicoOpen) setIframeUrl('https://dossanjuan.online/OspOdontologos/Login.Aspx?ReturnUrl=%2fospodontologos%2fdefault.aspx');
+    else if (bioquimicosOpen) setIframeUrl('https://dossanjuan.online/OspBio/Login.Aspx?ReturnUrl=%2fOspBio%2fdefault.aspx');
+    else if (facturacionOpen) setIframeUrl('https://dossanjuan.online/OspFacturar/Account/Login.aspx?ReturnUrl=%2fOspFacturar');
+    else if (dialisisOpen) setIframeUrl('https://dossanjuan.online/AmbulatorioOsp/Login.Aspx?ReturnUrl=%2fAmbulatorioOsp');
+  }, [internadosOpen, autorizacionesOpen, odontologicoOpen, bioquimicosOpen, facturacionOpen, dialisisOpen]);
+
 
 
   return (
     <div id="db-wrapper" className={`${showMenu ? '' : 'toggled'}`}>
-      <div className="navbar-vertical navbar">
+      <div className="navbar-vertical navbar ">
         <NavbarVertical/>
       </div>
       <div id="page-content">
@@ -66,7 +82,7 @@ const DefaultDashboardLayout: React.FC = () => {
         </div>
         <div className='px-6 border-top py-3'>
           {profileOpen && <Profile />}
-          {settingOpen && <UserProfile />}
+          {settingOpen && <UserProfile routing="hash" />}
           {familyGroupOpen && <FamilyGroup />}
           {ordenes && <Ordenes />}
           {publicacionedit && <EditPublicacion />}
@@ -74,6 +90,9 @@ const DefaultDashboardLayout: React.FC = () => {
           {notificadorOpen && <Notificador />}
           {prestadoresOpen && <Prestadores />}
         </div>
+        {iframeUrl && (
+          <iframe src={iframeUrl} style={{ width: '100%', height: '100vh', border: 'none' }} />
+        )}
       </div>
     </div>
   );

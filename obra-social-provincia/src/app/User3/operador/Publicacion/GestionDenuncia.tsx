@@ -10,9 +10,9 @@ import { Dialog } from 'primereact/dialog';
 import dataDenuncias from "../../../../../denuncias.json";
 import { Avatar } from 'primereact/avatar';
 import { Denuncia } from '@/app/interfaces/interfaces';
-import 'primereact/resources/themes/saga-blue/theme.css';
-import 'primereact/resources/primereact.min.css';
 
+import 'primereact/resources/primereact.min.css';
+import 'primeicons/primeicons.css';
 export default function DenunciasTable() {
     const [customers, setCustomers] = useState<Denuncia[]>([]);
     const [filters, setFilters] = useState<{

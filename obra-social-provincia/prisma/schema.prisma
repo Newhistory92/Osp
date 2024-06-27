@@ -125,6 +125,15 @@ model Notificacion {
   updatedAt   DateTime        @updatedAt
 }
 
+
+model Carrusel{
+   id                String   @id @default(uuid())
+  tituloprincipal    String
+  titulosecundario   String
+  contenido          String
+  urlImagen          String
+
+}
 enum Role {
   USER
   ADMIN

@@ -3,7 +3,6 @@ import { Card, CardBody, CardFooter, Typography, Button, Input,
   MenuHandler,
   MenuList,
   MenuItem} from "@material-tailwind/react";
-  
 import { useCountries } from "use-react-countries";
 import axios from 'axios';
 import FormGroup from '@mui/material/FormGroup';
@@ -213,6 +212,9 @@ return (
                             <Image
                               src={flags.svg}
                               alt={name}
+                              width={50}
+                              height={100}
+
                               className="h-4 w-4 rounded-full object-cover"
                             />
                             {countryCallingCode}
@@ -230,6 +232,8 @@ return (
                                 src={flags.svg}
                                 alt={name}
                                 className="h-5 w-5 rounded-full object-cover"
+                                width={50}
+                                height={100}
                               />
                               {name} <span className="ml-auto">{countryCallingCode}</span>
                             </MenuItem>
