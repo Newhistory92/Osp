@@ -166,7 +166,7 @@ const handleTabChange = useCallback((value: string) => {
             </TabsHeader>
           </Tabs>
   
-          <div className="flex flex-col items-center w-full md:flex-row md:w-auto gap-4 ">
+          <div className="flex flex-col items-center w-full md:flex-row md:w-auto gap-4">
             <div className="w-full flex-grow">
               <FilterUser prestadores={prestadores} openModal={openModal} />
             </div>
@@ -176,24 +176,66 @@ const handleTabChange = useCallback((value: string) => {
           </div>
         </div>
       </CardHeader>
-      <CardBody className=" px-0">
+      <CardBody className="px-0">
         {loading ? (
-         <React.Fragment>
-          <SkeletonTheme baseColor="#c9c4c4" highlightColor="#8f8c8c">
-        
-         <Skeleton height={60} count={3} className="skeleton" 
-         />
-         </SkeletonTheme>
-       </React.Fragment>
+          <div className="overflow-auto">
+            <table className="mt-4 w-full min-w-max table-auto text-left">
+              <thead>
+                <tr>
+                  {TABLE_HEAD.map((head) => (
+                    <th
+                      key={head}
+                      className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                    >
+                      <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
+                        {head}
+                      </Typography>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {[...Array(8)].map((_, index) => (
+                  <tr key={index} className="flex flex-wrap md:flex-nowrap">
+                    <td className="p-4 flex-grow md:w-1/5">
+                      <div className="flex items-center gap-3">
+                        <Skeleton circle={true} height={40} width={40} />
+                        <div className="flex flex-col">
+                          <Skeleton width={100} height={20} />
+                        </div>
+                      </div>
+                    </td>
+                    <td className="p-4 flex-grow md:w-1/5">
+                      <div className="flex flex-col">
+                        <Skeleton width={150} height={20} />
+                      </div>
+                    </td>
+                    <td className="p-4 flex-grow md:w-1/5">
+                      <div className="w-max">
+                        <Skeleton width={120} height={20} />
+                      </div>
+                    </td>
+                    <td className="p-4 flex-grow md:w-1/5">
+                      <Skeleton width={100} height={20} />
+                    </td>
+                    <td className="p-4 flex-grow md:w-1/5">
+                      <Skeleton width={80} height={20} />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         ) : (
           <>
             <table className="mt-4 w-full min-w-max table-auto text-left">
               <thead>
                 <tr>
                   {TABLE_HEAD.map((head) => (
-                     <th
-                     key={head}
-                     className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4" >
+                    <th
+                      key={head}
+                      className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4"
+                    >
                       <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
                         {head}
                       </Typography>
@@ -209,46 +251,48 @@ const handleTabChange = useCallback((value: string) => {
                   const { id, name, apellido, imageUrl, phone, phoneOpc, especialidad, address, tipo, checkedPhone, especialidad2, especialidad3 } = prestador;
                   const isLast = index === filteredData.length - 1;
                   const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
+  
                   const displayTipo = tipo.replace("_", " ").toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
+  
                   return (
-                    <tr key={id} className="flex flex-wrap md:flex-nowrap ">
+                    <tr key={id} className="flex flex-wrap md:flex-nowrap">
                       <td className={`${classes} flex-grow md:w-1/5`}>
-                        <div className="flex items-center gap-3 ">
+                        <div className="flex items-center gap-3">
                           <button className="avatar-button" onClick={() => handleAvatarButtonClick(prestador)}>
                             <Avatar src={imageUrl} alt={apellido} size="sm" />
                           </button>
                           <Modal
-                          size={"2xl"}
-                          isOpen={isOpen}
-                          onClose={onClose}
-                          placement="center"
-                          scrollBehavior={"outside"}
-                          backdrop={"blur"}
-                          classNames={{
-                            body: "py-6",
-                            backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
-                            base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
-                            header: "border-b-[1px] border-[#292f46]",
-                            footer: "border-t-[1px] border-[#292f46]",
-                            closeButton: "hover:bg-white/5 active:bg-white/10",
-                          }}
-                        >
-                          <ModalContent>
-                            {(onClose) => (
-                              <>
-                                <ModalHeader className="flex flex-col gap-1 z-100">Obra Social Provincia</ModalHeader>
-                                <ModalBody>
-                                  {selectedPrestador && <PrestadorCard {...selectedPrestador} />}
-                                </ModalBody>
-                                <ModalFooter>
-                                  <Button color="danger" variant="light" onPress={onClose}>
-                                    Cerrar
-                                  </Button>
-                                </ModalFooter>
-                              </>
-                            )}
-                          </ModalContent>
-                        </Modal>
+                            size={"2xl"}
+                            isOpen={isOpen}
+                            onClose={onClose}
+                            placement="center"
+                            scrollBehavior={"outside"}
+                            backdrop={"blur"}
+                            classNames={{
+                              body: "py-6",
+                              backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
+                              base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
+                              header: "border-b-[1px] border-[#292f46]",
+                              footer: "border-t-[1px] border-[#292f46]",
+                              closeButton: "hover:bg-white/5 active:bg-white/10",
+                            }}
+                          >
+                            <ModalContent>
+                              {(onClose) => (
+                                <>
+                                  <ModalHeader className="flex flex-col gap-1 z-100">Obra Social Provincia</ModalHeader>
+                                  <ModalBody>
+                                    {selectedPrestador && <PrestadorCard {...selectedPrestador} />}
+                                  </ModalBody>
+                                  <ModalFooter>
+                                    <Button color="danger" variant="light" onPress={onClose}>
+                                      Cerrar
+                                    </Button>
+                                  </ModalFooter>
+                                </>
+                              )}
+                            </ModalContent>
+                          </Modal>
                           <div className="flex flex-col">
                             <Typography variant="small" color="blue-gray" className="font-normal">
                               {name} {apellido}
