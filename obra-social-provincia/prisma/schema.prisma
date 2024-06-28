@@ -126,14 +126,14 @@ model Notificacion {
 }
 
 
-model Carrusel{
-   id                String   @id @default(uuid())
-  tituloprincipal    String
-  titulosecundario   String
-  contenido          String
-  urlImagen          String
-
+model Carrusel {
+  id               String   @id @default(uuid())
+  tituloprincipal  String
+  titulosecundario String
+  contenido        String
+  urlImagen        String
 }
+
 enum Role {
   USER
   ADMIN

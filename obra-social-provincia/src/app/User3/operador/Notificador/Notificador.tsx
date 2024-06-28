@@ -1,6 +1,5 @@
 import React, { useEffect, useState,useRef } from 'react';
 import { useAppSelector } from "../../../hooks/StoreHook";
-import NotificadosList from './NotificadosList';
 import { Afiliado,Prestador } from '@/app/interfaces/interfaces';
 import { Toast } from 'primereact/toast';
 import Loading from '@/app/components/Loading/loading';
@@ -13,7 +12,9 @@ import dynamic from 'next/dynamic';
 const BundledEditor = dynamic(() => import ('@/BundledEditor'),{
   ssr:false
 })
-
+const NotificadosList = dynamic(() => import ('./NotificadosList'),{
+  ssr:false
+})
 
 const Notificador = () => {
   const [dni, setDni] = useState('');
@@ -42,12 +43,22 @@ const Notificador = () => {
   }
 
   useEffect(() => {
-    if (userType === 'dni') {
-        obtenerAfiliadoPorDNI(dni);
-    } else if (userType === 'matricula') {
-        obtenerPrestadorPorMatricula(matricula);
+    let handler:any 
+
+    if (userType === 'dni' && dni) {
+        handler = setTimeout(() => {
+            obtenerAfiliadoPorDNI(dni);
+        }, 2000);
+    } else if (userType === 'matricula' && matricula) {
+        handler = setTimeout(() => {
+            obtenerPrestadorPorMatricula(matricula);
+        }, 2000);
     }
-}, [dni, matricula,userType]);
+
+    return () => {
+        clearTimeout(handler);
+    };
+}, [dni, matricula, userType]);
 
   const obtenerAfiliadoPorDNI = async (dni: string) => {
     setIsLoading(true);

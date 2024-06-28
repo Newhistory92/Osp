@@ -36,7 +36,6 @@
     "date-fns": "^3.6.0",
     "framer-motion": "^11.2.11",
     "html-react-parser": "^5.1.10",
-    "lodash": "^4.17.21",
     "material-ui-colors": "^1.0.0",
     "next": "14.2.3",
     "primeicons": "^7.0.0",

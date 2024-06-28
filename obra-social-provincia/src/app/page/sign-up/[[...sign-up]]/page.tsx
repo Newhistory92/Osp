@@ -1,4 +1,4 @@
-import { SignUpButton} from "@clerk/nextjs";
+import { SignUp} from "@clerk/nextjs";
 import Image from "next/image";
 import fondo from "../../../../../public/fondo.jpeg"
 
@@ -16,7 +16,7 @@ export default function Page() {
   <div className="grid md:grid-cols-2">
     <div className="flex justify-center items-center">
       <div className="container">
-        <SignUpButton    signInFallbackRedirectUrl='/page/select-user' fallbackRedirectUrl="/"/>
+        <SignUp    signInFallbackRedirectUrl='/page/select-user' fallbackRedirectUrl="/"/>
       </div>
     </div>
     <div className="flex justify-center items-center text-center text-black z-20">

@@ -1,7 +1,6 @@
 
 
-import React, { useState, useEffect,useRef,useCallback } from 'react';
-import { debounce } from 'lodash';
+import React, { useState, useEffect,useRef } from 'react';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -98,44 +97,42 @@ export default function EditPublicacion() {
             setShowForm(false);
         }
     };
-    const GetPublic = async () => {
-        try {
-            const response = await fetch(`/api/Publicaciones?published=${published}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-            if (!response.ok) {
-                throw new Error('Error al obtener las publicaciones: ' + response.statusText);
-            }
-            const data = await response.json();
-            if (data.status === 200) {
-                setPublicaciones(data.publicaciones);
-            } else {
-                setPublicaciones([]);
-                console.error('Error: La respuesta del servidor está vacía.');
-            }
-        } catch (error) {
-            console.error('Error al obtener las publicaciones:', error);
-        }
-    };
-
-
-
     useEffect(() => {
         if (published) {
-            const handler = debounce(() => {
+            const GetPublic = async () => {
+                try {
+                    const response = await fetch(`/api/Publicaciones?published=${published}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error('Error al obtener las publicaciones: ' + response.statusText);
+                    }
+                    const data = await response.json();
+                    if (data.status === 200) {
+                        setPublicaciones(data.publicaciones);
+                    } else {
+                        setPublicaciones([]);
+                        console.error('Error: La respuesta del servidor está vacía.');
+                    }
+                } catch (error) {
+                    console.error('Error al obtener las publicaciones:', error);
+                }
+            };
+    
+            const handler = setTimeout(() => {
                 GetPublic();
             }, 300);
     
-            handler();
-    
             return () => {
-                handler.cancel();
-            };  
+                clearTimeout(handler);
+            };
         }
-    }, [published, GetPublic]);
+    }, [published]);
+    
+    
     
 
     const handleEditPublicacion = (publicacion: PublicacionEdit) => {

@@ -8,10 +8,8 @@ import LocalPhoneOutlinedIcon from '@mui/icons-material/LocalPhoneOutlined';
 import AddLocationOutlinedIcon from '@mui/icons-material/AddLocationOutlined';
 import AddTaskSharpIcon from '@mui/icons-material/AddTaskSharp';
 import ChevronRightOutlinedIcon from '@mui/icons-material/ChevronRightOutlined';
-import PrestadorCard from './CardsPrestador';
-import FilterUser from "./Filtros/UseAutocomplete";
 import PaginationButtons from "../../components/Pagination/Pagination";
-import FilterEspecialidad from "./Filtros/FilterEspecialidad";
+import dynamic from 'next/dynamic';
 import {
   Card,
   CardHeader,
@@ -23,23 +21,28 @@ import {
   Tab,
   Avatar,
 } from "@material-tailwind/react";
-import Skeleton from "react-loading-skeleton";
+import Skeleton, { SkeletonTheme } from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
+
 import { Prestador } from "@/app/interfaces/interfaces";
 import { Virtuoso } from 'react-virtuoso';
+const PrestadorCard  = dynamic(() => import ('./CardsPrestador'),{
+  ssr:false
+})
+
+const FilterUser  = dynamic(() => import ('./Filtros/UseAutocomplete'),{
+  ssr:false
+})
+const FilterEspecialidad   = dynamic(() => import ('./Filtros/FilterEspecialidad'),{
+  ssr:false
+})
+
+
 
 const TABS = [
-  {
-    label: "Todos",
-    value: "Todos",
-  },
-  {
-    label: "Fidelizado",
-    value: "Fidelizado",
-  },
-  {
-    label: "No Fidelizado",
-    value: "No Fidelizado",
-  },
+  { label: 'Todos', value: 'Todos' },
+  { label: 'Fidelizado', value: 'FIDELIZADO' },
+  { label: 'No Fidelizado', value: 'NO_FIDELIZADO' }
 ];
 
 const TABLE_HEAD = ["Prestador", "Especialidad", "Teléfono", "Direccion", "Tipo"];
@@ -56,7 +59,7 @@ const Prestadores = () => {
   const [page, setPage] = useState(1);
   const perPage = 8;
   
-  
+
 
 
 
@@ -105,40 +108,29 @@ const Prestadores = () => {
 useEffect(() => {
   const filterPrestadores = () => {
     if (selectedType === 'Todos') {
+      console.log("Selected type is Todos");
       setFilteredData(prestadores);
     } else {
-      const filtered = prestadores.filter((prestador) => prestador.tipo === selectedType);
+      const filtered = prestadores.filter((prestador) => prestador.tipo.toLowerCase() === selectedType.toLowerCase());
+      console.log(`Filtered prestadores: ${filtered.length} items for type ${selectedType}`);
       setFilteredData(filtered);
     }
   };
 
+  console.log("Running filterPrestadores useEffect");
   filterPrestadores();
 }, [selectedType, prestadores]);
 
-
+const handleTabChange = useCallback((value: string) => {
+  console.log(`Tab changed to: ${value}`);
+  setSelectedType(value);
+  setPage(1);
+}, []);
 
 
   //const maxPage = Math.ceil(selectedType === "Todos" ? prestadores.length : filteredData.length / perPage);
   const maxPage = useMemo(() => Math.ceil(filteredData.length / perPage), [filteredData.length, perPage]);
 
-  const handleTabChange = useCallback((selectedType: string) => {
-    setSelectedType(selectedType);
-    const filtered = prestadores.filter((prestador) => {
-      if (selectedType === 'Todos') {
-        return true;
-      } else if (selectedType === 'Fidelizado') {
-        return prestador.tipo.toLowerCase().includes('fidelizado');
-      } else if (selectedType === 'No Fidelizado') {
-        return prestador.tipo.toLowerCase().includes('no_fidelizado');
-      } else {
-        return prestador.tipo.toLowerCase() === selectedType.toLowerCase();
-      }
-    });
-    setFilteredData(filtered);
-    setPage(1);
-  }, [prestadores]);
-  
-  
  
   const handleAvatarButtonClick = (prestador: React.SetStateAction<Prestador | null>) => {
     setSelectedPrestador(prestador);
@@ -186,14 +178,22 @@ useEffect(() => {
       </CardHeader>
       <CardBody className=" px-0">
         {loading ? (
-          <Skeleton height={400} count={8} />
+         <React.Fragment>
+          <SkeletonTheme baseColor="#c9c4c4" highlightColor="#8f8c8c">
+        
+         <Skeleton height={60} count={3} className="skeleton" 
+         />
+         </SkeletonTheme>
+       </React.Fragment>
         ) : (
           <>
             <table className="mt-4 w-full min-w-max table-auto text-left">
               <thead>
                 <tr>
                   {TABLE_HEAD.map((head) => (
-                    <th key={head} className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4">
+                     <th
+                     key={head}
+                     className="border-y border-blue-gray-100 bg-blue-gray-50/50 p-4" >
                       <Typography variant="small" color="blue-gray" className="font-normal leading-none opacity-70">
                         {head}
                       </Typography>
@@ -209,7 +209,7 @@ useEffect(() => {
                   const { id, name, apellido, imageUrl, phone, phoneOpc, especialidad, address, tipo, checkedPhone, especialidad2, especialidad3 } = prestador;
                   const isLast = index === filteredData.length - 1;
                   const classes = isLast ? "p-4" : "p-4 border-b border-blue-gray-50";
-  
+                  const displayTipo = tipo.replace("_", " ").toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
                   return (
                     <tr key={id} className="flex flex-wrap md:flex-nowrap ">
                       <td className={`${classes} flex-grow md:w-1/5`}>
@@ -217,6 +217,38 @@ useEffect(() => {
                           <button className="avatar-button" onClick={() => handleAvatarButtonClick(prestador)}>
                             <Avatar src={imageUrl} alt={apellido} size="sm" />
                           </button>
+                          <Modal
+                          size={"2xl"}
+                          isOpen={isOpen}
+                          onClose={onClose}
+                          placement="center"
+                          scrollBehavior={"outside"}
+                          backdrop={"blur"}
+                          classNames={{
+                            body: "py-6",
+                            backdrop: "bg-[#292f46]/50 backdrop-opacity-40",
+                            base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
+                            header: "border-b-[1px] border-[#292f46]",
+                            footer: "border-t-[1px] border-[#292f46]",
+                            closeButton: "hover:bg-white/5 active:bg-white/10",
+                          }}
+                        >
+                          <ModalContent>
+                            {(onClose) => (
+                              <>
+                                <ModalHeader className="flex flex-col gap-1 z-100">Obra Social Provincia</ModalHeader>
+                                <ModalBody>
+                                  {selectedPrestador && <PrestadorCard {...selectedPrestador} />}
+                                </ModalBody>
+                                <ModalFooter>
+                                  <Button color="danger" variant="light" onPress={onClose}>
+                                    Cerrar
+                                  </Button>
+                                </ModalFooter>
+                              </>
+                            )}
+                          </ModalContent>
+                        </Modal>
                           <div className="flex flex-col">
                             <Typography variant="small" color="blue-gray" className="font-normal">
                               {name} {apellido}
@@ -267,7 +299,7 @@ useEffect(() => {
                       </td>
                       <td className={`${classes} flex-grow md:w-1/5`}>
                         {tipo === "FIDELIZADO" && <AddTaskSharpIcon className="mr-2 mb-1" />}
-                        {tipo}
+                        {displayTipo}
                       </td>
                     </tr>
                   );

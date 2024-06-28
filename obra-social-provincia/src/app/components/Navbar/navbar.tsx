@@ -11,7 +11,7 @@ const DynamicButtonUser  = dynamic(() => import('../UserComponent/ButtomUser'));
 import { Publicacion } from '@/app/interfaces/interfaces';
 import dynamic from 'next/dynamic';
 
-// million-ignore
+
 const Navbar: React.FC =() => {
   const showPrestadores = useAppSelector(state => state.navbar.showPrestadores);
   const [isScrolled, setIsScrolled] = useState(false);
