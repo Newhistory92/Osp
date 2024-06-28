@@ -47,7 +47,7 @@ const Notificador = () => {
     } else if (userType === 'matricula') {
         obtenerPrestadorPorMatricula(matricula);
     }
-}, [dni, matricula]);
+}, [dni, matricula,userType]);
 
   const obtenerAfiliadoPorDNI = async (dni: string) => {
     setIsLoading(true);

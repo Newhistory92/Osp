@@ -20,8 +20,14 @@ import tinymce from 'tinymce/tinymce';
 import { Toast } from 'primereact/toast';
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import 'primeicons/primeicons.css';
-import EditCarrusel from "./EditCarrusel"
-import DeletCarrusel from "./DeletCarrusel"
+
+const DeletCarrusel = dynamic(() => import("./DeletCarrusel"), {
+    ssr: false
+});
+
+const EditCarrusel = dynamic(() => import("./EditCarrusel"), {
+    ssr: false
+});
 const BundledEditor = dynamic(() => import ('@/BundledEditor'),{
     ssr:false
 })
@@ -115,21 +121,22 @@ export default function EditPublicacion() {
         }
     };
 
-    const debouncedGetPublic = useCallback(debounce(GetPublic, 300), [published]);
+
 
     useEffect(() => {
         if (published) {
             const handler = debounce(() => {
                 GetPublic();
             }, 300);
-
+    
             handler();
-
+    
             return () => {
                 handler.cancel();
-            };  }
-    }, [published]);
-
+            };  
+        }
+    }, [published, GetPublic]);
+    
 
     const handleEditPublicacion = (publicacion: PublicacionEdit) => {
         console.log(publicacion)

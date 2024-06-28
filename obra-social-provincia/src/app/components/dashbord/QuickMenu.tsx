@@ -7,7 +7,6 @@ import { ListGroup, Row, Col, Modal, Dropdown, Button } from 'react-bootstrap';
 import SimpleBar from 'simplebar-react';
 import useMounted from '../../hooks/useMounted';
 import {useUser } from '@clerk/nextjs';
-import NotificationsAccordion from '../../User3/operador/Notificador/Notification-history';
 import MailRoundedIcon from '@mui/icons-material/MailRounded';
 import ButtonUser from '../UserComponent/ButtomUser';
 import {Notificacion,QuickMenuDesktopProps,NotificationsProps  } from '@/app/interfaces/interfaces';
@@ -16,6 +15,11 @@ import { Dialog } from 'primereact/dialog';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
+import dynamic from 'next/dynamic';
+const NotificationsAccordion = dynamic(() => import('../../User3/operador/Notificador/Notification-history'), {
+    ssr: false
+});
+
 
 const Notifications: React.FC<NotificationsProps> = ({ notificaciones, handleButtonClick }) => (
     <SimpleBar style={{ maxHeight: '300px' }}>
@@ -184,8 +188,8 @@ const QuickMenu = () => {
             }
         };
         getNotificaciones();
-    }, [receptorId]);
-
+    }, [receptorId, userRole]);
+    
     const countNewMessages = useCallback(() => {
         const newMessages = notificaciones.filter(notificacion => notificacion.status === 'No_leido');
         setNewMessagesCount(newMessages.length);

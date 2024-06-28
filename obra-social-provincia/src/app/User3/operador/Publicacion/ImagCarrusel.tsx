@@ -7,7 +7,8 @@ import { Button } from 'primereact/button';
 import { Tooltip } from 'primereact/tooltip';
 import { Tag } from 'primereact/tag';
 import 'primeicons/primeicons.css';
-        
+import Image from 'next/image';
+       
 export default function ImagenCarrusel() {
     const toast = useRef<Toast>(null);
     const [totalSize, setTotalSize] = useState(0);
@@ -64,11 +65,12 @@ export default function ImagenCarrusel() {
 
     const itemTemplate = (inFile: object, props: ItemTemplateOptions) => {
         const file = inFile as File;
+        const objectURL = URL.createObjectURL(file); // Crear URL de objeto
         return (
             <div className="flex align-items-center flex-wrap">
                 <div className="flex align-items-center" style={{ width: '40%' }}>
-                    // @ts-ignore
-                    <img alt={file.name} role="presentation" src={file.objectURL} width={100} />
+              
+                    <Image alt={file.name} src={objectURL} width={100} height={100} />
                     <span className="flex flex-column text-left ml-3">
                         {file.name}
                         <small>{new Date().toLocaleDateString()}</small>

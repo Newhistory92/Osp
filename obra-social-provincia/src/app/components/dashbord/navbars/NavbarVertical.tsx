@@ -86,7 +86,24 @@ const NavbarVertical: React.FC = React.memo(() => {
         dispatch(toggle(sectionClick));
       }
     }
-  }, [dispatch, profileOpen, settingOpen, familyGroupOpen, ordenes, publicacionedit, denunciaOpen, notificadorOpen, auditorOpen, prestadoresOpen]);
+  },  [
+    dispatch,
+    profileOpen,
+    settingOpen,
+    familyGroupOpen,
+    ordenes,
+    publicacionedit,
+    denunciaOpen,
+    notificadorOpen,
+    auditorOpen,
+    prestadoresOpen,
+    internadosOpen,
+    autorizacionesOpen,
+    odontologicoOpen,
+    bioquimicosOpen,
+    facturacionOpen,
+    dialisisOpen,
+  ]);
 
   return (
     <div className='navbar-vertical overflow-auto'>
