@@ -14,6 +14,14 @@ const initialState: NavbarStateVertical = {
     notificadorOpen: false,
     auditorOpen: false,
     prestadoresOpen: false,
+    internadosOpen:false,
+    autorizacionesOpen:false,
+    odontologicoOpen:false,
+    bioquimicosOpen:false,
+    facturacionOpen:false,
+    dialisisOpen:false
+
+
   };
 
 const navbarSlice = createSlice({

@@ -12,6 +12,7 @@ import { Dialog } from 'primereact/dialog';
 import { Tag } from 'primereact/tag';
 import { InputText } from 'primereact/inputtext';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
+import Loading from '@/app/components/Loading/loading';
 interface Props {
     autorId: string | null;
 }
@@ -24,8 +25,10 @@ const NotificadosList = ({ autorId }: Props) => {
     const [selectedNotification, setSelectedNotification] = useState<Notificacion | null>(null);
     const [filters, setFilters] = useState<DataTableFilterMeta>(defaultFilters);
     const [globalFilterValue, setGlobalFilterValue] = useState<string>('');
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
+        setIsLoading(true);
         const getNotificaciones = async () => {
             if (!autorId) return;
             try {
@@ -43,7 +46,10 @@ const NotificadosList = ({ autorId }: Props) => {
                 setNotificaciones(data);
             } catch (error) {
                 console.error('Error inesperado al obtener las notificaciones del autor:', error);
-            }
+            }finally {
+                    setIsLoading(false);
+                  }
+                
         };
         getNotificaciones();
     }, [autorId]);
@@ -96,6 +102,7 @@ const NotificadosList = ({ autorId }: Props) => {
 
     return (
         <div className="card">
+              {isLoading && <Loading />}
             <DataTable
                 value={notificaciones}
                 paginator

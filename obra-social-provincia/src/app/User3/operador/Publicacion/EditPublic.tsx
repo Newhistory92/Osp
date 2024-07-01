@@ -1,7 +1,6 @@
 
 
-import React, { useState, useEffect,useRef,useCallback } from 'react';
-import { debounce } from 'lodash';
+import React, { useState, useEffect,useRef } from 'react';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import FormControl from '@mui/material/FormControl';
@@ -14,13 +13,20 @@ import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import DrawIcon from '@mui/icons-material/Draw';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale'
-import AddIcon from '@mui/icons-material/Add';
 import { PublicacionEdit } from '@/app/interfaces/interfaces';
 import dynamic from 'next/dynamic';
 import tinymce from 'tinymce/tinymce';
 import { Toast } from 'primereact/toast';
 import "primereact/resources/themes/lara-light-cyan/theme.css";
+import 'primeicons/primeicons.css';
 
+const DeletCarrusel = dynamic(() => import("./DeletCarrusel"), {
+    ssr: false
+});
+
+const EditCarrusel = dynamic(() => import("./EditCarrusel"), {
+    ssr: false
+});
 const BundledEditor = dynamic(() => import ('@/BundledEditor'),{
     ssr:false
 })
@@ -91,44 +97,43 @@ export default function EditPublicacion() {
             setShowForm(false);
         }
     };
-    const GetPublic = async () => {
-        try {
-            const response = await fetch(`/api/Publicaciones?published=${published}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                }
-            });
-            if (!response.ok) {
-                throw new Error('Error al obtener las publicaciones: ' + response.statusText);
-            }
-            const data = await response.json();
-            if (data.status === 200) {
-                setPublicaciones(data.publicaciones);
-            } else {
-                setPublicaciones([]);
-                console.error('Error: La respuesta del servidor está vacía.');
-            }
-        } catch (error) {
-            console.error('Error al obtener las publicaciones:', error);
-        }
-    };
-
-    const debouncedGetPublic = useCallback(debounce(GetPublic, 300), [published]);
-
     useEffect(() => {
         if (published) {
-            const handler = debounce(() => {
+            const GetPublic = async () => {
+                try {
+                    const response = await fetch(`/api/Publicaciones?published=${published}`, {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        }
+                    });
+                    if (!response.ok) {
+                        throw new Error('Error al obtener las publicaciones: ' + response.statusText);
+                    }
+                    const data = await response.json();
+                    if (data.status === 200) {
+                        setPublicaciones(data.publicaciones);
+                    } else {
+                        setPublicaciones([]);
+                        console.error('Error: La respuesta del servidor está vacía.');
+                    }
+                } catch (error) {
+                    console.error('Error al obtener las publicaciones:', error);
+                }
+            };
+    
+            const handler = setTimeout(() => {
                 GetPublic();
             }, 300);
-
-            handler();
-
+    
             return () => {
-                handler.cancel();
-            };  }
+                clearTimeout(handler);
+            };
+        }
     }, [published]);
-
+    
+    
+    
 
     const handleEditPublicacion = (publicacion: PublicacionEdit) => {
         console.log(publicacion)
@@ -212,12 +217,10 @@ export default function EditPublicacion() {
     return (
         <div className='bg-white rounded-lg'>
             <Box sx={{ minWidth: 120 }}>
-            <Fab size="medium" color="secondary" aria-label="add">
-        <AddIcon />
-      </Fab>
-      <Fab  color="secondary" size="medium" aria-label="edit">
-  <DeleteSweepIcon />
-</Fab>
+            <EditCarrusel/>
+            <Fab  color="secondary" size="medium" aria-label="edit">
+            <DeletCarrusel/>
+             </Fab>
                 <FormControl fullWidth>
                     <InputLabel 
                     variant="standard" 

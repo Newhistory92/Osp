@@ -5,6 +5,7 @@ import TypeAfiliado from '../../User1/afiliado/typeAfiliado';
 import TypePrestador from '../../User2/prestador/typePrestador';
 import TypeOperador from '../../User3/operador/typeOperador';
 import "../../styles/selectUser.css"
+import 'primeicons/primeicons.css';
 const SelectUser = () => {
   const [selectedType, setSelectedType] = React.useState('');
 

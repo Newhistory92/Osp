@@ -1,35 +1,41 @@
 import prisma from "../../lib/prisma"
 import { NextResponse, NextRequest } from "next/server";
-
 export async function GET(req: NextRequest) {
     try {
         const url = new URL(req.url);
         const searchParams = new URLSearchParams(url.searchParams);
         const dni = searchParams.get('dni');
+        const matricula = searchParams.get('matricula');
 
-        // Verificar si se proporcionó el DNI
-        if (!dni) {
-            return NextResponse.json({ status: 400, message: 'El número de DNI es requerido' });
-        }
+        if (dni) {
+            const afiliado = await prisma.afiliado.findFirst({
+                where: { dni },
+            });
 
-        // Buscar el afiliado por DNI
-        const afiliado = await prisma.afiliado.findFirst({
-            where: {
-                dni: dni,
-            },
-        });
+            if (!afiliado) {
+                return NextResponse.json({ status: 404, message: 'Afiliado no encontrado' });
+            }
+
+            return NextResponse.json({ status: 200, message: 'Afiliado encontrado', afiliado });
+        } 
         
+        if (matricula) {
+            const prestador = await prisma.prestador.findFirst({
+                where: { matricula },
+            });
 
-        // Verificar si se encontró el afiliado
-        if (!afiliado) {
-            return NextResponse.json({ status: 404, message: 'Afiliado no encontrado' });
-        }
+            if (!prestador) {
+                return NextResponse.json({ status: 404, message: 'Prestador no encontrado' });
+            }
 
-        // Devolver la información del afiliado
-        return NextResponse.json({ status: 200, message: 'Afiliado encontrado:', afiliado });
+            return NextResponse.json({ status: 200, message: 'Prestador encontrado', prestador });
+        } 
+
+        return NextResponse.json({ status: 400, message: 'DNI o Matrícula es requerido' });
+
     } catch (error: any) {
-        console.error('Error al obtener el afiliado:', error);
-        return NextResponse.json({ status: 500, message: `Error al obtener el afiliado: ${error.message}` });
+        console.error('Error al obtener el usuario:', error);
+        return NextResponse.json({ status: 500, message: `Error al obtener el usuario: ${error.message}` });
     }
 }
 
@@ -39,32 +45,79 @@ export async function POST(request: NextRequest) {
         console.log("Recibida solicitud POST para crear una nueva notificación");
         const nuevaNotificacion = await request.json();
 
-        console.log("Datos de la nueva publicación:", nuevaNotificacion);
+        console.log("Datos de la nueva notificación:", nuevaNotificacion);
 
-        const { titulo, contenido, url, autorId, receptorId } = nuevaNotificacion;
+        const { titulo, contenido, url, autorId, receptorId, receptorPrestadorId } = nuevaNotificacion;
 
-        if (!autorId || !receptorId) {
-            throw new Error("Missing author or recipient ID");
+        if (!autorId || (!receptorId && !receptorPrestadorId)) {
+            throw new Error("Faltan el ID del autor o del receptor");
         }
 
-        const publicacionCreada = await prisma.notificacion.create({
+        const notificacionCreada = await prisma.notificacion.create({
             data: {
                 titulo,
                 contenido,
                 url: url || null,
                 autor: {
-                    connect: { id: autorId }, 
+                    connect: { id: autorId },
                 },
                 receptor: {
                     connect: { id: receptorId },
-                }
+                },
             },
         });
-        console.log("Notificación creada exitosamente:", publicacionCreada);
-        
-        return NextResponse.json({ status: 200, message: "Notificación creada exitosamente", publicacion: publicacionCreada });
+
+        console.log("Notificación creada exitosamente:", notificacionCreada);
+        return NextResponse.json({ status: 200, message: "Notificación creada exitosamente", notificacion: notificacionCreada });
     } catch (error: any) {
         console.error("Error al crear la notificación:", error);
-        return NextResponse.json({ status: 500, message: `Error al crear la Notificación: ${error.message}` });
+        return NextResponse.json({ status: 500, message: `Error al crear la notificación: ${error.message}` });
     }
+
 }
+
+
+
+
+
+// export async function POST(request: NextRequest) {
+//     try {
+//         console.log("Recibida solicitud POST para crear una nueva notificación");
+//         const nuevaNotificacion = await request.json();
+
+//         console.log("Datos de la nueva notificación:", nuevaNotificacion);
+
+//         const { titulo, contenido, url, autorId, receptorId, receptorPrestadorId } = nuevaNotificacion;
+
+//         if (!autorId || (!receptorId && !receptorPrestadorId)) {
+//             throw new Error("Faltan el ID del autor o del receptor");
+//         }
+
+//         const data = {
+//             titulo,
+//             contenido,
+//             url: url || null,
+//             autor: {
+//                 connect: { id: autorId },
+//             }
+//         };
+
+//         if (receptorId) {
+//             data.receptor = { connect: { id: receptorId } };
+//         }
+
+//         if (receptorPrestadorId) {
+//             data.receptorPrestador = { connect: { id: receptorPrestadorId } };
+//         }
+
+//         const notificacionCreada = await prisma.notificacion.create({
+//             data
+//         });
+
+//         console.log("Notificación creada exitosamente:", notificacionCreada);
+//         return NextResponse.json({ status: 200, message: "Notificación creada exitosamente", notificacion: notificacionCreada });
+//     } catch (error: any) {
+//         console.error("Error al crear la notificación:", error);
+//         return NextResponse.json({ status: 500, message: `Error al crear la notificación: ${error.message}` });
+//     }
+// }

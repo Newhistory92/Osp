@@ -55,6 +55,8 @@ model Prestador {
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
   denuncias       Denuncia[]
+  notificaciones  Notificacion[]
+ 
 }
 
 model Operador {
@@ -113,11 +115,23 @@ model Notificacion {
   autorId     String
   autor       Operador        @relation(fields: [autorId], references: [id])
   receptorId  String
-  receptor    Afiliado        @relation(fields: [receptorId], references: [id])
+  receptor    Afiliado?        @relation(fields: [receptorId], references: [id])
+  receptorPrestadorId String?
+  receptorPrestador  Prestador? @relation( fields: [receptorPrestadorId], references: [id])
+
   status      StatusMensaje   @default(No_leido)
   url         String?
   createdAt   DateTime        @default(now())
   updatedAt   DateTime        @updatedAt
+}
+
+
+model Carrusel {
+  id               String   @id @default(uuid())
+  tituloprincipal  String
+  titulosecundario String
+  contenido        String
+  urlImagen        String
 }
 
 enum Role {

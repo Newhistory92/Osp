@@ -7,7 +7,6 @@ import { ListGroup, Row, Col, Modal, Dropdown, Button } from 'react-bootstrap';
 import SimpleBar from 'simplebar-react';
 import useMounted from '../../hooks/useMounted';
 import {useUser } from '@clerk/nextjs';
-import NotificationsAccordion from '../../User3/operador/Notificador/Notification-history';
 import MailRoundedIcon from '@mui/icons-material/MailRounded';
 import ButtonUser from '../UserComponent/ButtomUser';
 import {Notificacion,QuickMenuDesktopProps,NotificationsProps  } from '@/app/interfaces/interfaces';
@@ -16,6 +15,11 @@ import { Dialog } from 'primereact/dialog';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
+import dynamic from 'next/dynamic';
+const NotificationsAccordion = dynamic(() => import('../../User3/operador/Notificador/Notification-history'), {
+    ssr: false
+});
+
 
 const Notifications: React.FC<NotificationsProps> = ({ notificaciones, handleButtonClick }) => (
     <SimpleBar style={{ maxHeight: '300px' }}>
@@ -38,11 +42,19 @@ const Notifications: React.FC<NotificationsProps> = ({ notificaciones, handleBut
 
 const QuickMenuDesktop: React.FC<QuickMenuDesktopProps> = ({ newMessagesCount, notificaciones, handleButtonClick, showModal, setShowModal }) => {
     const handleCloseModal = () => setShowModal(false);
+    const currentUser = useAppSelector(state => state.user.currentUser);
+    let userRole;
 
+    if (Array.isArray(currentUser)) {
+        userRole = currentUser.length > 0 ? currentUser[0].role : null;
+    } else {
+        userRole = currentUser ? currentUser.role : null;
+    }
     return (
         <ListGroup as="ul" bsPrefix='navbar-nav' className="navbar-right-wrap ms-auto d-flex nav-top-wrap">
-            <span className="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">{newMessagesCount}</span>
-            <Dropdown as="li" className="stopevent">
+            {userRole === 'USER' || userRole === 'PROVIDER' ? (
+                <Dropdown as="li" className="stopevent">
+                <span className="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">{newMessagesCount}</span>
                 <Dropdown.Toggle as="a" bsPrefix=' ' id="dropdownNotification" className="btn btn-light btn-icon rounded-circle indicator indicator-primary text-muted">
                     <i className="fe fe-bell"></i>
                     <div className="relative">
@@ -62,6 +74,7 @@ const QuickMenuDesktop: React.FC<QuickMenuDesktopProps> = ({ newMessagesCount, n
                     </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
+            ) : null}
             <Dropdown as="li" className="ms-5">
                 <Dropdown.Toggle as="a" bsPrefix=' ' className="rounded-circle" id="dropdownUser">
                     <div className="avatar avatar-md avatar-indicators avatar-online">
@@ -84,11 +97,19 @@ const QuickMenuDesktop: React.FC<QuickMenuDesktopProps> = ({ newMessagesCount, n
 
 const QuickMenuMobile: React.FC<QuickMenuDesktopProps> = ({ newMessagesCount, notificaciones, handleButtonClick, showModal, setShowModal }) => {
     const handleCloseModal = () => setShowModal(false);
+    const currentUser = useAppSelector(state => state.user.currentUser);
+    let userRole;
 
+    if (Array.isArray(currentUser)) {
+        userRole = currentUser.length > 0 ? currentUser[0].role : null;
+    } else {
+        userRole = currentUser ? currentUser.role : null;
+    }
     return (
         <ListGroup as="ul" bsPrefix='navbar-nav' className="navbar-right-wrap ms-auto d-flex nav-top-wrap">
-            <span className="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">{newMessagesCount}</span>
-            <Dropdown as="li" className="stopevent">
+            {userRole === 'USER' || userRole === 'PROVIDER' ? (
+                <Dropdown as="li" className="stopevent">
+                <span className="inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-red-500 border-2 border-white rounded-full -top-2 -end-2 dark:border-gray-900">{newMessagesCount}</span>
                 <Dropdown.Toggle as="a" bsPrefix=' ' id="dropdownNotification" className="btn btn-light btn-icon rounded-circle indicator indicator-primary text-muted">
                     <i className="fe fe-bell"></i>
                     <MailRoundedIcon />
@@ -105,6 +126,7 @@ const QuickMenuMobile: React.FC<QuickMenuDesktopProps> = ({ newMessagesCount, no
                     </Dropdown.Item>
                 </Dropdown.Menu>
             </Dropdown>
+                ) : null}
             <Dropdown as="li" className="ms-5">
                 <Dropdown.Toggle as="a" bsPrefix=' ' className="rounded-circle" id="dropdownUser">
                     <div className="avatar avatar-md avatar-indicators avatar-online">
@@ -135,9 +157,17 @@ const QuickMenu = () => {
     const [visible, setVisible] = useState<boolean>(false);
     const [selectedNotification, setSelectedNotification] = useState<Notificacion | null>(null);
     const [showModal, setShowModal] = useState(false);
+  
+    let userRole;
 
+    if (Array.isArray(currentUser)) {
+        userRole = currentUser.length > 0 ? currentUser[0].role : null;
+    } else {
+        userRole = currentUser ? currentUser.role : null;
+    }
    
     useEffect(() => {
+        if (userRole !== 'USER' && userRole !== 'PROVIDER') return;
         const getNotificaciones = async () => {
             if (!receptorId) return;
             try {
@@ -158,8 +188,8 @@ const QuickMenu = () => {
             }
         };
         getNotificaciones();
-    }, [receptorId]);
-
+    }, [receptorId, userRole]);
+    
     const countNewMessages = useCallback(() => {
         const newMessages = notificaciones.filter(notificacion => notificacion.status === 'No_leido');
         setNewMessagesCount(newMessages.length);

@@ -244,6 +244,12 @@ export interface NavbarStateVertical {
   notificadorOpen: boolean;
   prestadoresOpen: boolean;
   auditorOpen: boolean;
+  internadosOpen:boolean,
+    autorizacionesOpen:boolean,
+    odontologicoOpen:boolean,
+    bioquimicosOpen:boolean,
+    facturacionOpen:boolean,
+    dialisisOpen:boolean,
 }
 
 
@@ -261,4 +267,13 @@ export interface Operador {
   numeroOperador:string;
   createdAt: string;
   updatedAt: string;
+}
+
+
+export interface CarruselItem {
+  id: string;
+  tituloprincipal: string;
+  titulosecundario: string;
+  contenido: string;
+  urlImagen: string;
 }
