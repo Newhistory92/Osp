@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Typography, Input, Button, Alert } from '@mui/material';
-import prestadoresData from '../../../../prestor.json';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from "../../hooks/StoreHook";
 import { setPartialCurrentUser, setCurrentUser,setLoading, setErrorMessage,setSuccessMessage } from "../../redux/Slice/userSlice";
@@ -13,8 +12,7 @@ const TypePrestador = () => {
   const [matricula, setMatricula] = useState<string>('');
   const dispatch = useAppDispatch();
   const { currentUser, loading, errorMessage,successMessage } = useAppSelector((state) => state.user);
- console.log (currentUser)
-  // Limpia el mensaje de error al montar el componente
+
   useEffect(() => {
     dispatch(setErrorMessage(null));
     dispatch(setSuccessMessage(null));
@@ -55,36 +53,66 @@ const TypePrestador = () => {
     verifyUser();
   }, [dispatch]);
 
-  // Maneja el cambio de entrada en el input de matrícula
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const sanitizedValue = event.target.value.replace(/\D/g, '').slice(0, 8);
-    setMatricula(sanitizedValue);
-  
-    const prestador = prestadoresData.find(prestador => prestador.matricula === sanitizedValue);
  
-    if (prestador) {
-      const newCurrentUser: PartialUserInfo = {
-        id: prestador.id,
-        name: prestador.name,
-        matricula: prestador.matricula,
-        especialidad: prestador.especialidad,
-        dni: '',
-        dependencia: '',
-        operador: ''
-      };
-
-      dispatch(setPartialCurrentUser(newCurrentUser));
-      dispatch(setErrorMessage(null));
-    } 
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitizedValue = event.target.value.replace(/\D/g, '').slice(0, 4);
+    setMatricula(sanitizedValue);
   };
 
+  useEffect(() => {
+    dispatch(setLoading(true));
+    if (matricula.length === 4) {
+      console.log('Triggering API call with numeroMatricula:', matricula);
+      const timeoutId = setTimeout(async () => {
+        try {
+          const response = await fetch(`/api/Datos/prestador?matricula=${matricula}`);
+          console.log('API Response Status:', response.status);
+            
+          if (!response.ok) {
+            throw new Error('Prestador not found');
+          }
+          const prestador = await response.json();
+          console.log(prestador)
+          const capitalizeWords = (str:string) => {
+            return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+          };
+
+          const newCurrentUser: PartialUserInfo = {
+            id: prestador.id,
+            name: capitalizeWords(prestador.Nombre),
+            matricula: prestador.Codigo,
+            especialidad: capitalizeWords(prestador.especialidad),
+            dni: '',
+            dependencia: '',
+            operador: ''
+          };
+          
+          dispatch(setPartialCurrentUser(newCurrentUser));
+          dispatch(setErrorMessage(null));
+        } catch (error) {
+          dispatch(setErrorMessage('Prestador not found'));
+        } finally {
+          dispatch(setLoading(false));
+        }
+      }, 2000);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    } else {
+      dispatch(setLoading(false));
+    }
+  }, [matricula, dispatch]);
+
+  
   // Confirma y envía los datos del prestador a la base de datos
   const handleConfirm = async () => {
     if (!currentUser) {
       dispatch(setErrorMessage('Seleccione un prestador antes de confirmar'));
       return;
     }
-
+       
+  const address = `${currentUser.Domicilio}, ${currentUser.Localidad}`;
     dispatch(setLoading(true));
 
     try {
@@ -96,6 +124,7 @@ const TypePrestador = () => {
         body: JSON.stringify({
           matricula: currentUser.matricula,
           especialidad: currentUser.especialidad,
+          address: address,
         }),
       });
 

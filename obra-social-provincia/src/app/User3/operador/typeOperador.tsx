@@ -1,16 +1,18 @@
 "use client"
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect} from 'react';
 import { Typography, Input, Button, Alert } from '@mui/material';
-import operadoresData from '../../../../operador.json';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from "../../hooks/StoreHook";
 import { setPartialCurrentUser,setCurrentUser, setLoading, setErrorMessage,setSuccessMessage } from "../../redux/Slice/userSlice";
 import { PartialUserInfo } from '@/app/interfaces/interfaces';
 import Loading from '@/app/components/Loading/loading';
+
+
 const TypeOperador = () => {
   const [numeroOperador, setNumeroOperador] = useState<string>('');
   const dispatch = useAppDispatch();
   const { currentUser, loading, errorMessage,successMessage } = useAppSelector((state) => state.user);
+
 
 
   useEffect(() => {
@@ -34,7 +36,7 @@ const TypeOperador = () => {
         if (response.ok) {
           if (data.status === 200) {
             dispatch(setCurrentUser(data.users[0]));
-            window.location.href = '/page/dashboard';
+            //window.location.href = '/page/dashboard';
           } else if (data.status === 401) {
             window.location.href = '/page/signin';
           } else if (data.status === 402) {
@@ -53,26 +55,55 @@ const TypeOperador = () => {
   }, [dispatch]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const sanitizedValue = event.target.value.replace(/\D/g, '').slice(0, 8);
+    const sanitizedValue = event.target.value.replace(/\D/g, '').slice(0, 3);
     setNumeroOperador(sanitizedValue);
-
-    const operador = operadoresData.find(operador => operador.operador === sanitizedValue);
-    if (operador) {
-      const newCurrentUser: PartialUserInfo = {
-        id: operador.id,
-        name: operador.name,
-        operador: operador.operador,
-        matricula: '',
-        especialidad: '',
-        dni: '',
-        dependencia: ''
-      };
-
-      dispatch(setPartialCurrentUser(newCurrentUser));
-      dispatch(setErrorMessage(null));
-    }
   };
 
+  useEffect(() => {
+    dispatch(setLoading(true));
+    if (numeroOperador.length === 3) {
+      console.log('Triggering API call with numeroOperador:', numeroOperador);
+      const timeoutId = setTimeout(async () => {
+        try {
+          const response = await fetch(`/api/Datos/operador?numeroOperador=${numeroOperador}`);
+          console.log('API Response Status:', response.status);
+            
+          if (!response.ok) {
+            throw new Error('Operador not found');
+          }
+          const operador = await response.json();
+     
+          if (Array.isArray(operador) && operador.length === 0) {
+          }
+
+          const newCurrentUser: PartialUserInfo = {
+            id: operador.id,
+            name: operador.NOMBRE, 
+            operador: operador.CODIGO, 
+            matricula: '',
+            especialidad: '',
+            dni: '',
+            dependencia: ''
+          };
+
+          dispatch(setPartialCurrentUser(newCurrentUser));
+          dispatch(setErrorMessage(null));
+          dispatch(setLoading(false));
+
+        } catch (error) {
+      
+          dispatch(setErrorMessage('Operador not found'));
+          dispatch(setLoading(false));
+
+        }
+      }, 2000);
+
+      return () => {
+        clearTimeout(timeoutId);
+      };
+    }
+  }, [numeroOperador, dispatch]);
+  
   const handleConfirm = async () => {
     if (!currentUser) {
       dispatch(setErrorMessage('Seleccione un operador antes de confirmar'));
@@ -96,7 +127,7 @@ const TypeOperador = () => {
         dispatch(setCurrentUser(responseData.newOperador));
         dispatch(setSuccessMessage('El Operador fue creado con éxito'));
         dispatch(setErrorMessage(null));
-        window.location.href = '/page/dashboard';
+       // window.location.href = '/page/dashboard';
       } else if (responseData.status === 400) {
         dispatch(setErrorMessage('Error al crear la cuenta'));
         dispatch(setSuccessMessage(null));
@@ -111,7 +142,9 @@ const TypeOperador = () => {
       dispatch(setLoading(false));
     }
   };
-
+  const capitalizeWords = (str:string) => {
+    return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+  };
  
 
   return (
@@ -137,7 +170,7 @@ const TypeOperador = () => {
       />
       {currentUser && (
         <div className="mt-4">
-          <Typography className="text-white">Nombre: {currentUser.name}</Typography>
+         <Typography className="text-white">Nombre: {capitalizeWords(currentUser.name)}</Typography>
           <Link href="/">
             {errorMessage === "400" && (
               <Button variant="contained" className="mt-2 ms-6" color="error">
