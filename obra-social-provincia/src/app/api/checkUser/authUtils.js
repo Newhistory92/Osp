@@ -10,23 +10,20 @@ export async function checkUserAuthentication(userId, context) {
     try {
         // Verificar si el ID del usuario está en la tabla Afiliado
         const existingAfiliado = await prisma.afiliado.findFirst({
-            where: {
-                id: userId
-            }
+            where: { id: userId },
+            orderBy: { id: 'asc' } 
         });
 
         // Verificar si el ID del usuario está en la tabla Prestador
         const existingPrestador = await prisma.prestador.findFirst({
-            where: {
-                id: userId
-            }
+            where: { id: userId },
+            orderBy: { id: 'asc' } 
         });
 
         // Verificar si el ID del usuario está en la tabla Operador
         const existingOperador = await prisma.operador.findFirst({
-            where: {
-                id: userId
-            }
+            where: { id: userId },
+            orderBy: { id: 'asc' } 
         });
 
         // Determinar si el usuario está autenticado en alguna tabla

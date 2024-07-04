@@ -1,7 +1,6 @@
 "use client"
 import React, { useState, useEffect } from 'react';
 import { Typography, Input, Button, Alert } from '@mui/material';
-import afiliadosData from '../../../../afiliados.json';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from "../../hooks/StoreHook";
 import { setPartialCurrentUser,setCurrentUser, setLoading, setErrorMessage,setSuccessMessage } from "../../redux/Slice/userSlice";
@@ -12,10 +11,12 @@ import Loading from '@/app/components/Loading/loading';
 const TypeAfiliado = () => {
   const [dni, setDni] = useState<string>('');
   const dispatch = useAppDispatch();
-  const { currentUser, loading, errorMessage,successMessage } = useAppSelector((state) => state.user);
+  const { currentUser, loading, errorMessage,successMessage, clearCurrentUser } = useAppSelector((state) => state.user);
+  const [isDniValid, setIsDniValid] = useState(false);
 
   useEffect(() => {
     dispatch(setErrorMessage(null));
+    dispatch(setSuccessMessage(null));
   }, [dispatch]);
 
 
@@ -56,25 +57,74 @@ const TypeAfiliado = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const sanitizedValue = event.target.value.replace(/\D/g, '').slice(0, 8);
     setDni(sanitizedValue);
-
-    const afiliado = afiliadosData.find(afiliado => afiliado.dni === sanitizedValue);
-    if (afiliado) {
-      const newCurrentUser: PartialUserInfo = {
-        id: afiliado.id,
-        name: afiliado.name,
-        dni: afiliado.dni,
-        dependencia: afiliado.dependencia,
-        matricula: '',
-        especialidad: '',
-        operador: ''
-      };
-
-      dispatch(setPartialCurrentUser(newCurrentUser));
-      dispatch(setErrorMessage(null));
+    setIsDniValid(sanitizedValue.length === 8);
+    if (sanitizedValue.length !== 8) {
+      dispatch(clearCurrentUser());
     }
   };
 
+  useEffect(() => {
+    dispatch(setLoading(true));
+    if (dni.length === 8) {
+        console.log('Triggering API call with numerodni:', dni);
+        const timeoutId = setTimeout(async () => {
+            try {
+                const response = await fetch(`/api/Datos/afiliado?dni=${dni}`);
+                console.log('API Response Status:', response.status);
+
+                if (!response.ok) {
+                    throw new Error('Prestador not found');
+                }
+                const afiliado = await response.json();
+                console.log(afiliado);
+
+                const capitalizeWords = (str: string) => {
+                    return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+                };
+
+                if (afiliado.Fechabaja !== '1900-01-01T00:00:00.000Z') {
+                    dispatch(setErrorMessage(`Afiliado Dado de Baja por ${capitalizeWords(afiliado.razonBaja) || 'Sin razón específica'}`));
+                    return;
+                }
+
+                if (afiliado.CodBaja.trim() !== '') {
+                    dispatch(setErrorMessage(`Afiliado Dado de Baja por ${capitalizeWords(afiliado.razonBaja) || 'Sin razón específica'}`));
+                    return;
+                }
+
+                const newCurrentUser: PartialUserInfo = {
+                    id: afiliado.id,
+                    name: capitalizeWords(afiliado.Nombre),
+                    dni: afiliado.Codigo,
+                    dependencia: capitalizeWords(afiliado.dependencia),
+                    matricula: '',
+                    especialidad: '',
+                    operador: '',
+                    tipo: '',
+                };
+
+                console.log(newCurrentUser);
+                dispatch(setPartialCurrentUser(newCurrentUser));
+                dispatch(setErrorMessage(null));
+                setIsDniValid(true);
+            } catch (error) {
+                dispatch(setErrorMessage('Prestador not found'));
+                dispatch(clearCurrentUser());
+            } finally {
+                dispatch(setLoading(false));
+            }
+        }, 2000);
+
+        return () => {
+            clearTimeout(timeoutId);
+        };
+    } else {
+        dispatch(setLoading(false));
+    }
+}, [dni, dispatch]);
+   
   const handleConfirm = async () => {
+    
     if (!currentUser) {
       dispatch(setErrorMessage('Seleccione un afiliado antes de confirmar'));
       return;
@@ -144,9 +194,9 @@ const TypeAfiliado = () => {
           <Typography className="text-white">Nombre: {currentUser.name}</Typography>
           <Typography className="text-white">Dependencia: {currentUser.dependencia}</Typography>
           <Link href="/">
-            {errorMessage === "400" && (
-              <Button variant="contained" className="mt-2 ms-6" color="error">
-                Inicio
+          {errorMessage === "400" || errorMessage &&  (
+              <Button variant="contained" className="mt-2 ms-6 mb-5" color="error">
+                Volver al Inicio
               </Button>
             )}
           </Link>
@@ -154,8 +204,8 @@ const TypeAfiliado = () => {
             <Button
               variant="contained"
               onClick={handleConfirm}
-              className="mt-2 ms-6"
-              disabled={loading}
+              className="mt-2 ms-6 mb-5"
+              disabled={!isDniValid || loading}
               color="success"
             >
               Confirmar

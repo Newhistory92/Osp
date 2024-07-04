@@ -10,9 +10,10 @@ import Loading from '@/app/components/Loading/loading';
 // Componente principal para el tipo de usuario Prestador
 const TypePrestador = () => {
   const [matricula, setMatricula] = useState<string>('');
+  const [ismatriculaValid, setIsmatriculaValid] = useState(false);
   const dispatch = useAppDispatch();
   const { currentUser, loading, errorMessage,successMessage } = useAppSelector((state) => state.user);
-
+ 
   useEffect(() => {
     dispatch(setErrorMessage(null));
     dispatch(setSuccessMessage(null));
@@ -57,6 +58,7 @@ const TypePrestador = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const sanitizedValue = event.target.value.replace(/\D/g, '').slice(0, 4);
     setMatricula(sanitizedValue);
+    setIsmatriculaValid(sanitizedValue.length === 4);
   };
 
   useEffect(() => {
@@ -77,18 +79,33 @@ const TypePrestador = () => {
             return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
           };
 
+
+          if (prestador.Anulada === 1) {
+            dispatch(setErrorMessage(`Prestador dado de Baja`));
+            return;
+          }
+  
+          const fechaBaja = new Date(prestador.Fecha_Baja);
+          const fechaActual = new Date();
+          if (fechaBaja.getTime() !== new Date('1900-01-01T00:00:00.000Z').getTime() && fechaBaja < fechaActual) {
+            dispatch(setErrorMessage(`Prestador dado de baja (Fecha de baja: ${fechaBaja.toISOString().split('T')[0]})`));
+            return;
+          }
+
           const newCurrentUser: PartialUserInfo = {
             id: prestador.id,
             name: capitalizeWords(prestador.Nombre),
             matricula: prestador.Codigo,
             especialidad: capitalizeWords(prestador.especialidad),
+            tipo:prestador.Fidelizado,
             dni: '',
             dependencia: '',
             operador: ''
           };
-          
+          console.log( newCurrentUser)
           dispatch(setPartialCurrentUser(newCurrentUser));
           dispatch(setErrorMessage(null));
+          setIsmatriculaValid(true);
         } catch (error) {
           dispatch(setErrorMessage('Prestador not found'));
         } finally {
@@ -113,6 +130,7 @@ const TypePrestador = () => {
     }
        
   const address = `${currentUser.Domicilio}, ${currentUser.Localidad}`;
+  const tipo = currentUser.tipo === "0" ? "No Fidelizado" : null;
     dispatch(setLoading(true));
 
     try {
@@ -125,6 +143,7 @@ const TypePrestador = () => {
           matricula: currentUser.matricula,
           especialidad: currentUser.especialidad,
           address: address,
+          tipo: tipo,
         }),
       });
 
@@ -164,7 +183,7 @@ const TypePrestador = () => {
       )}
       <div className="max-w-screen-lg flex-col flex mx-auto p-8 bg-gray-700 rounded shadow-md px-4 ">
         <Typography className="text-white" variant="h6">Tipo de usuario: Prestador</Typography>
-        <label className="text-white">Ingrese Nº de Matrícula:</label>
+        <label className="text-white">Ingrese Nº de Matrícula o codigo:</label>
         <Input
           type="text"
           value={matricula}
@@ -177,29 +196,27 @@ const TypePrestador = () => {
             <Typography className="text-white">Nombre: {currentUser.name}</Typography>
             <Typography className="text-white">Especialidad: {currentUser.especialidad}</Typography>
             <Link href="/">
-              {errorMessage === "400" && (
-                <Button variant="contained" className="mt-2 ms-6" color="error">
-                  Inicio
-                </Button>
-              )}
+              {errorMessage === "400" || errorMessage &&  (
+              <Button variant="contained" className="mt-2 ms-6 mb-5" color="error">
+                Volver al Inicio
+              </Button>
+            )}
             </Link>
             {!errorMessage && (
-              <Button
-                variant="contained"
-                onClick={handleConfirm}
-                className="mt-2 ms-6"
-                disabled={loading}
-                color="success"
-              >
-                Confirmar
-              </Button>
-              
-            )}
-      
+            <Button
+              variant="contained"
+              onClick={handleConfirm}
+              className="mt-2 ms-6 mb-5"
+              disabled={!ismatriculaValid || loading}
+              color="success"
+            >
+              Confirmar
+            </Button>
+          )}
           </div>
           
         )}
-        <Alert severity="info">Por favor ingrese su matrícula para continuar.</Alert>
+        <Alert severity="info">Por favor ingrese su matrícula  o codigo de 4 digitos para continuar.</Alert>
          
       </div>
         <div className='mt-12 relative'>

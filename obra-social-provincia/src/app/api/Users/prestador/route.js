@@ -67,7 +67,7 @@ export async function POST(request) {
         console.log("Número de teléfono:", phoneNumbers[0].phoneNumber);
         console.log("¿Contraseña habilitada?", passwordEnabled);
         console.log("Valor de la contraseña:", passwordValue);
-
+        const address = domicilio && localidad ? `${domicilio}, ${localidad}` : null;
         const newPrestador = await prisma.prestador.create({
             data: {
                 id: userId,
@@ -83,7 +83,8 @@ export async function POST(request) {
                 especialidad3:null,
                 phoneOpc:null,
                 descripcion:null,
-                address:null,
+                address: address || null,
+                tipo: tipo || 'Fidelizado',
                 coordinatesLat:null,
                 coordinatesLon:null,
                 checkedPhone:false,
@@ -119,8 +120,9 @@ export async function GET(request) {
         const isAuthenticatedAndInDatabase = await checkUserAuthentication(userId, 'prestador');
         if (isAuthenticatedAndInDatabase.status === 200) {
             // Obtener toda la información del usuario desde la base de datos
-            const users = await prisma.prestador.findMany();
-
+          const users = await prisma.prestador.findMany({
+                orderBy: { id: 'asc' } 
+            });
             // Verificar si se encontró la información del usuario
             if (!users) {
                 return NextResponse.json({ status: 404, message: "Usuario no encontrado en la base de datos." });

@@ -5,7 +5,8 @@ const initialState: UserState = {
   currentUser: null,
   loading: false,
   errorMessage: null,
-  successMessage: null
+  successMessage: null,
+ 
 };
 
 const userSlice = createSlice({
@@ -31,6 +32,7 @@ const userSlice = createSlice({
         prestador: state.currentUser?.prestador ?? '',
         tipo: state.currentUser?.tipo ?? '',
         descripcion: state.currentUser?.descripcion ?? '',
+        
       };
     },
     setLoading(state, action: PayloadAction<boolean>) {
@@ -45,12 +47,12 @@ const userSlice = createSlice({
       // console.log("setSuccessMessage action dispatched with payload:", action.payload);
       state.successMessage = action.payload;
     },
-    clearState(state) {
-      return initialState;
-    }
+    clearCurrentUser(state) {
+      state.currentUser = null;
+    },
   },
 });
 
-export const { setCurrentUser, setPartialCurrentUser, setLoading, setErrorMessage, setSuccessMessage, clearState } = userSlice.actions;
+export const { setCurrentUser, setPartialCurrentUser, setLoading, setErrorMessage, setSuccessMessage,  clearCurrentUser } = userSlice.actions;
 
 export default userSlice.reducer;

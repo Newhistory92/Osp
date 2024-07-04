@@ -24,6 +24,8 @@ export interface NavbarState {
 
 
   export interface UserInfo {
+    Localidad: any;
+    Domicilio: any;
     operador: any;
     id: string;
     name: string;
@@ -129,7 +131,9 @@ export interface PartialUserInfo {
   id: string;
   dni: string;
   dependencia:string;
-  operador: string
+  operador: string;
+  tipo:string
+  
 }
 
 export interface PropsNavbarVertical {

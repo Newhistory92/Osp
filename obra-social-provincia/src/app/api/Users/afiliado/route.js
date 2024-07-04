@@ -87,7 +87,9 @@ export async function GET(request) {
         const isAuthenticatedAndInDatabase = await checkUserAuthentication(userId, 'afiliado');
         if (isAuthenticatedAndInDatabase.status === 200) {
             // Obtener toda la información del usuario desde la base de datos
-            const users = await prisma.afiliado.findMany();
+            const users = await prisma.afiliado.findMany({
+                orderBy: { id: 'asc' } 
+            });
 
             // Verificar si se encontró la información del usuario
             if (!users) {

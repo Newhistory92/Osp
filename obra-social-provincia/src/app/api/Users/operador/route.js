@@ -81,7 +81,9 @@ export async function GET(request) {
         // Verificar si el ID del usuario está en la base de datos
         const isAuthenticatedAndInDatabase = await checkUserAuthentication(userId, 'operador');
         if (isAuthenticatedAndInDatabase.status === 200) {
-            const users = await prisma.operador.findMany();
+            const users = await prisma.operador.findMany({
+                orderBy: { id: 'asc' } 
+            });
             if (!users) {
                 return NextResponse.json({ status: 404, message: "Usuario no encontrado en la base de datos." });
             }

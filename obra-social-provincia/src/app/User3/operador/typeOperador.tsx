@@ -10,6 +10,7 @@ import Loading from '@/app/components/Loading/loading';
 
 const TypeOperador = () => {
   const [numeroOperador, setNumeroOperador] = useState<string>('');
+  const [isoperadorValid, setIsoperadorValid] = useState(false);
   const dispatch = useAppDispatch();
   const { currentUser, loading, errorMessage,successMessage } = useAppSelector((state) => state.user);
 
@@ -17,6 +18,7 @@ const TypeOperador = () => {
 
   useEffect(() => {
     dispatch(setErrorMessage(null));
+    dispatch(setSuccessMessage(null));
   }, [dispatch]);
 
 
@@ -36,7 +38,7 @@ const TypeOperador = () => {
         if (response.ok) {
           if (data.status === 200) {
             dispatch(setCurrentUser(data.users[0]));
-            //window.location.href = '/page/dashboard';
+            window.location.href = '/page/dashboard';
           } else if (data.status === 401) {
             window.location.href = '/page/signin';
           } else if (data.status === 402) {
@@ -57,6 +59,7 @@ const TypeOperador = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const sanitizedValue = event.target.value.replace(/\D/g, '').slice(0, 3);
     setNumeroOperador(sanitizedValue);
+    setIsoperadorValid(sanitizedValue.length === 4);
   };
 
   useEffect(() => {
@@ -72,23 +75,29 @@ const TypeOperador = () => {
             throw new Error('Operador not found');
           }
           const operador = await response.json();
-     
+          console.log(operador)
+          if (operador.ANULADA === "1") {
+            dispatch(setErrorMessage(`Operador  Bloqueado`));
+            return;
+          }
           if (Array.isArray(operador) && operador.length === 0) {
           }
 
           const newCurrentUser: PartialUserInfo = {
             id: operador.id,
-            name: operador.NOMBRE, 
-            operador: operador.CODIGO, 
+            name: operador.NOMBRE,
+            operador: operador.CODIGO,
             matricula: '',
             especialidad: '',
             dni: '',
-            dependencia: ''
+            dependencia: '',
+            tipo: ''
           };
 
           dispatch(setPartialCurrentUser(newCurrentUser));
           dispatch(setErrorMessage(null));
           dispatch(setLoading(false));
+          setIsoperadorValid(true);
 
         } catch (error) {
       
@@ -127,7 +136,7 @@ const TypeOperador = () => {
         dispatch(setCurrentUser(responseData.newOperador));
         dispatch(setSuccessMessage('El Operador fue creado con éxito'));
         dispatch(setErrorMessage(null));
-       // window.location.href = '/page/dashboard';
+        window.location.href = '/page/dashboard';
       } else if (responseData.status === 400) {
         dispatch(setErrorMessage('Error al crear la cuenta'));
         dispatch(setSuccessMessage(null));
@@ -172,9 +181,9 @@ const TypeOperador = () => {
         <div className="mt-4">
          <Typography className="text-white">Nombre: {capitalizeWords(currentUser.name)}</Typography>
           <Link href="/">
-            {errorMessage === "400" && (
-              <Button variant="contained" className="mt-2 ms-6" color="error">
-                Inicio
+          {errorMessage === "400" || errorMessage &&  (
+              <Button variant="contained" className="mt-2 ms-6 mb-5" color="error">
+                Volver al Inicio
               </Button>
             )}
           </Link>
@@ -182,8 +191,8 @@ const TypeOperador = () => {
             <Button
               variant="contained"
               onClick={handleConfirm}
-              className="mt-2 ms-6"
-              disabled={loading}
+              className="mt-2 ms-6 mb-5"
+              disabled={!isoperadorValid || loading}
               color="success"
             >
               Confirmar
