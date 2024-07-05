@@ -4,7 +4,7 @@ import { ClerkLoading } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAppDispatch } from "../../hooks/StoreHook";
-import { clearState } from '../../redux/Slice/userSlice';
+import { clearCurrentUser } from '../../redux/Slice/userSlice';
 const ButtonUser = () => {
   const { user } = useUser();
   const dispatch = useAppDispatch ();
@@ -16,7 +16,7 @@ const ButtonUser = () => {
 
   const handleSignOut = () => {
     // Despacha la acción para limpiar el estado
-    dispatch(clearState());
+    dispatch(clearCurrentUser());
    
   };
 

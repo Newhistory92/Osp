@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Input, Button, Alert } from '@mui/material';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from "../../hooks/StoreHook";
-import { setPartialCurrentUser, setCurrentUser,setLoading, setErrorMessage,setSuccessMessage } from "../../redux/Slice/userSlice";
+import { setPartialCurrentUser, setCurrentUser,setLoading, setErrorMessage,setSuccessMessage,clearCurrentUser  } from "../../redux/Slice/userSlice";
 import { PartialUserInfo } from '@/app/interfaces/interfaces';
 import Loading from '@/app/components/Loading/loading';
 
@@ -59,6 +59,10 @@ const TypePrestador = () => {
     const sanitizedValue = event.target.value.replace(/\D/g, '').slice(0, 4);
     setMatricula(sanitizedValue);
     setIsmatriculaValid(sanitizedValue.length === 4);
+    if (sanitizedValue.length !== 4) {
+      dispatch(clearCurrentUser());
+    }
+  
   };
 
   useEffect(() => {
@@ -82,6 +86,7 @@ const TypePrestador = () => {
 
           if (prestador.Anulada === 1) {
             dispatch(setErrorMessage(`Prestador dado de Baja`));
+            dispatch(clearCurrentUser());
             return;
           }
   
@@ -89,6 +94,7 @@ const TypePrestador = () => {
           const fechaActual = new Date();
           if (fechaBaja.getTime() !== new Date('1900-01-01T00:00:00.000Z').getTime() && fechaBaja < fechaActual) {
             dispatch(setErrorMessage(`Prestador dado de baja (Fecha de baja: ${fechaBaja.toISOString().split('T')[0]})`));
+            dispatch(clearCurrentUser());
             return;
           }
 
@@ -108,6 +114,7 @@ const TypePrestador = () => {
           setIsmatriculaValid(true);
         } catch (error) {
           dispatch(setErrorMessage('Prestador not found'));
+          dispatch(clearCurrentUser());
         } finally {
           dispatch(setLoading(false));
         }

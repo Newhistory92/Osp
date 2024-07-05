@@ -3,7 +3,7 @@ import React, { useState, useEffect} from 'react';
 import { Typography, Input, Button, Alert } from '@mui/material';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from "../../hooks/StoreHook";
-import { setPartialCurrentUser,setCurrentUser, setLoading, setErrorMessage,setSuccessMessage } from "../../redux/Slice/userSlice";
+import { setPartialCurrentUser,setCurrentUser, setLoading, setErrorMessage,setSuccessMessage,clearCurrentUser } from "../../redux/Slice/userSlice";
 import { PartialUserInfo } from '@/app/interfaces/interfaces';
 import Loading from '@/app/components/Loading/loading';
 
@@ -14,7 +14,7 @@ const TypeOperador = () => {
   const dispatch = useAppDispatch();
   const { currentUser, loading, errorMessage,successMessage } = useAppSelector((state) => state.user);
 
-
+ console.log(currentUser)
 
   useEffect(() => {
     dispatch(setErrorMessage(null));
@@ -59,12 +59,17 @@ const TypeOperador = () => {
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const sanitizedValue = event.target.value.replace(/\D/g, '').slice(0, 3);
     setNumeroOperador(sanitizedValue);
-    setIsoperadorValid(sanitizedValue.length === 4);
+    setIsoperadorValid(sanitizedValue.length === 3);
+  
+    if (sanitizedValue.length !== 3) {
+      dispatch(clearCurrentUser());
+      dispatch(setLoading(false)); 
+    }
   };
-
+  
   useEffect(() => {
-    dispatch(setLoading(true));
     if (numeroOperador.length === 3) {
+      dispatch(setLoading(true));
       console.log('Triggering API call with numeroOperador:', numeroOperador);
       const timeoutId = setTimeout(async () => {
         try {
@@ -78,11 +83,10 @@ const TypeOperador = () => {
           console.log(operador)
           if (operador.ANULADA === "1") {
             dispatch(setErrorMessage(`Operador  Bloqueado`));
+            dispatch(clearCurrentUser());dispatch(clearCurrentUser());
             return;
           }
-          if (Array.isArray(operador) && operador.length === 0) {
-          }
-
+       
           const newCurrentUser: PartialUserInfo = {
             id: operador.id,
             name: operador.NOMBRE,
@@ -93,17 +97,18 @@ const TypeOperador = () => {
             dependencia: '',
             tipo: ''
           };
-
+         console.log(newCurrentUser)
           dispatch(setPartialCurrentUser(newCurrentUser));
           dispatch(setErrorMessage(null));
-          dispatch(setLoading(false));
           setIsoperadorValid(true);
 
         } catch (error) {
       
-          dispatch(setErrorMessage('Operador not found'));
-          dispatch(setLoading(false));
+          dispatch(setErrorMessage('Operador not found'))
+          dispatch(clearCurrentUser());
 
+        }finally {
+          dispatch(setLoading(false));
         }
       }, 2000);
 
@@ -114,6 +119,7 @@ const TypeOperador = () => {
   }, [numeroOperador, dispatch]);
   
   const handleConfirm = async () => {
+    console.log(currentUser, "post")
     if (!currentUser) {
       dispatch(setErrorMessage('Seleccione un operador antes de confirmar'));
       return;
@@ -132,6 +138,7 @@ const TypeOperador = () => {
       });
 
       const responseData = await response.json();
+      console.log(responseData)
       if (responseData.status === 200) {
         dispatch(setCurrentUser(responseData.newOperador));
         dispatch(setSuccessMessage('El Operador fue creado con éxito'));
@@ -151,9 +158,10 @@ const TypeOperador = () => {
       dispatch(setLoading(false));
     }
   };
-  const capitalizeWords = (str:string) => {
-    return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+  const capitalizeWords = (str: string) => {
+    return str ? str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase()) : '';
   };
+  
  
 
   return (

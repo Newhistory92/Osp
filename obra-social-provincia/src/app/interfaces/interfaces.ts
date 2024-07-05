@@ -24,8 +24,8 @@ export interface NavbarState {
 
 
   export interface UserInfo {
-    Localidad: any;
-    Domicilio: any;
+    Localidad?: any;
+    Domicilio?: any;
     operador: any;
     id: string;
     name: string;
@@ -54,6 +54,7 @@ export interface NavbarState {
     loading: boolean;
     errorMessage: string | null;
     successMessage:string | null;
+   
   }
 
 export interface Prestador {

@@ -21,8 +21,6 @@ const userSlice = createSlice({
       state.currentUser = {
         ...state.currentUser,
         ...action.payload,
-        // Asegúrate de que las propiedades obligatorias están presentes
-        operador: state.currentUser?.operador ?? '',
         email: state.currentUser?.email ?? '',
         checkedPhone: state.currentUser?.checkedPhone ?? false,
         phone: state.currentUser?.phone ?? '',

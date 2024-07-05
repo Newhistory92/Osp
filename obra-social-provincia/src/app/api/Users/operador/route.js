@@ -11,58 +11,36 @@ export async function POST(request) {
         const numeroOperador = body.numeroOperador;
         const email = user.emailAddresses[0].emailAddress;
         const userId = user.id;
-        // const dataTime =  new Date().toISOString();
-
-        // Verificar si el usuario ya está autenticado en alguna tabla
+      console.log( numeroOperador)
         const isAuthenticated = await checkUserAuthentication(userId, 'operador');
-        console.log(isAuthenticated.status,isAuthenticated.message )
-        if (isAuthenticated === false) {
+        console.log(isAuthenticated.status, isAuthenticated.message);
+        if (isAuthenticated.status == 200) {
             return NextResponse.json({ status: 404, message: isAuthenticated.message });
         }
-        // Verificar si el DNI ya está asociado a un usuario en la base de datos
-        const existingUserWithOPer = await prisma.operador.findFirst({
-            where: {
-                numeroOperador: numeroOperador
-            }
-        });
 
-        if (existingUserWithOPer) {
-            return NextResponse.json({ status: 400, message: `El Operador N°: ${existingUserWithOPer.numeroOperador} ya está asociado a un Afiliado` });
+        const existingUserWithOPer = await prisma.$queryRaw`SELECT * FROM operador WHERE numeroOperador = ${numeroOperador}`;
+        if (existingUserWithOPer.length) {
+            return NextResponse.json({ status: 400, message: `El Operador N°: ${existingUserWithOPer[0].numeroOperador} ya está asociado a un Afiliado` });
         }
 
-        // Verificar si el usuario ya existe en la base de datos por su email
-        const existingUserWithEmail = await prisma.operador.findFirst({
-            where: {
-                email: email
-            }
-        });
-
-        if (existingUserWithEmail) {
-            return NextResponse.json({ status: 400, message: `El Correo Electrónico ${existingUserWithEmail.email} ya está asociado a un Afiliado` });
+        const existingUserWithEmail = await prisma.$queryRaw`SELECT * FROM operador WHERE email = ${email}`;
+        if (existingUserWithEmail.length) {
+            return NextResponse.json({ status: 400, message: `El Correo Electrónico ${existingUserWithEmail[0].email} ya está asociado a un Afiliado` });
         }
 
-        // Insertar el nuevo usuario en la base de datos
-        const { firstName, lastName, emailAddresses, imageUrl, phoneNumbers, passwordEnabled } = user;
-        const passwordValue = passwordEnabled ? 'true' : 'false'; // Convertir el booleano a string
-        const newOperador = await prisma.operador.create({
-            data: {
-                id: userId,
-                name: `${firstName}`,
-                apellido: `${lastName}`,
-                email: emailAddresses[0].emailAddress,
-                imageUrl: imageUrl,
-                phone: phoneNumbers[0].phoneNumber,
-                password: passwordValue,
-                numeroOperador: numeroOperador,
-              
-            }
-        });
+        const { firstName, lastName, imageUrl, phoneNumbers, passwordEnabled } = user;
+        const passwordValue = passwordEnabled ? 'true' : 'false';
+        const currentDateTime = new Date().toISOString()
+        const newOperador = await prisma.$executeRaw`
+            INSERT INTO operador (id, name, apellido, email, imageUrl, phone, password, numeroOperador, updatedAt )
+            VALUES (${userId}, ${firstName}, ${lastName}, ${email}, ${imageUrl}, ${phoneNumbers[0].phoneNumber}, ${passwordValue}, ${numeroOperador},${currentDateTime})
+        `;
         
         console.log("Perfil de usuario creado correctamente:", newOperador);
 
-        return NextResponse.json({ status: 200, message: "Perfil del Operador fue creado con éxito." ,newOperador});
+        return NextResponse.json({ status: 200, message: "Perfil del Operador fue creado con éxito.", newOperador });
     } catch (error) {
-        console.error("Error al crear el perfil del Afiliado:", error);
+        console.error("Error al crear el perfil del Operador:", error);
         return NextResponse.json({ status: 500, message: `Error al crear el perfil del Operador: ${error.message}` });
     }
 }
