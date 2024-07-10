@@ -13,7 +13,7 @@ const TypePrestador = () => {
   const [ismatriculaValid, setIsmatriculaValid] = useState(false);
   const dispatch = useAppDispatch();
   const { currentUser, loading, errorMessage,successMessage } = useAppSelector((state) => state.user);
- 
+  console.log("currentUser", currentUser)
   useEffect(() => {
     dispatch(setErrorMessage(null));
     dispatch(setSuccessMessage(null));
@@ -36,7 +36,7 @@ const TypePrestador = () => {
         if (response.ok) {
           if (data.status === 200) {
             dispatch(setCurrentUser(data.users[0]));
-             window.location.href = '/page/dashboard';
+            window.location.href = '/page/dashboard';
           } else if (data.status === 401) {
             window.location.href = '/page/signin';
           } else if (data.status === 402) {
@@ -73,12 +73,13 @@ const TypePrestador = () => {
         try {
           const response = await fetch(`/api/Datos/prestador?matricula=${matricula}`);
           console.log('API Response Status:', response.status);
-            
+          console.log( response)
           if (!response.ok) {
             throw new Error('Prestador not found');
           }
           const prestador = await response.json();
           console.log(prestador)
+          
           const capitalizeWords = (str:string) => {
             return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
           };
@@ -97,13 +98,19 @@ const TypePrestador = () => {
             dispatch(clearCurrentUser());
             return;
           }
+          const address = `${prestador.Domicilio},${prestador.Localidad}`;
+          console.log(address)
+          const tipo = (prestador.Fidelizado === "0" || prestador.Fidelizado === null) ? "No Fidelizado" : "Fidelizado";
+          console.log(prestador.Telefono)
 
           const newCurrentUser: PartialUserInfo = {
             id: prestador.id,
             name: capitalizeWords(prestador.Nombre),
             matricula: prestador.Codigo,
             especialidad: capitalizeWords(prestador.especialidad),
-            tipo:prestador.Fidelizado,
+            tipo:tipo,
+            address:capitalizeWords(address),
+            phone:prestador.Telefono,
             dni: '',
             dependencia: '',
             operador: ''
@@ -136,8 +143,7 @@ const TypePrestador = () => {
       return;
     }
        
-  const address = `${currentUser.Domicilio}, ${currentUser.Localidad}`;
-  const tipo = currentUser.tipo === "0" ? "No Fidelizado" : null;
+  
     dispatch(setLoading(true));
 
     try {
@@ -149,8 +155,9 @@ const TypePrestador = () => {
         body: JSON.stringify({
           matricula: currentUser.matricula,
           especialidad: currentUser.especialidad,
-          address: address,
-          tipo: tipo,
+          address: currentUser.address,
+          tipo: currentUser.tipo,
+          phoneOpc:currentUser.phone
         }),
       });
 

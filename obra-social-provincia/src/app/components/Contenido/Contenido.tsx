@@ -45,7 +45,7 @@ const Contenido = () => {
       },
     });
 
-    return <div className="container-text  animate-zoom-in animation-delay-1000 ">{parsedContent}</div>;
+    return <div className="container-text overflow-auto animate-zoom-in animation-delay-1000 ">{parsedContent}</div>;
   };
 
 
@@ -79,7 +79,7 @@ const Contenido = () => {
 
 
   return (
-    <div className="overflow-y-auto p-8 pr-4 w-full h-screen flex justify-center  mx-auto">
+    <div className=" p-8 pr-4 w-full h-screen flex justify-center  mx-auto">
       {showWelcome && <Welcome />}
       {showPrestadores ? (
         < DynamicPrestadores />

@@ -44,7 +44,7 @@ model Prestador {
   especialidad3  String?        @db.VarChar(100)
   descripcion    String?        @db.VarChar(600)
   role           String?        @default("PROVIDER")
-  tipo           String?        @default("FIDELIZADO")
+  tipo           String?       
   address        String?        @db.VarChar(200)
   coordinatesLat Int?
   coordinatesLon Int?

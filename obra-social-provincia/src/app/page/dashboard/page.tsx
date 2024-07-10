@@ -11,7 +11,7 @@ import Ordenes from "../../User1/afiliado/Ordenes/Ordenes"
 import EditPublicacion from '../../User3/operador/Publicacion/EditPublic';
 import DenunciasTable from '../../User3/operador/Publicacion/GestionDenuncia';
 import Notificador from '../../User3/operador/Notificador/Notificador';
-
+import Loading from '@/app/components/Loading/loading';
 const DefaultDashboardLayout: React.FC = () => {
   const [showMenu, setShowMenu] = useState<boolean>(true);
   const [iframeUrl, setIframeUrl] = useState<string | null>(null);
@@ -31,7 +31,7 @@ const DefaultDashboardLayout: React.FC = () => {
     facturacionOpen,
     dialisisOpen,
   } = useAppSelector(state => state.navbarvertical);
- 
+  const { loading} = useAppSelector((state) => state.user);
   const currentUser = useAppSelector(state => state.user.currentUser);
   let userRole;
 
@@ -68,6 +68,7 @@ const DefaultDashboardLayout: React.FC = () => {
 
   return (
     <div id="db-wrapper" className={`${showMenu ? '' : 'toggled'}`}>
+       {loading && <Loading />}
       <div className="navbar-vertical navbar ">
         <NavbarVertical/>
       </div>

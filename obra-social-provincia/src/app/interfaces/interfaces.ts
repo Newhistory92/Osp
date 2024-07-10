@@ -32,20 +32,20 @@ export interface NavbarState {
     apellido?: string;
     email: string;
     checkedPhone:boolean;
-    phone: string;
+    phone: string | null;
     phoneOpc?: string;
     imageUrl: string;
     matricula?: string;
     dni?: string;
     numeroOperador?: string;
     role: string;
-    address: string;
+    address?: string | null;
     prestador:string
     especialidad?: string;
     especialidad2?:string;
     especialidad3?:string;
     dependencia?: string;
-    tipo:string
+    tipo?: string | null;
     descripcion:string
   }
 
@@ -133,7 +133,9 @@ export interface PartialUserInfo {
   dni: string;
   dependencia:string;
   operador: string;
-  tipo:string
+  tipo:string | null;
+  address:string | null
+  phone: string | null;
   
 }
 

@@ -95,7 +95,9 @@ const TypeOperador = () => {
             especialidad: '',
             dni: '',
             dependencia: '',
-            tipo: ''
+            tipo: '',
+            address: null,
+            phone: null
           };
          console.log(newCurrentUser)
           dispatch(setPartialCurrentUser(newCurrentUser));

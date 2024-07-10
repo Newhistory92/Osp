@@ -23,12 +23,12 @@ const userSlice = createSlice({
         ...action.payload,
         email: state.currentUser?.email ?? '',
         checkedPhone: state.currentUser?.checkedPhone ?? false,
-        phone: state.currentUser?.phone ?? '',
+        phone:  action.payload.phone ?? state.currentUser?.phone ?? null,
         imageUrl: state.currentUser?.imageUrl ?? '',
         role: state.currentUser?.role ?? '',
-        address: state.currentUser?.address ?? '',
+        address: action.payload.address ?? state.currentUser?.address ?? null,
         prestador: state.currentUser?.prestador ?? '',
-        tipo: state.currentUser?.tipo ?? '',
+        tipo: action.payload.tipo ?? state.currentUser?.tipo ?? null,
         descripcion: state.currentUser?.descripcion ?? '',
         
       };

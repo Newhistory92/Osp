@@ -20,7 +20,7 @@ export async function POST(request) {
 
         const existingUserWithOPer = await prisma.$queryRaw`SELECT * FROM operador WHERE numeroOperador = ${numeroOperador}`;
         if (existingUserWithOPer.length) {
-            return NextResponse.json({ status: 400, message: `El Operador N°: ${existingUserWithOPer[0].numeroOperador} ya está asociado a un Afiliado` });
+            return NextResponse.json({ status: 400, message: `El Operador N°: ${existingUserWithOPer[0].numeroOperador} ya está asociado a una Cuenta` });
         }
 
         const existingUserWithEmail = await prisma.$queryRaw`SELECT * FROM operador WHERE email = ${email}`;
@@ -52,17 +52,14 @@ export async function GET(request) {
         if (!user) {
             return NextResponse.json({ status: 401, message: "Operario no autenticado. Redirigiendo al inicio de sesión." });
         }
-        
-        // Obtener el ID del usuario autenticado
         const userId = user.id;
-
         // Verificar si el ID del usuario está en la base de datos
         const isAuthenticatedAndInDatabase = await checkUserAuthentication(userId, 'operador');
         if (isAuthenticatedAndInDatabase.status === 200) {
-            const users = await prisma.operador.findMany({
-                orderBy: { id: 'asc' } 
-            });
-            if (!users) {
+            const users = await prisma.$queryRaw`
+                SELECT * FROM Operador
+            `;
+            if (users.length === 0) {
                 return NextResponse.json({ status: 404, message: "Usuario no encontrado en la base de datos." });
             }
             return NextResponse.json({ status: 200, users });
@@ -74,7 +71,3 @@ export async function GET(request) {
         return NextResponse.json({ status: 500, message: `Error al verificar la autenticación del usuario: ${error.message}` });
     }
 }
-
-
-
-
