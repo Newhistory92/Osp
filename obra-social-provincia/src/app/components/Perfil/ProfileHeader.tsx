@@ -3,7 +3,7 @@ import { Col, Row, } from "react-bootstrap";
 import { ProfileHeaderProps } from '@/app/interfaces/interfaces';
 import Header from "../../../../public/profile-cover.jpg"
 import Image from 'next/image';
-
+import Logo from "../../../../public/Logo.png"
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({ imageUrl, name, apellido,email }) => {
 
     return (
@@ -14,10 +14,10 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ imageUrl, name, apellido,
                     className=" rounded-top "> 
                     <Image 
                     src={Header} alt="Fondo-badge"
-                    height="1000 "
+                    height="1000"
                     width="1000 "
                     className="w-full h-full object-cover"
-                    
+                    priority 
                     />
                     </div>
                 <div className="bg-white rounded-bottom smooth-shadow-sm ">
@@ -26,11 +26,13 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ imageUrl, name, apellido,
                             {/* avatar */}
                             <div className="avatar-xxl   me-2 position-relative d-flex justify-content-end align-items-end mt-n10">
                                 <Image
-                                    src={imageUrl}
+                                    src={imageUrl || Logo}
+
                                     className="avatar-xxl rounded-circle border border-white-color-40"
                                     alt=""
                                     height="100"
                                     width="1000"
+                                    priority 
                                 />
                                 {/* Verificado */}
                                 <Image

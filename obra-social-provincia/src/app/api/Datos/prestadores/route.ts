@@ -1,6 +1,5 @@
 import {  NextResponse } from "next/server";
-import prisma from "@/app/lib/prisma";
-import { poolPromise, sql } from '../../../lib/mssql';
+import { poolPromise } from '../../../lib/mssql';
 
 
 export async function GET() {

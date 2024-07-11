@@ -72,7 +72,7 @@ export interface Prestador {
   especialidad2?:string,
   especialidad3?:string,
   tipo: string,
-
+  IdPrestador:number,
   email:string,
   checkedPhone:boolean,
   createdAt?: string;
@@ -87,7 +87,7 @@ export interface DescriptionProps {
 }
 
 export interface Especialidad {
-  id: number;
+  id: string;
   nombre: string;
 }
 

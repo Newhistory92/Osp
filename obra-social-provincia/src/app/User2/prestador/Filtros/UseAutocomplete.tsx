@@ -39,7 +39,7 @@ const FilterUser: React.FC<FilterUserProps> = ({ prestadores, openModal }) => {
 
   const filterOptions = React.useCallback((value: string) => {
     const filtered = prestadores.filter((prestador) =>
-      `${prestador.name} ${prestador.apellido}`.toLowerCase().includes(value.toLowerCase())
+      `${prestador.name || ''} ${prestador.apellido || ''}`.toLowerCase().includes(value.toLowerCase())
     );
     setOptions(filtered);
   }, [prestadores]);
@@ -48,6 +48,18 @@ const FilterUser: React.FC<FilterUserProps> = ({ prestadores, openModal }) => {
     filterOptions(inputValue);
   }, [inputValue, filterOptions]);
 
+  React.useEffect(() => {
+    setOptions((options) => 
+      options.sort((a, b) => {
+        const firstLetterA = a.name ? capitalizeFirstLetter(a.name[0]) : '';
+        const firstLetterB = b.name ? capitalizeFirstLetter(b.name[0]) : '';
+        if (firstLetterA === firstLetterB) {
+          return a.name.localeCompare(b.name);
+        }
+        return firstLetterA.localeCompare(firstLetterB);
+      })
+    );
+  }, [inputValue]);
 
   const capitalizeFirstLetter = (word: string) => {
     return word.charAt(0).toUpperCase() + word.slice(1);
@@ -67,7 +79,8 @@ const FilterUser: React.FC<FilterUserProps> = ({ prestadores, openModal }) => {
       tipo: '',
       email: '',
       checkedPhone: false,
-      denuncias: ''
+      denuncias: '',
+      IdPrestador: 0
     };
     openModal(prestador);
   };
@@ -77,10 +90,17 @@ const FilterUser: React.FC<FilterUserProps> = ({ prestadores, openModal }) => {
       id="grouped-demo"
       options={options}
       groupBy={(option) => {
-        const firstLetter = capitalizeFirstLetter(option.name[0]);
-        return /[0-9]/.test(firstLetter) ? '0-9' : firstLetter;
+        if (option.name) {
+          const firstLetter = capitalizeFirstLetter(option.name[0]);
+          return /[0-9]/.test(firstLetter) ? '0-9' : firstLetter;
+        }
+        return '';  // Manejo de caso en que `name` es nulo o indefinido
       }}
-      getOptionLabel={(option) => `${capitalizeFirstLetter(option.name)} ${capitalizeFirstLetter(option.apellido)}`}
+      getOptionLabel={(option) => {
+        const name = option.name ? capitalizeFirstLetter(option.name) : '';
+        const apellido = option.apellido ? capitalizeFirstLetter(option.apellido) : '';
+        return `${name} ${apellido}`;
+      }}
       sx={{ width: 300 }}
       renderInput={(params) => <TextField {...params} label="Buscar por Nombre o Apellido" />}
       renderGroup={(params) => (

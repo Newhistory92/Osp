@@ -24,8 +24,7 @@ import {
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Prestador } from "@/app/interfaces/interfaces";
-import { Virtuoso } from 'react-virtuoso';
-import { Console } from "console";
+
 const PrestadorCard  = dynamic(() => import ('./CardsPrestador'),{
   ssr:false
 })
@@ -142,21 +141,24 @@ const handleTabChange = useCallback((value: string) => {
   setPage(1);
 }, []);
 
-
-  //const maxPage = Math.ceil(selectedType === "Todos" ? prestadores.length : filteredData.length / perPage);
   const maxPage = useMemo(() => Math.ceil(filteredData.length / perPage), [filteredData.length, perPage]);
 
  
   const handleAvatarButtonClick = (prestador: React.SetStateAction<Prestador | null>) => {
+    console.log("handleAvatarButtonClick called with:", prestador);
     setSelectedPrestador(prestador);
     onOpen();
   };
   const openModal = (prestador: Prestador) => {
+    console.log("openModal called with:", prestador);
     setSelectedPrestador(prestador);
     onOpen();
   };
- 
-// className="bg-gray-500
+
+  useEffect(() => {
+    console.log("isOpen state changed:", isOpen);
+  }, [isOpen]);
+
   return (
     <Card className="w-full h-screen mx-auto">
   <div className="sticky top-0 z-10 bg-white">
@@ -206,28 +208,28 @@ const handleTabChange = useCallback((value: string) => {
           </thead>
           <tbody>
             {[...Array(6)].map((_, index) => (
-              <tr key={index} className="bg-white">
+              <tr key={index} className="bg-gray-300">
                 <td className="p-4">
                   <div className="flex items-center gap-3">
-                    <Skeleton circle={true} height={40} width={40} className="bg-gray-500" />
+                    <Skeleton circle={true} height={40} width={40} className="bg-gray-200 border border-gray-300" />
                     <div className="flex flex-col">
-                      <Skeleton width={100} height={20} className="bg-gray-500" />
+                      <Skeleton width={100} height={20} className="bg-gray-200 border border-gray-300" />
                     </div>
                   </div>
                 </td>
                 <td className="p-4">
                   <div className="flex flex-col">
-                    <Skeleton width={150} height={20} className="bg-gray-500" />
+                    <Skeleton width={150} height={20} className="bg-gray-200 border border-gray-300" />
                   </div>
                 </td>
                 <td className="p-4">
-                  <Skeleton width={120} height={20} className="bg-gray-500" />
+                  <Skeleton width={120} height={20} className="bg-gray-200 border border-gray-300" />
                 </td>
                 <td className="p-4">
-                  <Skeleton width={100} height={20} className="bg-gray-500" />
+                  <Skeleton width={100} height={20} className="bg-gray-200 border border-gray-300" />
                 </td>
                 <td className="p-4">
-                  <Skeleton width={80} height={20} className="bg-gray-500" />
+                  <Skeleton width={80} height={20} className="bg-gray-200 border border-gray-300" />
                 </td>
               </tr>
             ))}
@@ -250,14 +252,15 @@ const handleTabChange = useCallback((value: string) => {
           </thead>
           <tbody>
             {filteredData.slice((page - 1) * perPage, page * perPage).map((prestador, index) => {
-              const { id, name, apellido, imageUrl, phone, phoneOpc, especialidad, address, tipo, checkedPhone, especialidad2, especialidad3 } = prestador;
+              const { IdPrestador, name, apellido, imageUrl, phone, phoneOpc, especialidad, address, tipo, checkedPhone, especialidad2, especialidad3 } = prestador;
               const displayTipo = tipo.replace("_", " ").toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
+                  
+         
 
-              // Aplicar clase para filas alternas
               const rowClass = index % 2 === 0 ? "bg-gray-50" : "bg-gray-300";
 
               return (
-                <tr key={id} className={` ${rowClass}`}>
+                <tr key={IdPrestador} className={` ${rowClass}`}>
                   <td className="p-4">
                     <div className="flex items-center gap-3">
                       <button className="avatar-button" onClick={() => handleAvatarButtonClick(prestador)}>
