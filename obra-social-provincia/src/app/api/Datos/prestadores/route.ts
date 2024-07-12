@@ -10,7 +10,7 @@ export async function GET() {
       const prestadoresPaginaObraSocial = await pool.request().query(`
         SELECT * FROM paginaobrasocial.dbo.Prestador
       `);
-  
+      
       // Obtener prestadores de la antigua base de datos
       const prestadoresObraSocial = await pool.request().query(`
         SELECT * FROM ObraSocial.dbo.Prestadores

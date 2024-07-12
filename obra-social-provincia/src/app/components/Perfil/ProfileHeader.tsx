@@ -3,7 +3,7 @@ import { Col, Row, } from "react-bootstrap";
 import { ProfileHeaderProps } from '@/app/interfaces/interfaces';
 import Header from "../../../../public/profile-cover.jpg"
 import Image from 'next/image';
-import Logo from "../../../../public/Logo.png"
+import Avatar_Default from "../../../../public/Avatar_default.webp"
 const ProfileHeader: React.FC<ProfileHeaderProps> = ({ imageUrl, name, apellido,email }) => {
 
     return (
@@ -24,23 +24,23 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ imageUrl, name, apellido,
                     <div className="d-flex align-items-center justify-content-between pt-4 pb-6 px-4">
                         <div className="d-flex align-items-center">
                             {/* avatar */}
-                            <div className="avatar-xxl   me-2 position-relative d-flex justify-content-end align-items-end mt-n10">
+                            <div className=" position-relative  justify-content-end align-items-end ">
                                 <Image
-                                    src={imageUrl || Logo}
-
-                                    className="avatar-xxl rounded-circle border border-white-color-40"
-                                    alt=""
-                                    height="100"
-                                    width="1000"
+                                    src={imageUrl || Avatar_Default}
+                                    className=" rounded-circle border border-white-color-40"
+                                    alt="avatar"
+                                    height="200"
+                                    width="200"
                                     priority 
+                                    rel="preload"
+                                    
                                 />
                                 {/* Verificado */}
                                 <Image
                                     src="https://img.icons8.com/color/48/verified-badge.png" alt="verified-badge"
-                                    
                                     height="30"
                                     width="30"
-                                    className="position-absolute top-0 right-0 me-2"
+                                    className="position-absolute top-0 right-0 me-5"
                                 />
                             </div>
                             {/* text */}

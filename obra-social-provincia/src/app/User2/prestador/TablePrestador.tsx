@@ -24,6 +24,9 @@ import {
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { Prestador } from "@/app/interfaces/interfaces";
+import avatarDefault from "../../../../public/Avatar_default.webp";
+
+const Avatar_Default = avatarDefault.src;
 
 const PrestadorCard  = dynamic(() => import ('./CardsPrestador'),{
   ssr:false
@@ -143,22 +146,15 @@ const handleTabChange = useCallback((value: string) => {
 
   const maxPage = useMemo(() => Math.ceil(filteredData.length / perPage), [filteredData.length, perPage]);
 
- 
-  const handleAvatarButtonClick = (prestador: React.SetStateAction<Prestador | null>) => {
-    console.log("handleAvatarButtonClick called with:", prestador);
-    setSelectedPrestador(prestador);
-    onOpen();
-  };
-  const openModal = (prestador: Prestador) => {
-    console.log("openModal called with:", prestador);
+  const handleAvatarButtonClick = (prestador: Prestador | null) => {
+    if (prestador && selectedPrestador && selectedPrestador.IdPrestador === prestador.IdPrestador) {
+      return;
+    } console.log("handleAvatarButtonClick called with:", prestador); // Depuración
     setSelectedPrestador(prestador);
     onOpen();
   };
 
-  useEffect(() => {
-    console.log("isOpen state changed:", isOpen);
-  }, [isOpen]);
-
+  
   return (
     <Card className="w-full h-screen mx-auto">
   <div className="sticky top-0 z-10 bg-white">
@@ -182,7 +178,7 @@ const handleTabChange = useCallback((value: string) => {
         </Tabs>
         <div className="flex flex-col items-center w-full md:flex-row md:w-auto gap-4">
           <div className="w-full flex-grow">
-            <FilterUser prestadores={prestadores} openModal={openModal} />
+          <FilterUser prestadores={prestadores} openModal={handleAvatarButtonClick} setFilteredData={setFilteredData} />
           </div>
           <div className="w-full flex-grow mb-2">
             <FilterEspecialidad prestadores={prestadores} setFilteredData={setFilteredData} />
@@ -254,9 +250,6 @@ const handleTabChange = useCallback((value: string) => {
             {filteredData.slice((page - 1) * perPage, page * perPage).map((prestador, index) => {
               const { IdPrestador, name, apellido, imageUrl, phone, phoneOpc, especialidad, address, tipo, checkedPhone, especialidad2, especialidad3 } = prestador;
               const displayTipo = tipo.replace("_", " ").toLowerCase().replace(/\b\w/g, (l) => l.toUpperCase());
-                  
-         
-
               const rowClass = index % 2 === 0 ? "bg-gray-50" : "bg-gray-300";
 
               return (
@@ -264,7 +257,7 @@ const handleTabChange = useCallback((value: string) => {
                   <td className="p-4">
                     <div className="flex items-center gap-3">
                       <button className="avatar-button" onClick={() => handleAvatarButtonClick(prestador)}>
-                        <Avatar src={imageUrl} alt={apellido} size="sm" />
+                        <Avatar src={imageUrl || Avatar_Default} alt={apellido} size="sm" />
                       </button>
                       <Modal
                         size={"2xl"}
@@ -279,11 +272,10 @@ const handleTabChange = useCallback((value: string) => {
                           base: "border-[#292f46] bg-[#19172c] dark:bg-[#19172c] text-[#a8b0d3]",
                           header: "border-b-[1px] border-[#292f46]",
                           footer: "border-t-[1px] border-[#292f46]",
-                          closeButton: "hover:bg-white/5 active:bg-white/10",
+                      
                         }}
                       >
                         <ModalContent>
-                          {(onClose) => (
                             <>
                               <ModalHeader className="flex flex-col gap-1 z-100">Obra Social Provincia</ModalHeader>
                               <ModalBody>
@@ -295,7 +287,7 @@ const handleTabChange = useCallback((value: string) => {
                                 </Button>
                               </ModalFooter>
                             </>
-                          )}
+                          
                         </ModalContent>
                       </Modal>
                       <div className="flex flex-col">

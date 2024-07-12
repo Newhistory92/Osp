@@ -28,96 +28,53 @@ const GroupItems = styled('ul')({
   padding: 0,
 });
 
+
 interface FilterUserProps {
   prestadores: PrestadorFilter[];
-  openModal: (prestador: Prestador) => void;
+  setFilteredData: React.Dispatch<React.SetStateAction<PrestadorFilter[]>>;
 }
 
-const FilterUser: React.FC<FilterUserProps> = ({ prestadores, openModal }) => {
+const FilterUser: React.FC<FilterUserProps> = ({ prestadores, setFilteredData }) => {
   const [inputValue, setInputValue] = React.useState('');
-  const [options, setOptions] = React.useState<PrestadorFilter[]>([]);
 
-  const filterOptions = React.useCallback((value: string) => {
-    const filtered = prestadores.filter((prestador) =>
-      `${prestador.name || ''} ${prestador.apellido || ''}`.toLowerCase().includes(value.toLowerCase())
-    );
-    setOptions(filtered);
-  }, [prestadores]);
-
-  React.useEffect(() => {
-    filterOptions(inputValue);
-  }, [inputValue, filterOptions]);
-
-  React.useEffect(() => {
-    setOptions((options) => 
-      options.sort((a, b) => {
-        const firstLetterA = a.name ? capitalizeFirstLetter(a.name[0]) : '';
-        const firstLetterB = b.name ? capitalizeFirstLetter(b.name[0]) : '';
-        if (firstLetterA === firstLetterB) {
-          return a.name.localeCompare(b.name);
-        }
-        return firstLetterA.localeCompare(firstLetterB);
-      })
-    );
-  }, [inputValue]);
-
-  const capitalizeFirstLetter = (word: string) => {
-    return word.charAt(0).toUpperCase() + word.slice(1);
-  };
-
-  const handleOpenModal = (prestadorFilter: PrestadorFilter) => {
-    const prestador: Prestador = {
-      ...prestadorFilter,
-      imageUrl: '',
-      descripcion: '',
-      phone: '',
-      phoneOpc: '',
-      address: '',
-      especialidad: '',
-      especialidad2: '',
-      especialidad3: '',
-      tipo: '',
-      email: '',
-      checkedPhone: false,
-      denuncias: '',
-      IdPrestador: 0
+  const options = prestadores.map((prestador) => {
+    const firstLetter = (prestador.name[0] || prestador.apellido[0]).toUpperCase();
+    return {
+      firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter,
+      ...prestador,
     };
-    openModal(prestador);
-  };
+  });
+
+  React.useEffect(() => {
+    const filtered = prestadores.filter((prestador) =>
+      `${prestador.name || ''} ${prestador.apellido || ''}`
+        .toLowerCase()
+        .includes(inputValue.toLowerCase())
+    );
+    setFilteredData(filtered);
+  }, [inputValue, prestadores, setFilteredData]);
 
   return (
     <Autocomplete
       id="grouped-demo"
-      options={options}
-      groupBy={(option) => {
-        if (option.name) {
-          const firstLetter = capitalizeFirstLetter(option.name[0]);
-          return /[0-9]/.test(firstLetter) ? '0-9' : firstLetter;
-        }
-        return '';  // Manejo de caso en que `name` es nulo o indefinido
-      }}
-      getOptionLabel={(option) => {
-        const name = option.name ? capitalizeFirstLetter(option.name) : '';
-        const apellido = option.apellido ? capitalizeFirstLetter(option.apellido) : '';
-        return `${name} ${apellido}`;
-      }}
+      options={options.sort((a, b) => -b.firstLetter.localeCompare(a.firstLetter))}
+      groupBy={(option) => option.firstLetter}
+      getOptionLabel={(option) => `${option.name} ${option.apellido}`}
       sx={{ width: 300 }}
-      renderInput={(params) => <TextField {...params} label="Buscar por Nombre o Apellido" />}
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          label="Buscar por Nombre o Apellido"
+          value={inputValue}
+          onChange={(event) => setInputValue(event.target.value)}
+        />
+      )}
       renderGroup={(params) => (
         <li key={params.key}>
-          <GroupHeader>{capitalizeFirstLetter(params.group)}</GroupHeader>
+          <GroupHeader>{params.group}</GroupHeader>
           <GroupItems>{params.children}</GroupItems>
         </li>
       )}
-      onChange={(event, value) => {
-        if (value) {
-          handleOpenModal(value);
-        }
-      }}
-      inputValue={inputValue}
-      onInputChange={(event, newInputValue) => {
-        setInputValue(newInputValue);
-      }}
     />
   );
 };

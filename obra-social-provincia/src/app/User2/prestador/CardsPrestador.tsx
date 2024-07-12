@@ -9,18 +9,16 @@ import { Prestador } from '@/app/interfaces/interfaces';
 
 
 const PrestadorCard: React.FC<Prestador > = ({  id, name, apellido, imageUrl, phone,phoneOpc, especialidad, address, tipo,
-    descripcion, email,checkedPhone, especialidad2,especialidad3 }) => {
+    descripcion,checkedPhone, especialidad2,especialidad3 }) => {
     const [showModal, setShowModal] = useState(false);
     const handleShowModal = () => setShowModal(true);
 
     return (
         <>
             <Col xl={50} lg={15} md={12} xs={12} className="mb-6">
-                {/* Card */}
                 <Card onClick={handleShowModal}>
-                    {/* Card body */}
                     <Card.Body>
-                        {/* Card title */}
+
                         <div className=" mb-6">
                         <ProfileHeader imageUrl={imageUrl} name={name} apellido={apellido} />
                         </div>

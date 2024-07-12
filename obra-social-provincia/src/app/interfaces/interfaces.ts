@@ -57,7 +57,7 @@ export interface NavbarState {
    
   }
 
-export interface Prestador {
+export interface Prestador  {
   denuncias: string;
   id:string,
   imageUrl: string;
@@ -111,6 +111,7 @@ export interface UserCardProps {
 }
 
 export interface PrestadorFilter {
+  
   id: string;
   name: string;
   apellido: string;
