@@ -11,6 +11,7 @@ export async function POST(request) {
         const numeroOperador = body.numeroOperador;
         const email = user.emailAddresses[0].emailAddress;
         const userId = user.id;
+        const name= body.name
       console.log( numeroOperador)
         const isAuthenticated = await checkUserAuthentication(userId, 'operador');
         console.log(isAuthenticated.status, isAuthenticated.message);
@@ -28,12 +29,12 @@ export async function POST(request) {
             return NextResponse.json({ status: 400, message: `El Correo Electrónico ${existingUserWithEmail[0].email} ya está asociado a un Afiliado` });
         }
 
-        const { firstName, lastName, imageUrl, phoneNumbers, passwordEnabled } = user;
+        const { imageUrl, phoneNumbers, passwordEnabled } = user;
         const passwordValue = passwordEnabled ? 'true' : 'false';
         const currentDateTime = new Date().toISOString()
         const newOperador = await prisma.$executeRaw`
-            INSERT INTO operador (id, name, apellido, email, imageUrl, phone, password, numeroOperador, updatedAt )
-            VALUES (${userId}, ${firstName}, ${lastName}, ${email}, ${imageUrl}, ${phoneNumbers[0].phoneNumber}, ${passwordValue}, ${numeroOperador},${currentDateTime})
+            INSERT INTO operador (id, name, email, imageUrl, phone, password, numeroOperador, updatedAt )
+            VALUES (${userId}, ${name},  ${email}, ${imageUrl}, ${phoneNumbers[0].phoneNumber}, ${passwordValue}, ${numeroOperador},${currentDateTime})
         `;
         
         console.log("Perfil de usuario creado correctamente:", newOperador);

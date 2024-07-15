@@ -4,7 +4,7 @@ import { ProfileHeaderProps } from '@/app/interfaces/interfaces';
 import Header from "../../../../public/profile-cover.jpg"
 import Image from 'next/image';
 import Avatar_Default from "../../../../public/Avatar_default.webp"
-const ProfileHeader: React.FC<ProfileHeaderProps> = ({ imageUrl, name, apellido,email }) => {
+const ProfileHeader: React.FC<ProfileHeaderProps> = ({ imageUrl, name,email }) => {
 
     return (
         <Row className="align-items-center shadow-lg">
@@ -46,7 +46,7 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({ imageUrl, name, apellido,
                             {/* text */}
                             <div className="lh-1">
                                 <h2 className="mb-0">
-                                    {name} {apellido}
+                                    {name} 
                                 </h2>
                                 {/* Email */}
                                 <p className="mb-0 d-block">{email}</p>

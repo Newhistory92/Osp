@@ -13,7 +13,7 @@ export async function POST(request) {
         const dependencia = body.dependencia;
         const email = user.emailAddresses[0].emailAddress;
         const userId = user.id;
-    
+        const name= body.name
      
         // Verificar si el usuario ya está autenticado en alguna tabla
         const isAuthenticated = await checkUserAuthentication(userId, 'afiliado');
@@ -50,8 +50,7 @@ export async function POST(request) {
         const newAfiliado = await prisma.afiliado.create({
             data: {
                 id: userId,
-                name: `${firstName}`,
-                apellido: `${lastName}`,
+                name: name,
                 email: emailAddresses[0].emailAddress,
                 imageUrl: imageUrl,
                 phone: phoneNumbers[0].phoneNumber,

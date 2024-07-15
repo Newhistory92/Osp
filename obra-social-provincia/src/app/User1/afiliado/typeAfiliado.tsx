@@ -95,14 +95,16 @@ const TypeAfiliado = () => {
                 }
 
                 const newCurrentUser: PartialUserInfo = {
-                    id: afiliado.id,
-                    name: capitalizeWords(afiliado.Nombre),
-                    dni: afiliado.Codigo,
-                    dependencia: capitalizeWords(afiliado.dependencia),
-                    matricula: '',
-                    especialidad: '',
-                    operador: '',
-                    tipo: '',
+                  id: afiliado.id,
+                  name: capitalizeWords(afiliado.Nombre),
+                  dni: afiliado.Codigo,
+                  dependencia: capitalizeWords(afiliado.dependencia),
+                  matricula: '',
+                  especialidad: '',
+                  operador: '',
+                  tipo: '',
+                  address: null,
+                  phone: null
                 };
 
                 console.log(newCurrentUser);
@@ -143,6 +145,7 @@ const TypeAfiliado = () => {
         body: JSON.stringify({
           dni: currentUser.dni,
           dependencia: currentUser.dependencia,
+          name:currentUser.name
         }),
       });
 

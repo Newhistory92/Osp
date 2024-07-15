@@ -8,19 +8,19 @@ import MedicalInformationIcon from '@mui/icons-material/MedicalInformation';
 import { Prestador } from '@/app/interfaces/interfaces';
 
 
-const PrestadorCard: React.FC<Prestador > = ({  id, name, apellido, imageUrl, phone,phoneOpc, especialidad, address, tipo,
+const PrestadorCard: React.FC<Prestador > = ({  id, name, imageUrl, phone,phoneOpc, especialidad, address, tipo,
     descripcion,checkedPhone, especialidad2,especialidad3 }) => {
     const [showModal, setShowModal] = useState(false);
     const handleShowModal = () => setShowModal(true);
 
     return (
         <>
-            <Col xl={50} lg={15} md={12} xs={12} className="mb-6">
+            <Col xl={50} lg={15} md={12} xs={12} className="mb-6" key={id}>
                 <Card onClick={handleShowModal}>
                     <Card.Body>
 
                         <div className=" mb-6">
-                        <ProfileHeader imageUrl={imageUrl} name={name} apellido={apellido} />
+                        <ProfileHeader imageUrl={imageUrl} name={name} />
                         </div>
                         <span className="text-uppercase fw-medium text-dark fs-5 ls-2">Un Poco Sobre Mi</span>
                         <p className="mt-2 mb-6">{descripcion}</p>

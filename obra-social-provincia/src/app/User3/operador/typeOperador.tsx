@@ -136,7 +136,7 @@ const TypeOperador = () => {
           'Content-Type': 'application/json',
         },
        
-      body: JSON.stringify({ numeroOperador: currentUser.operador }),
+      body: JSON.stringify({ numeroOperador: currentUser.operador,name:currentUser.name }),
       });
 
       const responseData = await response.json();

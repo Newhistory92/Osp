@@ -157,7 +157,8 @@ const TypePrestador = () => {
           especialidad: currentUser.especialidad,
           address: currentUser.address,
           tipo: currentUser.tipo,
-          phoneOpc:currentUser.phone
+          phoneOpc:currentUser.phone,
+          name:currentUser.name
         }),
       });
 

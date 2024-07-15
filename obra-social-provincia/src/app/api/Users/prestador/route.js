@@ -20,6 +20,7 @@ export async function POST(request) {
       const userId = user.id;
       const address = body.address || null;
       const phoneOpc  = body.phoneOpc || null;
+      const name = body.name
       const currentDateTime = new Date().toISOString()
       
       console.log("Matrícula:", matricula);
@@ -67,8 +68,8 @@ export async function POST(request) {
 
     
       await prisma.$executeRaw`
-          INSERT INTO Prestador (id, name, apellido, email, imageUrl, phone, phoneOpc,password, matricula, especialidad, address, updatedAt,tipo)
-          VALUES (${userId}, ${firstName}, ${lastName}, ${email}, ${imageUrl}, ${phoneNumbers[0].phoneNumber}, ${phoneOpc}, ${passwordValue}, ${matricula}, ${especialidad}, ${address},${currentDateTime}, 'Fidelizado')
+          INSERT INTO Prestador (id, name, email, imageUrl, phone, phoneOpc,password, matricula, especialidad, address, updatedAt,tipo)
+          VALUES (${userId}, ${name}, ${email}, ${imageUrl}, ${phoneNumbers[0].phoneNumber}, ${phoneOpc}, ${passwordValue}, ${matricula}, ${especialidad}, ${address},${currentDateTime}, 'Fidelizado')
       `;
       
       console.log("Perfil de usuario creado correctamente");

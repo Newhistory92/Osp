@@ -62,7 +62,6 @@ export interface Prestador  {
   id:string,
   imageUrl: string;
   name: string;
-  apellido: string;
   matricula?:string;
   descripcion: string;
   phone: string;
@@ -110,12 +109,6 @@ export interface UserCardProps {
 
 }
 
-export interface PrestadorFilter {
-  
-  id: string;
-  name: string;
-  apellido: string;
-}
 
 
 export interface PaginationButtonsProps {
@@ -203,7 +196,6 @@ export interface Notificador {
 export interface ProfileHeaderProps {
     imageUrl: string;
     name: string;
-    apellido: string;
     email?:string
 }
 

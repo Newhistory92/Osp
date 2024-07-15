@@ -66,11 +66,11 @@ const FilterEspecialidad: React.FC<FilterEspecialidadProps> = ({ prestadores, se
         const parts = parse(option.nombre, matches);
 
         return (
-          <li {...props}>
+          <li key={`${option.id}-${option.nombre}`} {...props}>
             <div>
               {parts.map((part, index) => (
                 <span
-                  key={index}
+                key={index}
                   style={{
                     fontWeight: part.highlight ? 700 : 400,
                   }}
