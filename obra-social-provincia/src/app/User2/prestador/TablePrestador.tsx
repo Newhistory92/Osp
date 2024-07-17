@@ -127,24 +127,19 @@ const Prestadores = () => {
   }, [prestadores, page, perPage]);
 ;
 
-  
 useEffect(() => {
-  const filterPrestadores = () => {
-    if (selectedType === 'Todos') {
-      console.log("Selected type is Todos");
-      setFilteredDataUser(prestadores);
-      setFilteredDataEspecialidad(prestadores);
-    } else {
-      const filtered = prestadores.filter((prestador) => prestador.tipo.toLowerCase() === selectedType.toLowerCase());
-      console.log(`Filtered prestadores: ${filtered.length} items for type ${selectedType}`);
-      setFilteredDataUser(filtered);
-      setFilteredDataEspecialidad(filtered);
-    }
-  };
 
-  console.log("Running filterPrestadores useEffect");
-  filterPrestadores();
-}, [selectedType, prestadores]);
+  if (selectedType === 'Todos') {
+    setFilteredDataUser(prestadores);
+    setFilteredDataEspecialidad(prestadores);
+  } else {
+    const filtered = prestadores.filter((prestador) => prestador.tipo.toLowerCase() === selectedType.toLowerCase());
+    setFilteredDataUser(filtered);
+    setFilteredDataEspecialidad(filtered);
+  }
+}, [prestadores, selectedType]);
+
+
 
 useEffect(() => {
   const combined = filteredDataUser.filter((prestador) =>

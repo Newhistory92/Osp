@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
                     autor: {
                         select: {
                             name: true,
-                            apellido: true
+                           
                         }
                     }
                 }
@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
                     autor: {
                         select: {
                             name: true,
-                            apellido: true
+                            
                         }
                     }
                 }

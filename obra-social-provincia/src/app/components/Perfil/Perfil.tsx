@@ -21,7 +21,6 @@ console.log("este estado global esta en el perfil",currentUser)
       <ProfileHeader 
         imageUrl={userData.imageUrl} 
         name={userData.name} 
-        apellido={userData.apellido} 
         email={userData.email} 
       />
       <div className="py-6">

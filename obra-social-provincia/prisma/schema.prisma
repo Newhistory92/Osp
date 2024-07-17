@@ -9,7 +9,7 @@ datasource db {
 
 model Afiliado {
   id             String         @id @unique
-  name           String         @db.VarChar(20)
+  name           String         @db.VarChar(50)
   email          String         @unique @db.VarChar(200)
   password       String         @db.VarChar(200)
   imageUrl       String         @db.VarChar(800)
@@ -29,7 +29,7 @@ model Afiliado {
 
 model Prestador {
   id             String         @id @unique
-  name           String         @db.VarChar(20)
+  name           String         @db.VarChar(50)
   email          String         @unique @db.VarChar(200)
   password       String         @db.VarChar(200)
   phone          String         @db.VarChar(13)
@@ -54,7 +54,7 @@ model Prestador {
 
 model Operador {
   id             String         @id @unique
-  name           String         @db.VarChar(20)
+  name           String         @db.VarChar(50)
   email          String         @unique @db.VarChar(200)
   password       String         @db.VarChar(200)
   phone          String         @db.VarChar(13)

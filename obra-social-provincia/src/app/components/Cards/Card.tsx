@@ -22,7 +22,8 @@ import RecentActorsIcon from '@mui/icons-material/RecentActors';
 import DialogSelect from './SubComponentes/DialogSelect';
 import MapComponent from "./SubComponentes/MapComponent"
 import  {getFormattedAddress} from "./SubComponentes/Maps/MapApi"
-import { setCurrentUser, setLoading} from "../../redux/Slice/userSlice";
+import { setCurrentUser} from "../../redux/Slice/userSlice";
+import {setLoading} from '@/app/redux/Slice/loading';
 import { useAppDispatch } from "../../hooks/StoreHook";
 import Description from "../Perfil/Description";
 import { Toast } from 'primereact/toast';

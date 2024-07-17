@@ -51,7 +51,6 @@ export interface NavbarState {
 
   export interface UserState {
     currentUser: UserInfo | null;
-    loading: boolean;
     errorMessage: string | null;
     successMessage:string | null;
    

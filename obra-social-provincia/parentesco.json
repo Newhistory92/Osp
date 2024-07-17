@@ -1,0 +1,47 @@
+[
+  {
+    "id": 1,
+    "Codigo": "000",
+    "Nombre": "Titular"
+  },
+  {
+    "id": 2,
+    "Codigo": "001",
+    "Nombre": "Conyuge"
+  },
+  {
+    "id": 3,
+    "Codigo": "002",
+    "Nombre": "Hijo/a"
+  },
+  {
+    "id": 4,
+    "Codigo": "003",
+    "Nombre": "Voluntarios"
+  },
+  {
+    "id": 5,
+    "Codigo": "004",
+    "Nombre": "Adherente"
+  },
+  {
+    "id": 6,
+    "Codigo": "005",
+    "Nombre": "Concubina/o"
+  },
+  {
+    "id": 7,
+    "Codigo": "006",
+    "Nombre": "Ex-Conyuge"
+  },
+  {
+    "id": 8,
+    "Codigo": "007",
+    "Nombre": "Guardia Pre-Adoptiva"
+  },
+  {
+    "id": 9,
+    "Codigo": "008",
+    "Nombre": "Hijo Discapacitado"
+  }
+]

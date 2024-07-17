@@ -3,8 +3,9 @@ import React, { useState, useEffect} from 'react';
 import { Typography, Input, Button, Alert } from '@mui/material';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from "../../hooks/StoreHook";
-import { setPartialCurrentUser,setCurrentUser, setLoading, setErrorMessage,setSuccessMessage,clearCurrentUser } from "../../redux/Slice/userSlice";
+import { setPartialCurrentUser,setCurrentUser,  setErrorMessage,setSuccessMessage,clearCurrentUser } from "../../redux/Slice/userSlice";
 import { PartialUserInfo } from '@/app/interfaces/interfaces';
+import {setLoading} from '@/app/redux/Slice/loading';
 import Loading from '@/app/components/Loading/loading';
 
 
@@ -12,7 +13,8 @@ const TypeOperador = () => {
   const [numeroOperador, setNumeroOperador] = useState<string>('');
   const [isoperadorValid, setIsoperadorValid] = useState(false);
   const dispatch = useAppDispatch();
-  const { currentUser, loading, errorMessage,successMessage } = useAppSelector((state) => state.user);
+  const { currentUser, errorMessage,successMessage } = useAppSelector((state) => state.user);
+  const { loading} = useAppSelector((state) => state.loading);
 
  console.log(currentUser)
 

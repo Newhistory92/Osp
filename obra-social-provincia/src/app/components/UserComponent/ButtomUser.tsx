@@ -4,7 +4,8 @@ import { ClerkLoading } from '@clerk/nextjs';
 import Image from 'next/image';
 import Link from 'next/link';
 import { useAppDispatch } from "../../hooks/StoreHook";
-import { clearCurrentUser,setLoading } from '../../redux/Slice/userSlice';
+import { clearCurrentUser } from '../../redux/Slice/userSlice';
+import {setLoading} from '@/app/redux/Slice/loading';
 
 const ButtonUser = () => {
   const { user } = useUser();
@@ -23,7 +24,7 @@ const ButtonUser = () => {
   };
 
   const handleLinkClick = () => {
-    dispatch(setLoading(true));
+   dispatch(setLoading(true));
   };
 
   if (!user) {

@@ -3,7 +3,8 @@ import React, { useState, useEffect } from 'react';
 import { Typography, Input, Button, Alert } from '@mui/material';
 import Link from 'next/link';
 import { useAppSelector, useAppDispatch } from "../../hooks/StoreHook";
-import { setPartialCurrentUser,setCurrentUser, setLoading, setErrorMessage,setSuccessMessage,clearCurrentUser } from "../../redux/Slice/userSlice";
+import { setPartialCurrentUser,setCurrentUser, setErrorMessage,setSuccessMessage,clearCurrentUser } from "../../redux/Slice/userSlice";
+import {setLoading} from '@/app/redux/Slice/loading';
 import { PartialUserInfo } from '@/app/interfaces/interfaces';
 import Loading from '@/app/components/Loading/loading';
 
@@ -11,7 +12,8 @@ import Loading from '@/app/components/Loading/loading';
 const TypeAfiliado = () => {
   const [dni, setDni] = useState<string>('');
   const dispatch = useAppDispatch();
-  const { currentUser, loading, errorMessage,successMessage } = useAppSelector((state) => state.user);
+  const { currentUser, errorMessage,successMessage } = useAppSelector((state) => state.user);
+  const { loading} = useAppSelector((state) => state.loading);
   const [isDniValid, setIsDniValid] = useState(false);
 
   useEffect(() => {
@@ -21,8 +23,8 @@ const TypeAfiliado = () => {
 
 
   useEffect(() => {
+    dispatch(setLoading(true));
     const verifyUser = async () => {
-      dispatch(setLoading(true));
       try {
         const response = await fetch('/api/Users/afiliado', {
           method: 'GET',

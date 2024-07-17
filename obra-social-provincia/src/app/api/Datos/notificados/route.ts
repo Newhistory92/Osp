@@ -10,7 +10,6 @@ export async function GET(req: NextRequest) {
 
         console.log('autorId:', autorId);
         console.log('receptorId:', receptorId);
-        
         if (!autorId && !receptorId) {
             return NextResponse.json({ error: "autorId o receptorId son necesarios" }, { status: 400 });
         }
@@ -18,39 +17,25 @@ export async function GET(req: NextRequest) {
         let notifications;
 
         if (autorId) {
-            notifications = await prisma.notificacion.findMany({
-                where: {
-                    autorId: autorId,
-                },
-                orderBy: { createdAt: 'desc' },
-                include: {
-                  autor: {
-                        select: {
-                            name: true,
-                            apellido: true,
-                           
-                        }
-                    },
-                    receptor: {
-                            select: {
-                                name: true,
-                                apellido: true,
-                                dni:true,
-                               
-                            }
-                        }
-                    
-                }
-                
-            });
-            
+            const result = await prisma.$queryRaw`
+                SELECT n.*, a.name as autorName, r.name as receptorName,  r.dni as receptorDni
+                FROM Notificacion n
+                JOIN Operador a ON n.autorId = a.id
+                JOIN Afiliado r ON n.receptorId = r.id
+                WHERE n.autorId = ${autorId}
+                ORDER BY n.createdAt DESC
+            `;
+            notifications = result;
         } else if (receptorId) {
-            notifications = await prisma.notificacion.findMany({
-                where: {
-                    receptorId: receptorId,
-                },
-                orderBy: { createdAt: 'desc' },
-            });
+            const result = await prisma.$queryRaw`
+                SELECT n.*, a.name as autorName, r.name as receptorName, r.dni as receptorDni
+                FROM Notificacion n
+                JOIN Operador a ON n.autorId = a.id
+                JOIN Afiliado r ON n.receptorId = r.id
+                WHERE n.receptorId = ${receptorId}
+                ORDER BY n.createdAt DESC
+            `;
+            notifications = result;
         }
 
         return NextResponse.json(notifications, { status: 200 });
@@ -61,18 +46,25 @@ export async function GET(req: NextRequest) {
 }
 
 
+
+
 export async function PUT(req: NextRequest) {
     console.log("Request received");
     
     try {
         const { id, status } = await req.json();
         console.log("Parsed request body:", { id, status });
-        
+
         // Actualiza el estado de la notificación
-        const updatedNotification = await prisma.notificacion.update({
-            where: { id },
-            data: { status },
-        });
+        await prisma.$executeRaw`
+            UPDATE Notificacion
+            SET status = ${status}
+            WHERE id = ${id}
+        `;
+
+        const updatedNotification = await prisma.$queryRaw`
+            SELECT * FROM Notificacion WHERE id = ${id}
+        `;
 
         console.log("Notification updated:", updatedNotification);
 

@@ -3,7 +3,6 @@ import { UserState, UserInfo, PartialUserInfo } from '@/app/interfaces/interface
 
 const initialState: UserState = {
   currentUser: null,
-  loading: false,
   errorMessage: null,
   successMessage: null,
  
@@ -33,10 +32,7 @@ const userSlice = createSlice({
         
       };
     },
-    setLoading(state, action: PayloadAction<boolean>) {
-      // console.log("setLoading action dispatched with payload:", action.payload);
-      state.loading = action.payload;
-    },
+  
     setErrorMessage(state, action: PayloadAction<string | null>) {
       // console.log("setErrorMessage action dispatched with payload:", action.payload);
       state.errorMessage = action.payload;
@@ -51,6 +47,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { setCurrentUser, setPartialCurrentUser, setLoading, setErrorMessage, setSuccessMessage,  clearCurrentUser } = userSlice.actions;
+export const { setCurrentUser, setPartialCurrentUser, setErrorMessage, setSuccessMessage,  clearCurrentUser } = userSlice.actions;
 
 export default userSlice.reducer;

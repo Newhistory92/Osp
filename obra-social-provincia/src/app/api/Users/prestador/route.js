@@ -56,10 +56,9 @@ export async function POST(request) {
       }
 
       // Si no se cumplen las condiciones anteriores, crear el nuevo usuario
-      const { firstName, lastName, imageUrl, phoneNumbers, passwordEnabled } = user;
+      const {  imageUrl, phoneNumbers, passwordEnabled } = user;
       const passwordValue = passwordEnabled ? 'true' : 'false'; // Convertir el booleano a string
-      console.log("Nombre:", firstName);
-      console.log("Apellido:", lastName);
+  
       console.log("Imagen de perfil:", imageUrl);
       console.log("Número de teléfono:", phoneNumbers[0].phoneNumber);
       console.log("¿Contraseña habilitada?", passwordEnabled);

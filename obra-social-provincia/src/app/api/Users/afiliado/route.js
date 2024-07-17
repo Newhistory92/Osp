@@ -12,93 +12,71 @@ export async function POST(request) {
         const dni = body.dni;
         const dependencia = body.dependencia;
         const email = user.emailAddresses[0].emailAddress;
+        const currentDateTime = new Date().toISOString()
         const userId = user.id;
         const name= body.name
      
         // Verificar si el usuario ya está autenticado en alguna tabla
         const isAuthenticated = await checkUserAuthentication(userId, 'afiliado');
         console.log(isAuthenticated.status,isAuthenticated.message )
-        if (isAuthenticated === false) {
+        if (isAuthenticated.status == 200) {
             return NextResponse.json({ status: 404, message: isAuthenticated.message });
         }
 
-        // Verificar si el DNI ya está asociado a un usuario en la base de datos
-        const existingUserWithDNI = await prisma.afiliado.findFirst({
-            where: {
-                dni: dni
-            }
-        });
-
-        if (existingUserWithDNI) {
-            return NextResponse.json({ status: 400, message: `El DNI N°: ${existingUserWithDNI.dni} ya está asociado a un Afiliado` });
-        }
-
         // Verificar si el usuario ya existe en la base de datos por su email
-        const existingUserWithEmail = await prisma.afiliado.findFirst({
-            where: {
-                email: email
-            }
-        });
+      const existingUserWithEmail = await prisma.$queryRaw`
+      SELECT * FROM Afiliado WHERE email = ${email}
+  `;
+  console.log("Usuario existente con correo electrónico:", existingUserWithEmail);
 
-        if (existingUserWithEmail) {
-            return NextResponse.json({ status: 400, message: `El Correo Electrónico ${existingUserWithEmail.email} ya está asociado a un Afiliado` });
-        }
+  if (existingUserWithEmail.length > 0) {
+      return NextResponse.json({ status: 400, message: `El Correo Electrónico ${existingUserWithEmail[0].email} ya está asociado a un Prestador` });
+  }
 
-        // Insertar el nuevo usuario en la base de datos
-        const { firstName, lastName, emailAddresses, imageUrl, phoneNumbers, passwordEnabled } = user;
-        const passwordValue = passwordEnabled ? 'true' : 'false'; // Convertir el booleano a string
-        const newAfiliado = await prisma.afiliado.create({
-            data: {
-                id: userId,
-                name: name,
-                email: emailAddresses[0].emailAddress,
-                imageUrl: imageUrl,
-                phone: phoneNumbers[0].phoneNumber,
-                password: passwordValue,
-                dni: dni,
-                dependencia:dependencia,
-                address:null,
-                coordinatesLat:null,
-                coordinatesLon:null,
-            }
-        });
-        
-        console.log("Perfil de usuario creado correctamente:", newAfiliado);
+   // Insertar el nuevo usuario en la base de datos
+   const { emailAddresses, imageUrl, phoneNumbers, passwordEnabled } = user;
+   const passwordValue = passwordEnabled ? 'true' : 'false'; // Convertir el booleano a string
+   await prisma.$executeRaw`
+       INSERT INTO Afiliado (id, name, email, imageUrl, phone, password, dni, dependencia, address, coordinatesLat, coordinatesLon,updatedAt)
+       VALUES (${userId}, ${name}, ${emailAddresses[0].emailAddress}, ${imageUrl}, ${phoneNumbers[0].phoneNumber}, ${passwordValue}, ${dni}, ${dependencia}, NULL, NULL, NULL,${currentDateTime})
+   `;
+   
+   const newAfiliado = await prisma.$queryRaw`
+       SELECT * FROM Afiliado WHERE id = ${userId}
+   `;
+ 
+ console.log("Perfil de usuario creado correctamente:", newAfiliado[0]);
 
-        return NextResponse.json({ status: 200, message: "Perfil del Afiliado fue creado con éxito.", newAfiliado });
-    } catch (error) {
-        console.error("Error al crear el perfil del Afiliado:", error);
-        return NextResponse.json({ status: 500, message: `Error al crear el perfil del Afiliado: ${error.message}` });
-    }
+ return NextResponse.json({ status: 200, message: "Perfil del Afiliado fue creado con éxito.", newAfiliado: newAfiliado[0] });
+} catch (error) {
+ console.error("Error al crear el perfil del Afiliado:", error);
+ return NextResponse.json({ status: 500, message: `Error al crear el perfil del Afiliado: ${error.message}` });
 }
+}
+
+
+
+
 
 export async function GET(request) {
     try {
         const user = await currentUser();
         if (!user) {
-            return NextResponse.json({ status: 407, message: "Afiliado no autenticado. Redirigiendo al inicio de sesión." });
+            return NextResponse.json({ status: 401, message: "Afiliado no autenticado. Redirigiendo al inicio de sesión." });
         }
-        
-        // Obtener el ID del usuario autenticado
         const userId = user.id;
-        
         // Verificar si el ID del usuario está en la base de datos
         const isAuthenticatedAndInDatabase = await checkUserAuthentication(userId, 'afiliado');
         if (isAuthenticatedAndInDatabase.status === 200) {
-            // Obtener toda la información del usuario desde la base de datos
-            const users = await prisma.afiliado.findMany({
-                orderBy: { id: 'asc' } 
-            });
-
-            // Verificar si se encontró la información del usuario
-            if (!users) {
+            const users = await prisma.$queryRaw`
+                SELECT * FROM Afiliado
+            `;
+            if (users.length === 0) {
                 return NextResponse.json({ status: 404, message: "Usuario no encontrado en la base de datos." });
             }
-
-            // Devolver toda la información del usuario
             return NextResponse.json({ status: 200, users });
         } else {
-            return NextResponse.json ({ status: 402, message: isAuthenticatedAndInDatabase.message });
+            return NextResponse.json ({ status: 402, message: "Afiliado no encontrado en la base de datos." });
         }
     } catch (error) {
         console.error("Error al verificar la autenticación del usuario:", error);
@@ -108,46 +86,50 @@ export async function GET(request) {
 
     
 
+
 export async function PUT(request) {
     try {
-        const user = await currentUser();
         const body = await request.json();
-        const motivo = body.motivo;
-        const autorId = user.id; // El ID del usuario autenticado
-        const matriculaPrestador = body.matriculaPrestador;
-
-
-        // Verificar si el prestador existe en la base de datos
-        const prestador = await prisma.prestador.findUnique({
-            where: {
-                matricula: matriculaPrestador
-            }
-        });
-        if (!prestador) {
-            return NextResponse.json({ status: 404, message: 'Prestador no encontrado' });
+        const userId = body.id;
+        console.log(userId);
+  
+        if (!userId) {
+            return NextResponse.json({ status: 400, message: "ID de usuario no proporcionado." });
         }
+  
+        // Datos a actualizar
+        const dataToUpdate = body;
 
-        // Crear la nueva denuncia asociada al afiliado y al prestador
-        const nuevaDenuncia = await prisma.denuncia.create({
-            data: {
-                motivo,
-                autorId,
-                autor: {
-                    connect: { id: autorId }
-                },
-                prestador: {
-                    connect: { id: prestador.id }
-                }
-            }
-        });
-
-        console.log("Denuncia creada correctamente:", nuevaDenuncia);
-
-        return NextResponse.json({ status: 200, message: "Denuncia creada exitosamente", nuevaDenuncia });
+       
+  
+        // Definir los datos de actualización con campos que tienen valores definidos en la solicitud
+        const updateFields = [];
+        
+        if (dataToUpdate.addressInfo && dataToUpdate.addressInfo.address !== null) {
+            updateFields.push(`address = '${dataToUpdate.addressInfo.address}'`);
+        }
+  
+        // Verificar si updateFields está vacío
+        if (updateFields.length === 0) {
+            return NextResponse.json({ status: 400, message: "No se proporcionaron datos para actualizar." });
+        }
+  
+        const updateQuery = `
+            UPDATE Prestador
+            SET ${updateFields.join(', ')}
+            WHERE id = '${userId}'
+        `;
+        console.log(updateQuery);
+  
+        // Ejecutar la consulta de actualización
+        await prisma.$executeRawUnsafe(updateQuery);
+  
+        // Responder con el prestador actualizado
+        return NextResponse.json({ status: 200, message: "Perfil del Prestador fue actualizado con éxito." });
     } catch (error) {
-        console.error("Error al procesar la solicitud PUT:", error);
-        return NextResponse.json({ status: 500, message: "Error interno del servidor" });
+        // Manejar errores
+        console.error('Error al actualizar el prestador:', error);
+        return NextResponse.json({ status: 500, message: `Error al actualizar el prestador: ${error.message}` });
     }
-}
-
-
+  }
+  

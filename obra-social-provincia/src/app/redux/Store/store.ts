@@ -3,6 +3,7 @@ import userReducer from '../Slice/userSlice';
 import navbarReducer from '../Slice/navbarSlice';
 import navbarVerticalReducer from '../Slice/navbarVerticalSlice';
 import createWebStorage from "redux-persist/lib/storage/createWebStorage";
+import loadingReducer from "../Slice/loading"
 import {
   persistStore,
   persistReducer,
@@ -37,13 +38,14 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  blacklist: ['navbar','navbarvertical'],
+  blacklist: ['navbar','navbarvertical,loading'],
 };
 
 const rootReducer = combineReducers({
   user: userReducer,
   navbar: navbarReducer,
-  navbarvertical:navbarVerticalReducer
+  navbarvertical:navbarVerticalReducer,
+  loading:loadingReducer
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducer);
