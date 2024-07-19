@@ -65,6 +65,7 @@ const TypeAfiliado = () => {
     }
   };
 
+  
   useEffect(() => {
     dispatch(setLoading(true));
     if (dni.length === 8) {
@@ -75,7 +76,7 @@ const TypeAfiliado = () => {
                 console.log('API Response Status:', response.status);
 
                 if (!response.ok) {
-                    throw new Error('Prestador not found');
+                    throw new Error('Afiliado not found');
                 }
                 const afiliado = await response.json();
                 console.log(afiliado);
@@ -84,29 +85,39 @@ const TypeAfiliado = () => {
                     return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
                 };
 
-                if (afiliado.Fechabaja !== '1900-01-01T00:00:00.000Z') {
-                    dispatch(setErrorMessage(`Afiliado Dado de Baja por ${capitalizeWords(afiliado.razonBaja) || 'Sin razón específica'}`));
+                // If it's an array, process each member
+                const afiliados = Array.isArray(afiliado) ? afiliado : [afiliado];
+
+                // Check if any afiliado has 'Fechabaja' not equal to '1900-01-01T00:00:00.000Z'
+                const isBaja = afiliados.some(af => af.Fechabaja !== '1900-01-01T00:00:00.000Z');
+                if (isBaja) {
+                    const bajaAfiliado = afiliados.find(af => af.Fechabaja !== '1900-01-01T00:00:00.000Z');
+                    dispatch(setErrorMessage(`Afiliado Dado de Baja por ${capitalizeWords(bajaAfiliado.razonBaja) || 'Sin razón específica'}`));
                     dispatch(clearCurrentUser());
                     return;
                 }
 
-                if (afiliado.CodBaja.trim() !== '') {
-                    dispatch(setErrorMessage(`Afiliado Dado de Baja por ${capitalizeWords(afiliado.razonBaja) || 'Sin razón específica'}`));
+                // Check if any afiliado has 'CodBaja' not empty
+                const hasCodBaja = afiliados.some(af => af.CodBaja.trim() !== '');
+                if (hasCodBaja) {
+                    const codBajaAfiliado = afiliados.find(af => af.CodBaja.trim() !== '');
+                    dispatch(setErrorMessage(`Afiliado Dado de Baja por ${capitalizeWords(codBajaAfiliado.razonBaja) || 'Sin razón específica'}`));
                     dispatch(clearCurrentUser());
                     return;
                 }
 
+                // Ensure newCurrentUser is a single object for setPartialCurrentUser
                 const newCurrentUser: PartialUserInfo = {
-                  id: afiliado.id,
-                  name: capitalizeWords(afiliado.Nombre),
-                  dni: afiliado.Codigo,
-                  dependencia: capitalizeWords(afiliado.dependencia),
-                  matricula: '',
-                  especialidad: '',
-                  operador: '',
-                  tipo: '',
-                  address: null,
-                  phone: null
+                    id: afiliados[0].id,
+                    name: capitalizeWords(afiliados[0].Nombre),
+                    dni: afiliados[0].Codigo,
+                    dependencia: capitalizeWords(afiliados[0].dependencia),
+                    matricula: '',
+                    especialidad: '',
+                    operador: '',
+                    tipo: '',
+                    address: null,
+                    phone: null
                 };
 
                 console.log(newCurrentUser);
@@ -128,7 +139,7 @@ const TypeAfiliado = () => {
         dispatch(setLoading(false));
     }
 }, [dni, dispatch]);
-   
+
   const handleConfirm = async () => {
     
     if (!currentUser) {

@@ -56,6 +56,21 @@ export interface NavbarState {
    
   }
 
+  export interface GrupData {
+    VTOParcial: string | null;
+    Motivo: string;
+    FecVenciCarnet: string;
+    Codigo: string;
+    CarnetVencimiento: string;
+    FecNac: string;
+    FecAlt: string;
+    Fechabaja: string;
+    razonBaja: string;
+    CarnetVencimientoParcial: string;
+    Parentesco: string;
+    Nombre: string;
+  }
+
 export interface Prestador  {
   denuncias: string;
   id:string,

@@ -17,7 +17,7 @@
   {
     "id": 4,
     "Codigo": "003",
-    "Nombre": "Voluntarios"
+    "Nombre": "Voluntario"
   },
   {
     "id": 5,
@@ -42,6 +42,6 @@
   {
     "id": 9,
     "Codigo": "008",
-    "Nombre": "Hijo Discapacitado"
+    "Nombre": "Hijo Con Discapacidad"
   }
 ]

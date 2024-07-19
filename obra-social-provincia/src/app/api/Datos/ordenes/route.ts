@@ -10,8 +10,8 @@ export const GET = async (req: NextRequest) => {
     try {
         const pool = await poolPromise;
         const result = await pool.request()
-            .input('consultaId', sql.VarChar(8), numerodni)
-            .query('SELECT * FROM ExcelenciaDigital.dbo.OrdenesConsulta WHERE id = @consultaId');
+            .input('consultadni', sql.VarChar(8), numerodni)
+            .query('SELECT * FROM ExcelenciaDigital.dbo.FacturacionDetalle WHERE Documento = @consultadni');
         
         if (result.recordset.length === 0) {
             return NextResponse.json({ error: 'Orden de consulta no encontrada' }, { status: 404 });

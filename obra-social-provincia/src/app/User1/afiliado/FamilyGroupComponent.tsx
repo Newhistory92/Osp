@@ -1,33 +1,40 @@
-import * as React from 'react';
-import List from '@mui/material/List';
+import React, { useState } from "react";
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
-import { useAppSelector,useAppDispatch } from "../../hooks/StoreHook"
-import {setLoading} from '@/app/redux/Slice/loading';
+import { useAppSelector, useAppDispatch } from "../../hooks/StoreHook";
+import { setLoading } from '@/app/redux/Slice/loading';
 import Loading from '@/app/components/Loading/loading';
-import {  UserInfo} from '@/app/interfaces/interfaces';
-import parentesco from "../../../../parentesco.json"
-import { format, parseISO, isValid } from 'date-fns';
+import { UserInfo,GrupData } from '@/app/interfaces/interfaces';
+import parentesco from "../../../../parentesco.json";
+import { format, parseISO, isValid, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
 import { Accordion, AccordionTab } from 'primereact/accordion';
-
-function formatFecha(fecha: string | undefined): string {
+import { Dialog } from 'primereact/dialog';
+import { Button } from 'primereact/button';
+import Image from "next/image";
+import IcontComentario from "../../../../public/icons-comentarios.png"
+function formatFecha(fecha: string | null): string {
   if (!fecha) return 'Fecha inválida';
   const parsedFecha = parseISO(fecha);
-  return fecha === '1900-01-01T00:00:00.000Z' 
-    ? 'Permanente' 
-    : isValid(parsedFecha) 
-      ? format(parsedFecha, 'dd/MM/yyyy', { locale: es }) 
-      : 'Fecha inválida';
+  return isValid(parsedFecha)
+    ? format(addDays(parsedFecha, 1), 'dd/MM/yyyy', { locale: es })
+    : 'Fecha inválida';
 }
 
+
+function capitalizeWords(str: string) {
+  return str ? str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase()) : '';
+}
+
+
 export default function FamilyGroup() {
-  const [grupsData, setGrupsData] = React.useState<any>(null);
+  const [grupsData, setGrupsData] = React.useState<any>([]);
   const familyGroupOpen = useAppSelector(state => state.navbarvertical.familyGroupOpen);
+  const [modalVisible, setModalVisible] = useState(false);
   const currentUser = useAppSelector((state: { user: { currentUser: UserInfo | null; }; }) => state.user.currentUser);
   const dispatch = useAppDispatch();
 
@@ -40,17 +47,17 @@ export default function FamilyGroup() {
   const fetchGrup = React.useCallback(async () => {
     dispatch(setLoading(true));
     try {
-      const response = await fetch(`/api/Datos/afiliado?dni=${userData.dni}`);
+      const response = await fetch(`/api/Datos/afiliado?doctit=${ userData.dni}`);
       const data = await response.json();
       console.log("respuesta del backend", data);
-      setGrupsData(data);
+      setGrupsData(Array.isArray(data) ? data : [data]);
     } catch (error) {
       console.error("Error al obtener las órdenes:", error);
-      setGrupsData(null);
+      setGrupsData([]);
     } finally {
       dispatch(setLoading(false));
     }
-  }, [userData.dni, dispatch]);
+  }, [ userData.dni, dispatch]);
 
   React.useEffect(() => {
     if (familyGroupOpen) {
@@ -58,72 +65,88 @@ export default function FamilyGroup() {
     }
   }, [familyGroupOpen, fetchGrup]);
 
-  const renderGrupsDataInfo = (grup: any) => {
-    const capitalizeWords = (str: string) => {
-      return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
-  };
-    const carnetVencimiento = grup.CarnetVencimiento === '1900-01-01T00:00:00.000Z' ? 'Permanente' : formatFecha(grup.CarnetVencimiento);
+  const renderGrupsDataInfo = (grup: GrupData) => {
+    const carnetVencimiento = grup.FecVenciCarnet === '9999-12-31T00:00:00.000Z' ? 'Permanente' : formatFecha(grup.FecVenciCarnet);
     const fecNac = formatFecha(grup.FecNac);
     const fecAlt = formatFecha(grup.FecAlt);
-    const fechabaja = grup.Fechabaja === '1900-01-01T00:00:00.000Z' ? 'Sin baja' : formatFecha(grup.Fechabaja);
-    const parentescoNombre = parentesco.find(p => p.Codigo === grup.Parentesco)?.Nombre || 'Desconocido';
-    const carnetVencimientoParcial = grup.CarnetVencimientoParcial !== '1900-01-01T00:00:00.000Z' ? `Recuerde regularizar su situación semanas antes de la fecha: ${formatFecha(grup.CarnetVencimientoParcial)}` : '';
-    const fecEmbara = grup.FecEmbara !== '1900-01-01T00:00:00.000Z' ? `Fecha de embarazo: ${formatFecha(grup.FecEmbara)}` : '';
-    const fecParto = grup.FecParto !== '1900-01-01T00:00:00.000Z' ? `Fecha de parto: ${formatFecha(grup.FecParto)}` : '';
+    const fechabaja = grup.Fechabaja && grup.Fechabaja !== '1900-01-01T00:00:00.000Z' ? formatFecha(grup.Fechabaja) : null;
+    const bajaMessage = fechabaja ? `Razón: ${capitalizeWords(grup.razonBaja)}` : '';
+  
+    const carnetVencimientoParcial = grup.VTOParcial && grup.VTOParcial !== '1900-01-01T00:00:00.000Z'
+      
+  
 
-    
-    
+  
+   
+  
     return (
       <div key={grup.Codigo}>
-        <Typography sx={{ display: 'inline' }} component="span" variant="body2" color="text.primary">
-          <strong>Afiliado:</strong> {parentescoNombre} <br />
+        <Typography sx={{ display: 'inline' }} component="span" variant="subtitle2"  color="text.primary">
           <strong>DNI:</strong> {grup.Codigo}
         </Typography>
-        <Divider variant="inset"  />
         <br />
-        <strong>Reparticion Publica:</strong> {currentUser.dependencia} <br />
+        <strong>Repartición Pública:</strong> {currentUser.dependencia} <br />
         <strong>Fecha de Alta:</strong> {fecAlt} <br />
-        <Divider variant="inset"  />
         <strong>Fecha de Nacimiento:</strong> {fecNac} <br />
-        <strong>Fecha de Baja:</strong> {fechabaja} <br />
-        {carnetVencimientoParcial && (
+        {fechabaja && (
           <>
-            <strong>{carnetVencimientoParcial}</strong> <br />
-          </>
-        )}
-        {fecEmbara && (
-          <>
-            <strong>{fecEmbara}</strong> <br />
-          </>
-        )}
-        {fecParto && (
-          <>
-            <strong>{fecParto}</strong> <br />
+            <Divider variant="inset" component="div" />
+            <strong>Fecha de Baja:</strong> {fechabaja}  &nbsp;&nbsp;
+            <strong>{bajaMessage}</strong> <br />
           </>
         )}
         <Divider variant="inset" component="div" />
-        <strong>Vencimiento del Carnet:</strong> {carnetVencimiento} <br />
+        <strong>Carnet Vencimiento:</strong> {carnetVencimiento} <br />
+        {carnetVencimientoParcial && (
+          <>
+            <Divider variant="inset" component="div" />
+            <div className="flex items-center mt-2">
+          <Image width="32" height="32" src={IcontComentario} alt="comments" />
+          <Button
+            label={`Usted Posee un Vencimiento Parcial- Recuerde regularizar su situación días antes de la fecha: ${formatFecha(grup.VTOParcial)}`}
+            severity="warning"
+            text
+            raised
+            link
+            onClick={() => setModalVisible(true)}
+          />
+        </div>
+            <Dialog header="Motivo" visible={modalVisible} onHide={() => setModalVisible(false)}
+              style={{ width: '50vw' }} breakpoints={{ '960px': '75vw', '641px': '100vw' }}>
+              <p>{grup.Motivo}</p>
+            </Dialog>
+            <br />
+          </> )}
+           <footer>
+           <Typography variant="caption" color="textSecondary" align="center">
+             Cualquier información que no coincida o no se encuentre actualizada debe acercarse por Afiliaciones presencialmente.
+           </Typography>
+         </footer>
+        
       </div>
     );
   };
-
+  
   return (
     <div className="card">
       <Accordion>
-        {grupsData && (
-          <AccordionTab header={grupsData.Nombre}>
+        {grupsData.map((grupData: GrupData) => (
+          <AccordionTab key={grupData.Codigo} header={grupData.Nombre}>
             <ListItem alignItems="flex-start">
               <ListItemAvatar>
                 <Avatar />
               </ListItemAvatar>
               <ListItemText
-                primary={parentesco.find(p => p.Codigo === grupsData.Parentesco)?.Nombre === 'Titular' ? 'Afiliado Titular' : 'Afiliado Indirecto'}
-                secondary={renderGrupsDataInfo(grupsData)}
+                primary={
+                  parentesco.find(p => p.Codigo === grupData.Parentesco)?.Nombre === 'Titular'
+                    ? <Typography variant="h6" color="textPrimary" component="strong">Afiliado Titular</Typography>
+                    : <Typography variant="h6" color="textPrimary" component="strong">Afiliado Indirecto ({parentesco.find(p => p.Codigo === grupData.Parentesco)?.Nombre || 'Desconocido'})</Typography>
+                }
+                secondary={renderGrupsDataInfo(grupData)}
               />
             </ListItem>
           </AccordionTab>
-        )}
+        ))}
       </Accordion>
     </div>
-  );
-}
+  );}

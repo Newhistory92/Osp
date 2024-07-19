@@ -33,7 +33,7 @@ const DefaultDashboardLayout: React.FC = () => {
     dialisisOpen,
   } = useAppSelector(state => state.navbarvertical);
   const { loading} = useAppSelector((state) => state.loading);
-  console.log( loading)
+
   const currentUser = useAppSelector(state => state.user.currentUser);
   let userRole;
 

@@ -11,7 +11,9 @@ const Ordenes = () => {
     const [ordenesData, setOrdenesData] = useState<OrdenData[]>([]);
     const ordenes = useAppSelector(state => state.navbarvertical);
     const currentUser = useAppSelector((state: { user: { currentUser: UserInfo | null; }; }) => state.user.currentUser);
-    console.log("este estado global esta en el ordenes",currentUser)
+    const dispatch = useAppDispatch(); // Si necesitas despachar alguna acción
+
+
       if (!currentUser) {
         return <div><Loading/></div>;
       }
@@ -20,33 +22,32 @@ const Ordenes = () => {
       const userData = Array.isArray(currentUser) ? currentUser[0] : currentUser;
     
 
-    console.log( currentUser)
 
-  
-    useEffect(() => {
+
+      useEffect(() => {
         const fetchOrdenes = async () => {
-         setLoading(true);
+            setLoading(true);
             try {
-                const response = await fetch(`/api/Datos/ordenes?dni=${userData.dni}`);
+                const response = await fetch(`/api/Datos/ordenes?dni=${ userData.dni}`);
                 const data = await response.json();
-                console.log("respuesta del backend",data)
+                console.log(data)
                 setOrdenesData(data);
             } catch (error) {
                 console.error("Error al obtener las órdenes:", error);
             } finally {
                 setLoading(false);
             }
-            if (ordenes) {
-                fetchOrdenes();
-            }
         };
 
-    }, [ordenes, userData.dni]);
+        if (ordenes) {
+            fetchOrdenes();
+        }
+    }, [ordenes,  userData.dni]);
 
     return (
         <div>
             
-                <CarouselDefault ordenes={ordenesData} />
+                {/* <CarouselDefault ordenes={ordenesData} /> */}
            
         </div>
     );

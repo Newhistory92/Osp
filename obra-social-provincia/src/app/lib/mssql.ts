@@ -2,8 +2,8 @@
 import sql from 'mssql';
 
 const config = {
-  user: 'emi',
-  password: 'Pelotin+2178',
+  user: 'prueba23',
+  password: 'Q1Tp2aXiMjN1*23',
   server: '10.25.1.103',
   // database: 'ObraSocial',
   options: {
