@@ -159,14 +159,25 @@ export interface PropsNavbarVertical {
 }
 
 export interface OrdenData {
-  numeroOrden: number;
-  fechaUso: string;
-  nombreMedico: string;
-  apellidoMedico: string;
-  especialidad: string;
-  nombreAfiliado: string;
-  numeroPrestador: number;
-  tipoBono: string;
+  IdFacturacion:string;
+  Cantidad: number;
+  EspecialidadEfector: string;
+  NombrePractica: string;
+  Nombre: string;
+  NombreEfector: string;
+  FechaEfectua: string;
+  Numero:string;
+  Efector:string
+}
+export interface DenunciaProps {
+    closeModal: () => void;
+    NombreEfector: string;
+    EspecialidadEfector: string;
+    NombrePractica: string;
+    FechaEfectua: string;
+    IdFacturacion:string;
+    Efector:string
+    onSuccess: () => void;
 }
 
 

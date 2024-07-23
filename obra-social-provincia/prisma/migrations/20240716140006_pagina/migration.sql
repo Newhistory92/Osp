@@ -97,7 +97,7 @@ CREATE TABLE [dbo].[Denuncia] (
     [id] INT NOT NULL IDENTITY(1,1),
     [motivo] TEXT NOT NULL,
     [autorId] NVARCHAR(1000) NOT NULL,
-    [prestadorId] NVARCHAR(1000) NOT NULL,
+    [prestadorId] NVARCHAR(1000)  NULL,
     [status] NVARCHAR(1000) NOT NULL CONSTRAINT [Denuncia_status_df] DEFAULT 'Nuevo',
     [createdAt] DATETIME2 NOT NULL CONSTRAINT [Denuncia_createdAt_df] DEFAULT CURRENT_TIMESTAMP,
     [updatedAt] DATETIME2 NOT NULL,

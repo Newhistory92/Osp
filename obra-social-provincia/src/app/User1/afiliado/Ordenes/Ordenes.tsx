@@ -13,7 +13,7 @@ const Ordenes = () => {
     const currentUser = useAppSelector((state: { user: { currentUser: UserInfo | null; }; }) => state.user.currentUser);
     const dispatch = useAppDispatch(); // Si necesitas despachar alguna acción
 
-
+    console.log(ordenesData)
       if (!currentUser) {
         return <div><Loading/></div>;
       }
@@ -23,31 +23,29 @@ const Ordenes = () => {
     
 
 
-
       useEffect(() => {
         const fetchOrdenes = async () => {
-            setLoading(true);
-            try {
-                const response = await fetch(`/api/Datos/ordenes?dni=${ userData.dni}`);
-                const data = await response.json();
-                console.log(data)
-                setOrdenesData(data);
-            } catch (error) {
-                console.error("Error al obtener las órdenes:", error);
-            } finally {
-                setLoading(false);
+            if (ordenes && userData.dni) {
+                dispatch(setLoading(true));
+                try {
+                    const response = await fetch(`/api/Datos/ordenes?dni=${ userData.dni}`);
+                    const data = await response.json();
+                    setOrdenesData(data);
+                } catch (error) {
+                    console.error('Error fetching ordenes:', error);
+                } finally {
+                    dispatch(setLoading(false));
+                }
             }
         };
-
-        if (ordenes) {
-            fetchOrdenes();
-        }
-    }, [ordenes,  userData.dni]);
+        fetchOrdenes();
+    }, [ordenes, userData.dni, dispatch]);
+     
 
     return (
         <div>
             
-                {/* <CarouselDefault ordenes={ordenesData} /> */}
+               <CarouselDefault ordenesData={ordenesData} />
            
         </div>
     );

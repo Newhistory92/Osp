@@ -9,8 +9,7 @@
     "lint": "next lint",
     "postinstall": "prisma generate"
   },
-   "proxy": "http://10.25.1.118:3000",
-   
+  "proxy": "http://10.25.1.118:3000",
   "dependencies": {
     "@clerk/clerk-react": "^5.2.4",
     "@clerk/nextjs": "^5.0.6",

@@ -22,7 +22,6 @@ model Afiliado {
   role           String?        @default("USER")
   createdAt      DateTime       @default(now())
   updatedAt      DateTime       @updatedAt
-  denuncias      Denuncia[]
   notificaciones Notificacion[]
   opiniones      Opinion[]
 }
@@ -36,7 +35,7 @@ model Prestador {
   checkedPhone   Boolean?       @default(false)
   phoneOpc       String?        @db.VarChar(13)
   imageUrl       String         @db.VarChar(800)
-  matricula      String         @db.VarChar(5)
+  matricula      String         @db.VarChar(5)@unique
   especialidad   String         @db.VarChar(100)
   especialidad2  String?        @db.VarChar(100)
   especialidad3  String?        @db.VarChar(100)
@@ -89,16 +88,18 @@ model Opinion {
 }
 
 model Denuncia {
-  id          Int       @id @default(autoincrement())
-  motivo      String    @db.Text
-  autorId     String
-  prestadorId String
-  status      String    @default("Nuevo")
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  autor       Afiliado  @relation(fields: [autorId], references: [id])
-  prestador   Prestador @relation(fields: [prestadorId], references: [id])
+  id              Int       @id @default(autoincrement())
+  motivo          String    @db.Text
+  nombrePrestador String    @db.VarChar(50)
+  especialidad    String    @db.VarChar(50)
+  practica        String    @db.VarChar(50)
+  fechadelsuceso  String
+  prestadorId     String?   @db.VarChar(5)
+  status          String    @default("Nuevo")
+  createdAt       DateTime  @default(now())
+  prestador       Prestador? @relation(fields: [prestadorId], references: [matricula])
 }
+
 
 model Notificacion {
   id                  String     @id @default(uuid())
