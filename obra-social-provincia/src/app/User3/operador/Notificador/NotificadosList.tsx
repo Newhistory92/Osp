@@ -114,7 +114,7 @@ const NotificadosList = ({ autorId }: Props) => {
                 paginatorLeft={paginatorLeft}
                 paginatorRight={paginatorRight}
                 filters={filters}
-                globalFilterFields={['receptor.dni', 'receptor.name', 'receptor.apellido']}
+                globalFilterFields={['receptor.dni', 'receptor.name']}
                 emptyMessage="No se encontraron notificaciones."
                 header={header}
             >

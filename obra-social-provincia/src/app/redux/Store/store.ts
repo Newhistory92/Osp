@@ -39,13 +39,13 @@ const persistConfig = {
   key: 'root',
   version: 1,
   storage,
-  blacklist: ['navbar','navbarvertical,loading'],
+  blacklist: ['navbar','navbarvertical, loading'],
 };
 
 const rootReducer = combineReducers({
   user: userReducer,
   navbar: navbarReducer,
-  navbarvertical:navbarVerticalReducer,
+  navbarvertical: navbarVerticalReducer,
   loading:loadingReducer,
   denuncia:denunciaReducer
 });

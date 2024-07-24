@@ -11,16 +11,18 @@ const Orden: React.FC<OrdenData> = ({ Numero, FechaEfectua,  NombreEfector, Espe
     const [showDenuncia, setShowDenuncia] = useState(false);
     const reportedIds = useAppSelector((state) => state.denuncia.reportDenuncia);
     const hasReported = Array.isArray(reportedIds) && reportedIds.includes(IdFacturacion);
-    const dispatch = useAppDispatch()
+    const dispatch = useAppDispatch();
+   
 
     const capitalizeWords = (str: string) => {
         return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
     };
-   
+
     const handleDenunciaSuccess = () => {
-        dispatch(addReportDenuncia(IdFacturacion));
+        
         setShowDenuncia(false);
     };
+
 
 
     return (
@@ -55,7 +57,7 @@ const Orden: React.FC<OrdenData> = ({ Numero, FechaEfectua,  NombreEfector, Espe
                 FechaEfectua={FechaEfectua}
                 NombrePractica={NombrePractica}
                 Efector={Efector}
-                onSuccess={handleDenunciaSuccess}
+                onSuccess={() => setShowDenuncia(false)}
             />}
         </div>
     );

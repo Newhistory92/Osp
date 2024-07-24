@@ -46,7 +46,9 @@ export interface NavbarState {
     especialidad3?:string;
     dependencia?: string;
     tipo?: string | null;
-    descripcion:string
+    descripcion:string;
+    grupFamiliar: string[] | null;
+
   }
 
   export interface UserState {
@@ -190,11 +192,14 @@ export interface NuevaPublicacion {
 
 export interface Denuncia {
   id: string;
+  nombrePrestador: string;
+  especialidad: string;
+  prestadorId: string;
+  practica: string;
+  fechadelsuceso: string;
   motivo: string;
-  autor: string;
-  createdAt: string;
-  prestador: string;
   status: string;
+  createdAt: string;
 }
 
 export interface Afiliado {

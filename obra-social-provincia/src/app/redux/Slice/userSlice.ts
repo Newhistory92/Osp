@@ -29,10 +29,19 @@ const userSlice = createSlice({
         prestador: state.currentUser?.prestador ?? '',
         tipo: action.payload.tipo ?? state.currentUser?.tipo ?? null,
         descripcion: state.currentUser?.descripcion ?? '',
+        grupFamiliar: state.currentUser?.grupFamiliar ?? [],
         
       };
     },
-  
+    addGrupFamiliarMember(state, action: PayloadAction<string>) {
+      if (state.currentUser) {
+        if (!Array.isArray(state.currentUser.grupFamiliar)) {
+          state.currentUser.grupFamiliar = [];
+        }
+        state.currentUser.grupFamiliar.push(action.payload);
+      }
+    },
+    
     setErrorMessage(state, action: PayloadAction<string | null>) {
       // console.log("setErrorMessage action dispatched with payload:", action.payload);
       state.errorMessage = action.payload;
@@ -47,6 +56,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { setCurrentUser, setPartialCurrentUser, setErrorMessage, setSuccessMessage,  clearCurrentUser } = userSlice.actions;
+export const { setCurrentUser, setPartialCurrentUser, setErrorMessage, setSuccessMessage,  clearCurrentUser,addGrupFamiliarMember } = userSlice.actions;
 
 export default userSlice.reducer;

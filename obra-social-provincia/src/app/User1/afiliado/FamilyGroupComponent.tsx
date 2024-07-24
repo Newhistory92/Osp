@@ -17,6 +17,7 @@ import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import Image from "next/image";
 import IcontComentario from "../../../../public/icons-comentarios.png"
+import { addGrupFamiliarMember } from "@/app/redux/Slice/userSlice";
 function formatFecha(fecha: string | null): string {
   if (!fecha) return 'Fecha inválida';
   const parsedFecha = parseISO(fecha);
@@ -47,10 +48,14 @@ export default function FamilyGroup() {
   const fetchGrup = React.useCallback(async () => {
     dispatch(setLoading(true));
     try {
-      const response = await fetch(`/api/Datos/afiliado?doctit=${ userData.dni}`);
+      const response = await fetch(`/api/Datos/afiliado?doctit=${userData.dni}`);
       const data = await response.json();
       console.log("respuesta del backend", data);
       setGrupsData(Array.isArray(data) ? data : [data]);
+      const grupDnis = Array.isArray(data) ? data.map(item => item.Codigo) : [data.Codigo];
+      grupDnis.forEach(dni => {
+        dispatch(addGrupFamiliarMember(dni));
+      });
     } catch (error) {
       console.error("Error al obtener las órdenes:", error);
       setGrupsData([]);

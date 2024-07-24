@@ -7,40 +7,46 @@ import Loading from '@/app/components/Loading/loading';
 
 
 
+   
 const Ordenes = () => {
     const [ordenesData, setOrdenesData] = useState<OrdenData[]>([]);
     const ordenes = useAppSelector(state => state.navbarvertical);
-    const currentUser = useAppSelector((state: { user: { currentUser: UserInfo | null; }; }) => state.user.currentUser);
-    const dispatch = useAppDispatch(); // Si necesitas despachar alguna acción
-
-    console.log(ordenesData)
-      if (!currentUser) {
-        return <div><Loading/></div>;
-      }
-    
-      // Verificar si currentUser es un array o no
-      const userData = Array.isArray(currentUser) ? currentUser[0] : currentUser;
-    
-
-
-      useEffect(() => {
-        const fetchOrdenes = async () => {
-            if (ordenes && userData.dni) {
-                dispatch(setLoading(true));
-                try {
-                    const response = await fetch(`/api/Datos/ordenes?dni=${ userData.dni}`);
-                    const data = await response.json();
-                    setOrdenesData(data);
-                } catch (error) {
-                    console.error('Error fetching ordenes:', error);
-                } finally {
-                    dispatch(setLoading(false));
-                }
-            }
-        };
+    const currentUser = useAppSelector((state: { user: { currentUser: UserInfo | null; }; }) => state.user.currentUser?.grupFamiliar);
+    const dispatch = useAppDispatch(); 
+  
+    console.log(ordenesData);
+  
+    if (!currentUser) {
+      return <div><Loading /></div>;
+    }
+  
+    useEffect(() => {
+      const fetchOrdenes = async () => {
+        
+        dispatch(setLoading(true));
+        try {
+          const ordenesDataPromises = currentUser.map(async (dni: string) => {
+            const response = await fetch(`/api/Datos/ordenes?dni=${dni}`);
+            const data = await response.json();
+            return data;
+          });
+  
+          const allOrdenesData = await Promise.all(ordenesDataPromises);
+          const concatenatedOrdenesData = allOrdenesData.flat().filter((value, index, self) =>
+            index === self.findIndex((t) => t.IdFacturacion === value.IdFacturacion)
+        );
+          setOrdenesData(concatenatedOrdenesData);
+        } catch (error) {
+          console.error('Error fetching ordenes:', error);
+        } finally {
+          dispatch(setLoading(false));
+        }
+      };
+  
+      if (ordenes && currentUser) {
         fetchOrdenes();
-    }, [ordenes, userData.dni, dispatch]);
-     
+    }
+}, [currentUser, dispatch]);
 
     return (
         <div>

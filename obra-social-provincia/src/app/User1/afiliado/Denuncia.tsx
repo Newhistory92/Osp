@@ -5,11 +5,13 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import { DenunciaProps } from '@/app/interfaces/interfaces';
 import { setLoading } from '@/app/redux/Slice/loading';
 import { useAppDispatch } from '@/app/hooks/StoreHook';
-const Denuncia: React.FC<DenunciaProps> = ({ closeModal, NombreEfector, EspecialidadEfector,  Efector,NombrePractica, FechaEfectua, onSuccess }) => {
+import { addReportDenuncia } from '@/app/redux/Slice/denunciaSlice';
+             
+    const Denuncia: React.FC<DenunciaProps> = ({ closeModal, NombreEfector, EspecialidadEfector,  Efector,NombrePractica, FechaEfectua, onSuccess,IdFacturacion }) => {
     const [denuncia, setDenuncia] = useState('');
     const toast = useRef<Toast>(null);
     const dispatch = useAppDispatch()
-
+ console.log(IdFacturacion)
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -36,8 +38,9 @@ const Denuncia: React.FC<DenunciaProps> = ({ closeModal, NombreEfector, Especial
 
             if (response.ok) {
                 toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'Tu experiencia fue enviada.' });
+                dispatch(addReportDenuncia(IdFacturacion)); 
                 onSuccess();
-                
+           
             } else {
                 toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Ocurrió un error, disculpa los inconvenientes.' });
             }

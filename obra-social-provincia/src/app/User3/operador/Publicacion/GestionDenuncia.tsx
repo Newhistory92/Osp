@@ -1,64 +1,74 @@
 import React, { useState, useEffect } from 'react';
-import { FilterMatchMode } from 'primereact/api';
-import { DataTable } from 'primereact/datatable';
-import { Column, ColumnFilterElementTemplateOptions } from 'primereact/column';
+import { FilterMatchMode, FilterMatchModeOptions } from 'primereact/api';
+import { DataTable, DataTableFilterMeta } from 'primereact/datatable';
+import { Column, ColumnFilterElementTemplateOptions} from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
 import { Tag } from 'primereact/tag';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import dataDenuncias from "../../../../../denuncias.json";
-import { Avatar } from 'primereact/avatar';
 import { Denuncia } from '@/app/interfaces/interfaces';
-
+import { useAppSelector,useAppDispatch } from "../../../hooks/StoreHook"
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
+import { format } from 'date-fns';
+import { es } from 'date-fns/locale';
+import { Calendar, CalendarViewChangeEvent } from 'primereact/calendar';
+
+
+
 export default function DenunciasTable() {
-    const [customers, setCustomers] = useState<Denuncia[]>([]);
-    const [filters, setFilters] = useState<{
-        global: { value: string | null, matchMode: FilterMatchMode },
-        autor: { value: string | null, matchMode: FilterMatchMode },
-        prestador: { value: string | null, matchMode: FilterMatchMode },
-        status: { value: string | null, matchMode: FilterMatchMode }
-    }>({
+    const [denuncias, setDenuncias] = useState<Denuncia[]>([]);
+    const denunciaOpen = useAppSelector(state => state.navbarvertical.denunciaOpen);
+    const dispatch = useAppDispatch();
+
+    const [filters, setFilters] = useState<any>({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        autor: { value: null, matchMode: FilterMatchMode.CONTAINS },
-        prestador: { value: null, matchMode: FilterMatchMode.CONTAINS },
+        nombrePrestador: { value: null, matchMode: FilterMatchMode.CONTAINS },
         status: { value: null, matchMode: FilterMatchMode.EQUALS },
+        createdAt: { value: null, matchMode: FilterMatchMode.DATE_IS }
     });
     const [globalFilterValue, setGlobalFilterValue] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
-    const [statuses] = useState<string[]>(['No solucionado', 'Leido', 'Nuevo', 'Pendiente', 'Otros']);
     const [selectedDenuncia, setSelectedDenuncia] = useState<Denuncia | null>(null);
     const [visible, setVisible] = useState<boolean>(false);
+
+    const capitalizeWords = (str: string) => {
+        return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+    };
+
     const getSeverity = (status: string) => {
         switch (status) {
-            case 'No solucionado':
-                return 'danger';
-
             case 'Leido':
                 return 'success';
-
             case 'Nuevo':
                 return 'info';
-
-            case 'Pendiente':
-                return 'warning';
-
-            case 'Otros':
-                return null;
-
             default:
                 return null;
         }
     };
 
     useEffect(() => {
-        setCustomers(dataDenuncias);
-        setLoading(false);
-        console.log("selectedDenuncia:", selectedDenuncia);
-    }, [selectedDenuncia]);
-    
+        if (denunciaOpen) {
+            const fetchDenuncias = async () => {
+                try {
+                    const response = await fetch('/api/Denuncias');
+                    const data = await response.json();
+                    if (response.ok) {
+                        setDenuncias(data.data);
+                    } else {
+                        console.error('Error fetching denuncias:', data.message);
+                    }
+                } catch (error) {
+                    console.error('Error fetching denuncias:', error);
+                } finally {
+                    setLoading(false);
+                }
+            };
+
+            fetchDenuncias();
+        }
+    }, [denunciaOpen]);
 
     const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
@@ -68,6 +78,7 @@ export default function DenunciasTable() {
         setGlobalFilterValue(value);
     };
 
+      
     const renderHeader = () => {
         return (
             <div className="flex justify-content-end">
@@ -82,23 +93,46 @@ export default function DenunciasTable() {
     const statusBodyTemplate = (rowData: Denuncia) => {
         return <Tag value={rowData.status} severity={getSeverity(rowData.status)} />;
     };
+
     const statusItemTemplate = (option: string) => {
         return <Tag value={option} severity={getSeverity(option)} />;
     };
+
     const statusRowFilterTemplate = (options: ColumnFilterElementTemplateOptions) => {
         return (
-            <Dropdown value={options.value} options={statuses} onChange={(e: DropdownChangeEvent) => options.filterApplyCallback(e.value)} itemTemplate={statusItemTemplate} placeholder="Select One" className="p-column-filter" showClear style={{ minWidth: '12rem' }} />
+            <Dropdown value={options.value} options={['Leido', 'Nuevo']} onChange={(e: DropdownChangeEvent) => options.filterApplyCallback(e.value)} itemTemplate={statusItemTemplate} placeholder="Selecciona uno" className="p-column-filter" showClear style={{ minWidth: '12rem' }} />
         );
     };
-    const verifiedBodyTemplate = (rowData: Denuncia) => {
-        return <span>{rowData.createdAt}</span>;
+
+    const dateBodyTemplate = (rowData: Denuncia) => {
+        return <span>{format(new Date(rowData.createdAt), 'eeee d/MM/yyyy', { locale: es })}</span>;
     };
 
+    const dateFilterTemplate = (options: ColumnFilterElementTemplateOptions) => {
+        return (
+            <Calendar value={options.value ? new Date(options.value) : null} onChange={(e:CalendarViewChangeEvent) => options.filterApplyCallback(e.value)} dateFormat="dd/mm/yy" placeholder="Fecha" />
+        );
+    };
 
-   
-    const handleDenunciaClick = (denuncia: Denuncia) => {
+    const handleDenunciaClick = async (denuncia: Denuncia) => {
         setSelectedDenuncia(denuncia);
         setVisible(true);
+        // Actualizar el estado de la denuncia a "Leido" en el backend
+        try {
+            await fetch(`/api/Denuncias/${denuncia.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ status: 'Leido' })
+            });
+
+            // Actualizar el estado de la denuncia en el frontend
+            const updatedDenuncias = denuncias.map(d =>
+                d.id === denuncia.id ? { ...d, status: 'Leido' } : d
+            );
+            setDenuncias(updatedDenuncias);
+        } catch (error) {
+            console.error('Error updating denuncia status:', error);
+        }
     };
 
     const handleCloseModal = () => {
@@ -106,37 +140,37 @@ export default function DenunciasTable() {
         setSelectedDenuncia(null); // Reset selectedDenuncia when closing modal
     };
 
-    
-     const headerElement = (
-        <div className="inline-flex align-items-center justify-content-center gap-2">
-            <Avatar image="https://primefaces.org/cdn/primereact/images/avatar/amyelsner.png" shape="circle" />
-            <span className="font-bold white-space-nowrap">{selectedDenuncia && selectedDenuncia.autor}</span>
+    const headerElement = selectedDenuncia ? (
+        <div>
+            <div><strong>Prestador:</strong> {capitalizeWords(selectedDenuncia.nombrePrestador)}</div>
+            <div><strong>Especialidad:</strong> {capitalizeWords(selectedDenuncia.especialidad)}</div>
+            <div><strong>Matricula del Prestador:</strong> {selectedDenuncia.prestadorId}</div>
+            <div><strong>Práctica:</strong> {capitalizeWords(selectedDenuncia.practica)}</div>
+            <div><strong>Fecha del Suceso:</strong> {format(new Date(selectedDenuncia.fechadelsuceso), 'eeee d/MM/yyyy', { locale: es })}</div>
         </div>
-    );
+    ) : null;
 
     const footerContent = (
         <div>
-            <Button label="Cerrar" icon="pi pi-times" onClick={() => setVisible(false)} autoFocus />
+            <Button label="Cerrar" icon="pi pi-times" onClick={handleCloseModal} autoFocus className='mr-5'/>
+            <Button label="Imprimir" icon="pi pi-print" onClick={() => window.print()} />
         </div>
     );
-    
-    
 
     return (
-        <div className="">
-           <DataTable value={customers} paginator rows={10} dataKey="id" filters={filters} filterDisplay="row" loading={loading}
-    globalFilterFields={['autor', 'prestador', 'status']} header={renderHeader()} emptyMessage="No Econtro Denuncias."
-    selectionMode="single" selection={selectedDenuncia}  onSelectionChange={(e) => setSelectedDenuncia(e.value as Denuncia)}>
+        <div>
+            <DataTable value={denuncias} paginator rows={10} dataKey="id" filters={filters} filterDisplay="row" loading={loading}
+                globalFilterFields={['nombrePrestador', 'status']} header={renderHeader()} emptyMessage="No se encontraron denuncias."
+                selectionMode="single" selection={selectedDenuncia} onSelectionChange={(e) => setSelectedDenuncia(e.value as Denuncia)}>
 
-                <Column field="autor" header="Autor" filter filterPlaceholder="Buscar por autor" style={{ minWidth: '12rem' }} />
-                <Column field="prestador" header="Prestador" filter filterPlaceholder="Buscar por prestador" style={{ minWidth: '12rem' }} />
+                <Column field="nombrePrestador" header="Prestador" filter filterPlaceholder="Buscar por prestador" style={{ minWidth: '12rem' }} />
                 <Column header="Denuncia" style={{ minWidth: '14rem' }} body={(rowData: Denuncia) => (
                     <div className="card flex justify-content-center">
                         <Button label="Ver Motivo" icon="pi pi-external-link" onClick={() => handleDenunciaClick(rowData)} />
                     </div>
                 )} />
                 <Column field="status" header="Estado" showFilterMenu={false} filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} />
-                <Column field="createdAt" header="Fecha" dataType="boolean" style={{ minWidth: '6rem' }} body={verifiedBodyTemplate} />
+                <Column field="createdAt" header="Fecha" style={{ minWidth: '12rem' }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} sortable />
             </DataTable>
             <Dialog visible={visible} modal header={headerElement} footer={footerContent} style={{ width: '50rem' }} onHide={handleCloseModal}>
                 <p className="m-0">{selectedDenuncia && selectedDenuncia.motivo}</p>
@@ -144,38 +178,3 @@ export default function DenunciasTable() {
         </div>
     );
 }
-
-
-
-
-
-
-
-
-
-// useEffect(() => {
-//     const getDenuncias = async () => {
-//         try {
-//             const response = await fetch(`/api/Denuncias`, {
-//                 method: 'GET',
-//                 headers: {
-//                     'Content-Type': 'application/json',
-//                 },
-//             });
-
-//             const data = await response.json();
-//             if (data.status === 200) {
-//                 setDenuncias(data.denuncias);
-//             } else {
-//                 setDenuncias([]);
-//                 console.error('Error: La respuesta del servidor está vacía.');
-//             }
-//         } catch (error) {
-//             console.error('Error al obtener las denuncias', error);
-//         } finally {
-//             setLoading(false);
-//         }
-//     };
-
-//     getDenuncias();
-// }, []);
