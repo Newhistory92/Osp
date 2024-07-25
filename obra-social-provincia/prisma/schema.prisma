@@ -102,7 +102,7 @@ model Denuncia {
 
 
 model Notificacion {
-  id                  String     @id @default(uuid())
+  id                  Int    @id @default(autoincrement())
   titulo              String
   contenido           String     @db.Text
   autorId             String
@@ -118,7 +118,7 @@ model Notificacion {
 }
 
 model Carrusel {
-  id               String @id @default(uuid())
+  id               Int    @id @default(autoincrement())
   tituloprincipal  String
   titulosecundario String
   contenido        String

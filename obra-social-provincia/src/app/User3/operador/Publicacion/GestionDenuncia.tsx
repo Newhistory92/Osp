@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FilterMatchMode, FilterMatchModeOptions } from 'primereact/api';
-import { DataTable, DataTableFilterMeta } from 'primereact/datatable';
+import { FilterMatchMode } from 'primereact/api';
+import { DataTable} from 'primereact/datatable';
 import { Column, ColumnFilterElementTemplateOptions} from 'primereact/column';
 import { InputText } from 'primereact/inputtext';
 import { Dropdown, DropdownChangeEvent } from 'primereact/dropdown';
@@ -8,25 +8,21 @@ import { Tag } from 'primereact/tag';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
 import { Denuncia } from '@/app/interfaces/interfaces';
-import { useAppSelector,useAppDispatch } from "../../../hooks/StoreHook"
+import { useAppSelector } from "../../../hooks/StoreHook"
 import 'primereact/resources/primereact.min.css';
 import 'primeicons/primeicons.css';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import { Calendar, CalendarViewChangeEvent } from 'primereact/calendar';
 
 
 
 export default function DenunciasTable() {
     const [denuncias, setDenuncias] = useState<Denuncia[]>([]);
     const denunciaOpen = useAppSelector(state => state.navbarvertical.denunciaOpen);
-    const dispatch = useAppDispatch();
-
     const [filters, setFilters] = useState<any>({
         global: { value: null, matchMode: FilterMatchMode.CONTAINS },
         nombrePrestador: { value: null, matchMode: FilterMatchMode.CONTAINS },
         status: { value: null, matchMode: FilterMatchMode.EQUALS },
-        createdAt: { value: null, matchMode: FilterMatchMode.DATE_IS }
     });
     const [globalFilterValue, setGlobalFilterValue] = useState<string>('');
     const [loading, setLoading] = useState<boolean>(true);
@@ -78,7 +74,6 @@ export default function DenunciasTable() {
         setGlobalFilterValue(value);
     };
 
-      
     const renderHeader = () => {
         return (
             <div className="flex justify-content-end">
@@ -107,25 +102,25 @@ export default function DenunciasTable() {
     const dateBodyTemplate = (rowData: Denuncia) => {
         return <span>{format(new Date(rowData.createdAt), 'eeee d/MM/yyyy', { locale: es })}</span>;
     };
-
-    const dateFilterTemplate = (options: ColumnFilterElementTemplateOptions) => {
-        return (
-            <Calendar value={options.value ? new Date(options.value) : null} onChange={(e:CalendarViewChangeEvent) => options.filterApplyCallback(e.value)} dateFormat="dd/mm/yy" placeholder="Fecha" />
-        );
-    };
-
     const handleDenunciaClick = async (denuncia: Denuncia) => {
         setSelectedDenuncia(denuncia);
         setVisible(true);
-        // Actualizar el estado de la denuncia a "Leido" en el backend
+    
         try {
-            await fetch(`/api/Denuncias/${denuncia.id}`, {
+            console.log('Updating status for denuncia:', denuncia.id);
+    
+            const response = await fetch(`/api/Denuncias?id=${denuncia.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: 'Leido' })
             });
-
-            // Actualizar el estado de la denuncia en el frontend
+    
+            console.log('Response:', response);
+    
+            if (!response.ok) {
+                throw new Error('Failed to update status');
+            }
+    
             const updatedDenuncias = denuncias.map(d =>
                 d.id === denuncia.id ? { ...d, status: 'Leido' } : d
             );
@@ -137,7 +132,7 @@ export default function DenunciasTable() {
 
     const handleCloseModal = () => {
         setVisible(false);
-        setSelectedDenuncia(null); // Reset selectedDenuncia when closing modal
+        setSelectedDenuncia(null);
     };
 
     const headerElement = selectedDenuncia ? (
@@ -163,14 +158,14 @@ export default function DenunciasTable() {
                 globalFilterFields={['nombrePrestador', 'status']} header={renderHeader()} emptyMessage="No se encontraron denuncias."
                 selectionMode="single" selection={selectedDenuncia} onSelectionChange={(e) => setSelectedDenuncia(e.value as Denuncia)}>
 
-                <Column field="nombrePrestador" header="Prestador" filter filterPlaceholder="Buscar por prestador" style={{ minWidth: '12rem' }} />
+                <Column field="nombrePrestador" header="Prestador" filter filterPlaceholder="Buscar por prestador" style={{ minWidth: '12rem' }} body={(rowData: Denuncia) => capitalizeWords(rowData.nombrePrestador)} />
                 <Column header="Denuncia" style={{ minWidth: '14rem' }} body={(rowData: Denuncia) => (
                     <div className="card flex justify-content-center">
                         <Button label="Ver Motivo" icon="pi pi-external-link" onClick={() => handleDenunciaClick(rowData)} />
                     </div>
                 )} />
                 <Column field="status" header="Estado" showFilterMenu={false} filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusRowFilterTemplate} />
-                <Column field="createdAt" header="Fecha" style={{ minWidth: '12rem' }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} sortable />
+                <Column field="createdAt" header="Fecha" style={{ minWidth: '12rem' }} body={dateBodyTemplate} sortable />
             </DataTable>
             <Dialog visible={visible} modal header={headerElement} footer={footerContent} style={{ width: '50rem' }} onHide={handleCloseModal}>
                 <p className="m-0">{selectedDenuncia && selectedDenuncia.motivo}</p>

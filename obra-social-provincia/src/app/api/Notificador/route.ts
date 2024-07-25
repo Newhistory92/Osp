@@ -1,5 +1,6 @@
 import prisma from "../../lib/prisma"
 import { NextResponse, NextRequest } from "next/server";
+
 export async function GET(req: NextRequest) {
     try {
         const url = new URL(req.url);
@@ -8,27 +9,27 @@ export async function GET(req: NextRequest) {
         const matricula = searchParams.get('matricula');
 
         if (dni) {
-            const afiliado = await prisma.afiliado.findFirst({
-                where: { dni },
-            });
+            const afiliado: any[] = await prisma.$queryRaw`
+                SELECT * FROM Afiliado WHERE dni = ${dni}
+            `;
 
-            if (!afiliado) {
+            if (afiliado.length === 0) {
                 return NextResponse.json({ status: 404, message: 'Afiliado no encontrado' });
             }
 
-            return NextResponse.json({ status: 200, message: 'Afiliado encontrado', afiliado });
+            return NextResponse.json({ status: 200, message: 'Afiliado encontrado', afiliado: afiliado[0] });
         } 
         
         if (matricula) {
-            const prestador = await prisma.prestador.findFirst({
-                where: { matricula },
-            });
+            const prestador: any[] = await prisma.$queryRaw`
+                SELECT * FROM Prestador WHERE matricula = ${matricula}
+            `;
 
-            if (!prestador) {
+            if (prestador.length === 0) {
                 return NextResponse.json({ status: 404, message: 'Prestador no encontrado' });
             }
 
-            return NextResponse.json({ status: 200, message: 'Prestador encontrado', prestador });
+            return NextResponse.json({ status: 200, message: 'Prestador encontrado', prestador: prestador[0] });
         } 
 
         return NextResponse.json({ status: 400, message: 'DNI o Matrícula es requerido' });
@@ -42,6 +43,7 @@ export async function GET(req: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
+        const currentDateTime = new Date().toISOString()
         console.log("Recibida solicitud POST para crear una nueva notificación");
         const nuevaNotificacion = await request.json();
 
@@ -53,19 +55,19 @@ export async function POST(request: NextRequest) {
             throw new Error("Faltan el ID del autor o del receptor");
         }
 
-        const notificacionCreada = await prisma.notificacion.create({
-            data: {
-                titulo,
-                contenido,
-                url: url || null,
-                autor: {
-                    connect: { id: autorId },
-                },
-                receptor: {
-                    connect: { id: receptorId },
-                },
-            },
-        });
+        let notificacionCreada;
+        
+        if (receptorId) {
+            notificacionCreada = await prisma.$executeRaw`
+                INSERT INTO Notificacion (titulo, contenido, url, autorId, receptorId,updatedAt)
+                VALUES (${titulo}, ${contenido}, ${url || null}, ${autorId}, ${receptorId},${currentDateTime})
+            `;
+        } else {
+            notificacionCreada = await prisma.$executeRaw`
+                INSERT INTO Notificacion (titulo, contenido, url, autorId, receptorPrestadorId,updatedAt)
+                VALUES (${titulo}, ${contenido}, ${url || null}, ${autorId}, ${receptorPrestadorId},${currentDateTime})
+            `;
+        }
 
         console.log("Notificación creada exitosamente:", notificacionCreada);
         return NextResponse.json({ status: 200, message: "Notificación creada exitosamente", notificacion: notificacionCreada });
@@ -73,51 +75,4 @@ export async function POST(request: NextRequest) {
         console.error("Error al crear la notificación:", error);
         return NextResponse.json({ status: 500, message: `Error al crear la notificación: ${error.message}` });
     }
-
 }
-
-
-
-
-
-// export async function POST(request: NextRequest) {
-//     try {
-//         console.log("Recibida solicitud POST para crear una nueva notificación");
-//         const nuevaNotificacion = await request.json();
-
-//         console.log("Datos de la nueva notificación:", nuevaNotificacion);
-
-//         const { titulo, contenido, url, autorId, receptorId, receptorPrestadorId } = nuevaNotificacion;
-
-//         if (!autorId || (!receptorId && !receptorPrestadorId)) {
-//             throw new Error("Faltan el ID del autor o del receptor");
-//         }
-
-//         const data = {
-//             titulo,
-//             contenido,
-//             url: url || null,
-//             autor: {
-//                 connect: { id: autorId },
-//             }
-//         };
-
-//         if (receptorId) {
-//             data.receptor = { connect: { id: receptorId } };
-//         }
-
-//         if (receptorPrestadorId) {
-//             data.receptorPrestador = { connect: { id: receptorPrestadorId } };
-//         }
-
-//         const notificacionCreada = await prisma.notificacion.create({
-//             data
-//         });
-
-//         console.log("Notificación creada exitosamente:", notificacionCreada);
-//         return NextResponse.json({ status: 200, message: "Notificación creada exitosamente", notificacion: notificacionCreada });
-//     } catch (error: any) {
-//         console.error("Error al crear la notificación:", error);
-//         return NextResponse.json({ status: 500, message: `Error al crear la notificación: ${error.message}` });
-//     }
-// }

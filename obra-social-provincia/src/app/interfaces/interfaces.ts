@@ -239,11 +239,16 @@ export interface Notificacion {
   id: string;
   titulo: string;
   contenido: string;
-  autor: string;
-  receptor: string;
+  autorId: string;
+  autorName: string;
+  receptorId: string;
+  receptorName: string;
+  receptorDni: string;
+  receptorPrestadorId: string | null;
   status: string;
-  createdAt: string | number | Date;
-  updatedAt: string | number | Date;
+  url: string | null;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface NotificationsProps {

@@ -3,11 +3,11 @@ import { useAppSelector } from "../../../hooks/StoreHook";
 import { Afiliado,Prestador } from '@/app/interfaces/interfaces';
 import { Toast } from 'primereact/toast';
 import Loading from '@/app/components/Loading/loading';
-import { FileUpload } from 'primereact/fileupload';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import TemplateDemo from '@/app/components/FileUploa/TemplateDemo';
 import dynamic from 'next/dynamic';
 const BundledEditor = dynamic(() => import ('@/BundledEditor'),{
   ssr:false
@@ -27,11 +27,11 @@ const Notificador = () => {
   const [showButtons, setShowButtons] = useState(false); 
   const [titulo, setTitulo] = useState('');
   const [contenido, setContenido] = useState('');
-  const [archivo, setArchivo] = useState<File | null>(null);
+  const [archivoBase64, setArchivoBase64] = useState<string | null>(null);
   const editorRef = useRef<any>(null);
   const toast = useRef<Toast>(null);
   const [isLoading, setIsLoading] = useState(false);
-
+ console.log (archivoBase64, "se encuentra en notificador")
   const currentUser = useAppSelector(state => state.user.currentUser);
 
   let autorId;
@@ -70,12 +70,12 @@ const Notificador = () => {
         },
       });
       const data = await response.json();
-  
+      console.log(data)
       if (response.ok) {
         if (data.status === 200) {
           console.log('Afiliado encontrado:', data.afiliado);
           setAfiliado(data.afiliado);
-          setMessage(`Afiliado encontrado: ${data.afiliado.name} ${data.afiliado.apellido}`);
+          setMessage(`Afiliado encontrado: ${data.afiliado.name}`);
           setMessageType('success');
           setShowButtons(true);
         } else if (data.status === 404) {
@@ -113,7 +113,7 @@ const Notificador = () => {
 
         if (response.ok && data.status === 200) {
             setPrestador(data.prestador);
-            setMessage(`Prestador encontrado: ${data.prestador.name} ${data.prestador.apellido}`);
+            setMessage(`Prestador encontrado: ${data.prestador.name}`);
             setMessageType('success');
             setShowButtons(true);
         } else {
@@ -135,13 +135,6 @@ const Notificador = () => {
   const handleTituloChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitulo(event.target.value);
   };
-  const handleFileUpload = (event: { files: any; }) => {
-    const { files } = event;
-    if (files && files.length > 0) {
-        const file = files[0];
-        setArchivo(file.objectURL);
-    }
-};
 
 
   const handleDniChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -184,88 +177,71 @@ const Notificador = () => {
     setShowButtons(false);
 };
 
-  const handleEnviar = async () => {
-    
+const handleEnviar = async () => {
+  const contenido = editorRef.current ? editorRef.current.getContent() : '';
 
-    const contenido = editorRef.current ? editorRef.current.getContent() : '';
-
-    if (!titulo || !contenido) {
+  if (!titulo || !contenido) {
       toast.current?.show({ severity: 'warn', summary: 'Advertencia', detail: 'El título y el contenido son requeridos', life: 3000 });
       return;
-    }
+  }
 
-    // let archivoUrl = '';
+  const receptorId = afiliado ? afiliado.id : null;
+  const receptorPrestadorId = prestador ? prestador.id : null;
 
-    // if (archivo) {
-    //   const formData = new FormData();
-    //   formData.append('archivo', archivo);
-
-    //   try {
-    //     const response = await fetch('/api/subir-archivo', {
-    //       method: 'POST',
-    //       body: formData,
-    //     });
-
-    //     if (response.ok) {
-    //       const data = await response.json();
-    //       archivoUrl = data.url;
-    //     } else {
-    //       toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al subir el archivo', life: 3000 });
-    //       return;
-    //     }
-    //   } catch (error) {
-    //     console.error('Error al subir el archivo:', error);
-    //     toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al subir el archivo', life: 3000 });
-    //     return;
-    //   }
-    // }
-
-
-    const receptorId = afiliado ? afiliado.id : null;
-    const receptorPrestadorId = prestador ? prestador.id : null;
-  
-    if (!receptorId && !receptorPrestadorId) {
+  if (!receptorId && !receptorPrestadorId) {
       toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Debe seleccionar un afiliado o un prestador', life: 3000 });
       return;
-    }
-    const notificacionData = {
+  }
+
+  console.log("Contenido antes de enviar:", contenido);
+  console.log("Archivo Base64 antes de enviar:", archivoBase64);
+
+  const notificacionData = {
       titulo,
       contenido,
-      url: archivo, 
+      url: archivoBase64, 
       autorId,
-      receptorId: receptorId, 
-      receptorPrestadorId: receptorPrestadorId
-    };
+      receptorId,
+      receptorPrestadorId
+  };
 
-    setIsLoading(true);
-    console.log(notificacionData)
-    try {
+  setIsLoading(true);
+  console.log("Datos de la notificación a enviar:", notificacionData);
+
+  try {
       const response = await fetch('/api/Notificador', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(notificacionData),
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(notificacionData),
       });
-   
 
       if (response.ok) {
-        toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'Notificación enviada exitosamente', life: 3000 });
-        setTitulo('');
-        if (editorRef.current) {
-          editorRef.current.setContent('');
-        }
-        setArchivo(null);
+          toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'Notificación enviada exitosamente', life: 3000 });
+          setTitulo('');
+          if (editorRef.current) {
+              editorRef.current.setContent('');
+          }
+          setArchivoBase64('');
+          console.log("Carga de archivo limpiada exitosamente.");
+
+          // Limpiar FileUpload
+          const fileUploadElement = document.querySelector('.p-fileupload') as any;
+          if (fileUploadElement && fileUploadElement.clear) {
+              fileUploadElement.clear();
+          }
       } else {
-        toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al enviar la notificación', life: 3000 });
+          toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al enviar la notificación', life: 3000 });
       }
-    } catch (error) {
+  } catch (error) {
       console.error('Error al enviar la notificación:', error);
       toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al enviar la notificación', life: 3000 });
-    } finally {
+  } finally {
       setIsLoading(false);
-    }
-  };
+  }
+};
+
 
 
   const handleCancelar = () => {
@@ -366,7 +342,6 @@ indentation: '20pt',
 indent_use_margin: true,
 branding:false,
 preview_styles: false,
-content_css: false,
 table_header_type: 'sectionCells',
 table_sizing_mode: 'responsive',
 table_column_resizing: 'resizetable',
@@ -403,14 +378,7 @@ media_live_embeds: true,
 
 {messageType === 'success' && (afiliado || prestador) && (
               <div className="card mt-6">
-                  <FileUpload
-                      name="demo[]"
-                      url="/api/subir-archivo"
-                      accept=".pdf"
-                      maxFileSize={1000000}
-                      onUpload={handleFileUpload}
-                      emptyTemplate={<p className="m-0">Arrastre y suelte archivos aquí para cargarlos.</p>}
-                  />
+                  <TemplateDemo archivoBase64={archivoBase64} />
               </div>
           )}
 
@@ -424,10 +392,7 @@ media_live_embeds: true,
               </button>
             </div>
           )}
-
           <Toast ref={toast} />
-         
-
           {messageType !== 'success' && <NotificadosList autorId={autorId} />}
       </div>
   );

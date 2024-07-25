@@ -102,85 +102,85 @@ const NotificadosList = ({ autorId }: Props) => {
 
     return (
         <div className="card">
-              {isLoading && <Loading />}
-            <DataTable
-                value={notificaciones}
-                paginator
-                rows={5}
-                rowsPerPageOptions={[5, 10, 25, 50]}
-                tableStyle={{ minWidth: '50rem' }}
-                paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
-                currentPageReportTemplate="{first} a {last} de {totalRecords}"
-                paginatorLeft={paginatorLeft}
-                paginatorRight={paginatorRight}
-                filters={filters}
-                globalFilterFields={['receptor.dni', 'receptor.name']}
-                emptyMessage="No se encontraron notificaciones."
-                header={header}
-            >
-                <Column field="titulo" header="Título" sortable style={{ width: '20%' }}></Column>
-                <Column
-                    field="contenido"
-                    header="Contenido"
-                    sortable
-                    style={{ width: '20%' }}
-                    body={(rowData) => (
-                        <Button icon="pi pi-external-link" onClick={() => handleRowClick(rowData)}>
-                            {parse(rowData.contenido.slice(0, 20))}
-                        </Button>
-                    )}
-                ></Column>
-                <Column
-                    field="autor"
-                    header="Autor"
-                    sortable
-                    style={{ width: '15%' }}
-                    body={(rowData) => `${rowData.autor.name} ${rowData.autor.apellido}`}
-                ></Column>
-                <Column
-                    field="receptor"
-                    header="Receptor"
-                    sortable
-                    style={{ width: '15%' }}
-                    body={(rowData) => `${rowData.receptor.name} ${rowData.receptor.apellido} (DNI:${rowData.receptor.dni})`}
-                ></Column>
-                <Column
-                    field="status"
-                    header="Estado"
-                    sortable
-                    style={{ width: '10%' }}
-                    body={(rowData) => <Tag value={rowData.status} severity={getSeverity(rowData.status)} />}
-                ></Column>
-                <Column
-                    field="createdAt"
-                    header="Enviado"
-                    sortable
-                    style={{ width: '20%' }}
-                    body={(rowData) => format(new Date(rowData.createdAt), 'eeee d/MM/yyyy', { locale: es })}
-                ></Column>
-                <Column
-                    field="updatedAt"
-                    header="Visto"
-                    sortable
-                    style={{ width: '20%' }}
-                    body={(rowData) => rowData.status === 'Leido' ? format(new Date(rowData.updatedAt), 'eeee d/MM/yyyy', { locale: es }) : ''}
-                ></Column>
-            </DataTable>
-            {selectedNotification && (
-                <div className="card flex justify-content-center">
-                    <Dialog
-                        header={selectedNotification.titulo}
-                        visible={visible}
-                        onHide={() => setVisible(false)}
-                        style={{ width: '50vw' }}
-                        breakpoints={{ '960px': '75vw', '641px': '100vw' }}
-                    >
-                        <div>{parse(selectedNotification.contenido)}</div>
-                    </Dialog>
-                </div>
-            )}
+          {isLoading && <Loading />}
+          <DataTable
+            value={notificaciones}
+            paginator
+            rows={5}
+            rowsPerPageOptions={[5, 10, 25, 50]}
+            tableStyle={{ minWidth: '50rem' }}
+            paginatorTemplate="RowsPerPageDropdown FirstPageLink PrevPageLink CurrentPageReport NextPageLink LastPageLink"
+            currentPageReportTemplate="{first} a {last} de {totalRecords}"
+            paginatorLeft={paginatorLeft}
+            paginatorRight={paginatorRight}
+            filters={filters}
+            globalFilterFields={['receptorDni', 'receptorName']}
+            emptyMessage="No se encontraron notificaciones."
+            header={header}
+          >
+            <Column field="titulo" header="Título" sortable style={{ width: '20%' }}></Column>
+            <Column
+              field="contenido"
+              header="Contenido"
+              sortable
+              style={{ width: '20%' }}
+              body={(rowData) => (
+                <Button icon="pi pi-external-link" onClick={() => handleRowClick(rowData)}>
+                  {parse(rowData.contenido.slice(0, 20))}
+                </Button>
+              )}
+            ></Column>
+            <Column
+              field="autorName"
+              header="Autor"
+              sortable
+              style={{ width: '15%' }}
+              body={(rowData) => `${rowData.autorName}`}
+            ></Column>
+            <Column
+              field="receptorName"
+              header="Receptor"
+              sortable
+              style={{ width: '15%' }}
+              body={(rowData) => `${rowData.receptorName}  (DNI:${rowData.receptorDni})`}
+            ></Column>
+            <Column
+              field="status"
+              header="Estado"
+              sortable
+              style={{ width: '10%' }}
+              body={(rowData) => <Tag value={rowData.status} severity={getSeverity(rowData.status)} />}
+            ></Column>
+            <Column
+              field="createdAt"
+              header="Enviado"
+              sortable
+              style={{ width: '20%' }}
+              body={(rowData) => format(new Date(rowData.createdAt), 'eeee d/MM/yyyy', { locale: es })}
+            ></Column>
+            <Column
+              field="updatedAt"
+              header="Visto"
+              sortable
+              style={{ width: '20%' }}
+              body={(rowData) => rowData.status === 'Leido' ? format(new Date(rowData.updatedAt), 'eeee d/MM/yyyy', { locale: es }) : ''}
+            ></Column>
+          </DataTable>
+          {selectedNotification && (
+            <div className="card flex justify-content-center">
+              <Dialog
+                header={selectedNotification.titulo}
+                visible={visible}
+                onHide={() => setVisible(false)}
+                style={{ width: '50vw' }}
+                breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+              >
+                <div>{parse(selectedNotification.contenido)}</div>
+              </Dialog>
+            </div>
+          )}
         </div>
-    );
-};
-
+      );
+    };
+    
 export default NotificadosList;

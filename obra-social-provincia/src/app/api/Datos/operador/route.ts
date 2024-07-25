@@ -7,19 +7,6 @@ import { poolPromise, sql } from '../../../lib/mssql';
 
 
 
-
-// export async function GET() {
-//     try {
-//         const users = await prisma.operador.findMany();
-//         return NextResponse.json(users);
-//     } catch (error) {
-//         console.error('Error en la función GET para operador:', error);
-//         return NextResponse.json({ status: 400, error: 'Error en el servidor' });
-//     }
-// }
-
-
-
 export async function PUT(request: NextRequest) {
     try {
         // Parsear el cuerpo de la solicitud para obtener los datos a actualizar

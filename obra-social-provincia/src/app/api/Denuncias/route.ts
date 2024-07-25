@@ -47,3 +47,32 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ status: 500, message: "Error interno del servidor" });
     }
 }
+
+
+export async function PUT(req: NextRequest) {
+    try {
+        console.log('Request received:', req);
+        const url = new URL(req.url);
+        const searchParams = new URLSearchParams(url.searchParams);
+        const id = searchParams.get('id');
+        console.log('ID:', id);
+
+        const { status } = await req.json();
+        console.log('Status:', status);
+
+        if (status !== 'Leido') {
+            return NextResponse.json({ status: 400, message: "Estado no válido" });
+        }
+
+        await prisma.$executeRawUnsafe(`
+            UPDATE Denuncia
+            SET status = 'Leido'
+            WHERE id = ${Number(id)}
+        `);
+
+        return NextResponse.json({ status: 200, message: "Denuncia actualizada correctamente" });
+    } catch (error) {
+        console.error("Error al actualizar la denuncia:", error);
+        return NextResponse.json({ status: 500, message: "Error interno del servidor" });
+    }
+}
