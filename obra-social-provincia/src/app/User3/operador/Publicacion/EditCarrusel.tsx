@@ -16,7 +16,8 @@ import AddIcon from '@mui/icons-material/Add';
 import {Fab} from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
-import ImagenCarrusel from "./ImagCarrusel"
+import UploadImag from '@/app/components/FileUploa/TemplateDemo';
+
 
 const EditCarrusel = React.forwardRef(function EditCarrusel(
   props: TransitionProps & {
@@ -32,7 +33,7 @@ export default function FullScreenDialog() {
   const [tituloPrincipal, setTituloPrincipal] = React.useState('');
   const [tituloSecundario, setTituloSecundario] = React.useState('');
   const [contenido, setContenido] = React.useState('');
-  const [urlImagen, setUrlImagen] = React.useState('');
+  const [archivoBase64, setArchivoBase64] = React.useState<string | null>(null);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -43,13 +44,18 @@ export default function FullScreenDialog() {
   };
 
 
-
+  const resetStates = () => {
+    setTituloPrincipal('');
+    setTituloSecundario('');
+    setContenido('');
+    setArchivoBase64(null);
+  };
   const handleConfirm = async () => {
     const nuevoCarrusel = {
       tituloprincipal: tituloPrincipal,
       titulosecundario: tituloSecundario,
       contenido,
-      urlImagen,
+      urlImagen:archivoBase64
     };
 
     try {
@@ -64,6 +70,7 @@ export default function FullScreenDialog() {
         throw new Error('Error al crear el item de carrusel: ' + response.statusText);
       }
       const responseData = await response.json();
+      resetStates();
       handleClose();
       return responseData;
     } catch (error) {
@@ -166,7 +173,7 @@ export default function FullScreenDialog() {
         </Box>
           </ListItemButton>
           <Divider />
-          <ImagenCarrusel/>
+          <UploadImag onFileUpload={setArchivoBase64} />
         </List>
      
       </Dialog>

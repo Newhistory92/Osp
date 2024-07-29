@@ -70,8 +70,8 @@ model Publicacion {
   id        Int      @id @default(autoincrement())
   titulo    String
   published String
-  contenido String?  @db.Text
-  imagen    Bytes?
+  contenido String   @db.Text
+  imagen    String?  @db.Text
   autorId   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -109,7 +109,7 @@ model Notificacion {
   receptorId          String
   receptorPrestadorId String?
   status              String     @default("No_leido")
-  url                 String?
+  url                 String?    @db.Text
   createdAt           DateTime   @default(now())
   updatedAt           DateTime   @updatedAt
   autor               Operador   @relation(fields: [autorId], references: [id])
@@ -122,5 +122,5 @@ model Carrusel {
   tituloprincipal  String
   titulosecundario String
   contenido        String
-  urlImagen        String
+  urlImagen        String  @db.Text
 }

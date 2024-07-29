@@ -1,26 +1,31 @@
 import React, { useRef, useState } from 'react';
+import { FileUpload } from 'primereact/fileupload';
 import { Toast } from 'primereact/toast';
-import { FileUpload, FileUploadSelectEvent, FileUploadUploadEvent, FileUploadHeaderTemplateOptions, ItemTemplateOptions } from 'primereact/fileupload';
 import { ProgressBar } from 'primereact/progressbar';
+import { Tag } from 'primereact/tag';
 import { Button } from 'primereact/button';
 import { Tooltip } from 'primereact/tooltip';
-import { Tag } from 'primereact/tag';
-import { FileUploadHandler } from './FileUploadHandler';
+import Typography from '@mui/material/Typography';
 import BeenhereIcon from '@mui/icons-material/Beenhere';
-import { Typography } from '@mui/material';
-
+import { handleFileUpload } from './FileUploadHandler';
 
 interface TemplateDemoProps {
-    archivoBase64: string | null;
+    onFileUpload: (base64: string | null) => void;
 }
 
-export default function TemplateDemo({ archivoBase64 }: TemplateDemoProps) {
+export default function UploadImag({ onFileUpload }: TemplateDemoProps) {
     const toast = useRef<Toast>(null);
     const [totalSize, setTotalSize] = useState(0);
     const fileUploadRef = useRef<FileUpload>(null);
-    const { handleFileUpload } = FileUploadHandler({ archivoBase64 });
+    const [uploadedBase64, setUploadedBase64] = useState<string | null>(null);
 
-    const onTemplateSelect = (e: FileUploadSelectEvent) => {
+    const onFileConverted = (base64: string | null) => {
+        setUploadedBase64(base64);
+        onFileUpload(base64);
+    };
+   
+
+    const onTemplateSelect = (e: any) => {
         let _totalSize = totalSize;
         let files = e.files;
 
@@ -31,10 +36,10 @@ export default function TemplateDemo({ archivoBase64 }: TemplateDemoProps) {
         setTotalSize(_totalSize);
     };
 
-    const onTemplateUpload = (e: FileUploadUploadEvent) => {
+    const onTemplateUpload = (e: any) => {
         let _totalSize = 0;
 
-        e.files.forEach((file) => {
+        e.files.forEach((file: File) => {
             _totalSize += file.size || 0;
         });
 
@@ -51,7 +56,7 @@ export default function TemplateDemo({ archivoBase64 }: TemplateDemoProps) {
         setTotalSize(0);
     };
 
-    const headerTemplate = (options: FileUploadHeaderTemplateOptions) => {
+    const headerTemplate = (options: any) => {
         const { className, chooseButton, uploadButton, cancelButton } = options;
         const value = totalSize / 10000;
         const formatedValue = fileUploadRef && fileUploadRef.current ? fileUploadRef.current.formatSize(totalSize) : '0 B';
@@ -69,7 +74,7 @@ export default function TemplateDemo({ archivoBase64 }: TemplateDemoProps) {
         );
     };
 
-    const itemTemplate = (inFile: object, props: ItemTemplateOptions) => {
+    const itemTemplate = (inFile: object, props: any) => {
         const file = inFile as File;
         return (
             <div className="flex align-items-center flex-wrap">
@@ -110,16 +115,31 @@ export default function TemplateDemo({ archivoBase64 }: TemplateDemoProps) {
             <Tooltip target=".custom-upload-btn" content="Upload" position="bottom" />
             <Tooltip target=".custom-cancel-btn" content="Clear" position="bottom" />
 
-            <FileUpload ref={fileUploadRef} name="demo[]" url="/api/upload" multiple accept="image/*" maxFileSize={1000000}
-                onUpload={onTemplateUpload} onSelect={onTemplateSelect} onError={onTemplateClear} onClear={onTemplateClear}
-                headerTemplate={headerTemplate} itemTemplate={itemTemplate} emptyTemplate={emptyTemplate}
-                chooseOptions={chooseOptions} uploadOptions={uploadOptions} cancelOptions={cancelOptions}
-                customUpload uploadHandler={handleFileUpload} />
+            <FileUpload
+    ref={fileUploadRef}
+    name="updat"
+    multiple
+    accept="image/*"
+    maxFileSize={1000000}
+    onUpload={onTemplateUpload}
+    onSelect={onTemplateSelect}
+    onError={onTemplateClear}
+    onClear={onTemplateClear}
+    headerTemplate={headerTemplate}
+    itemTemplate={itemTemplate}
+    emptyTemplate={emptyTemplate}
+    chooseOptions={chooseOptions}
+    uploadOptions={uploadOptions}
+    cancelOptions={cancelOptions}
+    customUpload
+    uploadHandler={(e) => handleFileUpload(e, onFileConverted)}
+/>
             
-            {archivoBase64 && (
+            {uploadedBase64 && (
                 <div>
-                    <Typography  variant="button" display="block" >Archivo Cargado con Exito <BeenhereIcon/></Typography>
-                   
+                    <Typography variant="button" display="block">
+                        Archivo Cargado con Éxito <BeenhereIcon />
+                    </Typography>
                 </div>
             )}
         </div>

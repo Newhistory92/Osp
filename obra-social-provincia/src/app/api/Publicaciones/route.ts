@@ -13,36 +13,24 @@ export async function GET(req: NextRequest) {
         let publicaciones;
 
         if (published) {
-            publicaciones = await prisma.publicacion.findMany({
-                where: {
-                    published: published
-                },
-                include: {
-                    autor: {
-                        select: {
-                            name: true,
-                           
-                        }
-                    }
-                }
-            });
-        } else {
-            publicaciones = await prisma.publicacion.findMany({
-                include: {
-                    autor: {
-                        select: {
-                            name: true,
-                            
-                        }
-                    }
-                }
-            });
+            publicaciones = await prisma.$queryRaw`
+            SELECT p.*, o.name as autor_name 
+            FROM Publicacion p 
+            JOIN Operador o ON p.autorId = o.id 
+            WHERE p.published = ${published}
+        `;
+    } else {
+        publicaciones = await prisma.$queryRaw`
+            SELECT p.*, o.name as autor_name 
+            FROM Publicacion p 
+            JOIN Operador o ON p.autorId = o.id
+        `;
         }
 
         // Verifica si se encontraron publicaciones
-        if (publicaciones.length === 0) {
-            return NextResponse.json({ status: 400, message: `No se encontraron publicaciones` });
-        }
+        // if (publicaciones.length === 0) {
+        //     return NextResponse.json({ status: 400, message: `No se encontraron publicaciones` });
+        // }
 
         // Devuelve las publicaciones encontradas
         return NextResponse.json({ status: 200, message: `Estas son las publicaciones:`, publicaciones });
@@ -54,45 +42,55 @@ export async function GET(req: NextRequest) {
 
 
 
-// Función para manejar la solicitud POST
 export async function POST(request: NextRequest) {
     try {
         console.log("Recibida solicitud POST para crear una nueva publicación");
         const nuevaPublicacion = await request.json();
-      
         console.log("Datos de la nueva publicación:", nuevaPublicacion);
-        const publicacionCreada = await prisma.publicacion.create({ // Crea la nueva publicación en la base de datos utilizando Prisma
-            data: nuevaPublicacion,
-        });
+        const currentDateTime = new Date().toISOString()
+        const result = await prisma.$executeRaw`
+            INSERT INTO Publicacion (titulo, published, contenido, autorId,updatedAt,imagen) 
+            VALUES (${nuevaPublicacion.titulo}, ${nuevaPublicacion.published}, ${nuevaPublicacion.contenido}, ${nuevaPublicacion.autorId},${currentDateTime},${nuevaPublicacion.imagen || null})`;
+
+        const publicacionCreada = result;
         console.log("Publicación creada exitosamente:", publicacionCreada);
         
         return NextResponse.json({ status: 200, message: "Publicación creada exitosamente", publicacion: publicacionCreada });
     } catch (error:any) {
-        console.error("Error al verificar la autenticación del usuario:", error);
+        console.error("Error al crear la publicación:", error);
         return NextResponse.json({ status: 500, message: `Error al crear la publicación: ${error.message}` });
     }
 }
 
-// Función para manejar la solicitud PUT
+
 export async function PUT(request: NextRequest) {
     try {
         console.log("Recibida solicitud PUT para actualizar una publicación");
-        const datosActualizados = await request.json()
+        const datosActualizados = await request.json();
         const id = datosActualizados.id;
         console.log(datosActualizados);
-        console.log(id)
-        const publicacionActualizada = await prisma.publicacion.update({ // Actualiza la publicación en la base de datos utilizando Prisma
-            where: { id:id },
-            data: datosActualizados,
-        });
+        console.log(id);
+
+        const result = await prisma.$executeRaw`
+            UPDATE Publicacion 
+            SET titulo = ${datosActualizados.titulo}, 
+                published = ${datosActualizados.published}, 
+                contenido = ${datosActualizados.contenido}, 
+                imagen = ${datosActualizados.imagen}, 
+                autorId = ${datosActualizados.autorId} 
+            WHERE id = ${id}
+            RETURNING *
+        `;
+
+        const publicacionActualizada = result;
         console.log("Publicación actualizada exitosamente:", publicacionActualizada);
-        return NextResponse.json({ status: 200, message: "Publicación se actualizo exitosamente", publicacionActualizada });
-    }catch (error:any) {
-        console.error("Error al crear la publicacion:", error);
-        return NextResponse.json({ status: 500, message: `Error al actualizar  la publicación: ${error.message}` });
+
+        return NextResponse.json({ status: 200, message: "Publicación se actualizó exitosamente", publicacionActualizada });
+    } catch (error:any) {
+        console.error("Error al actualizar la publicación:", error);
+        return NextResponse.json({ status: 500, message: `Error al actualizar la publicación: ${error.message}` });
     }
 }
-
 
 
 export async function DELETE(request: NextRequest) {
@@ -101,13 +99,15 @@ export async function DELETE(request: NextRequest) {
         const datosEliminacion = await request.json();
         const id = datosEliminacion.id;
 
-        // Elimina la publicación de la base de datos utilizando Prisma
-        const publicacionEliminada = await prisma.publicacion.delete({
-            where: { id: Number(id) }
-        });
+        const result = await prisma.$executeRaw`
+            DELETE FROM Publicacion WHERE id = ${id}
+            RETURNING *
+        `;
 
+        const publicacionEliminada = result;
         console.log("Publicación eliminada exitosamente:", publicacionEliminada);
-        return NextResponse.json({ status: 200, message: "Publicación eliminada exitosamente" });
+        
+        return NextResponse.json({ status: 200, message: "Publicación eliminada exitosamente", publicacionEliminada });
     } catch (error:any) {
         console.error("Error al eliminar la publicación:", error);
         return NextResponse.json({ status: 500, message: `Error al eliminar la publicación: ${error.message}` });

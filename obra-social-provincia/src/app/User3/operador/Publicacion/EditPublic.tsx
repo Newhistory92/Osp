@@ -7,7 +7,7 @@ import FormControl from '@mui/material/FormControl';
 import NativeSelect from '@mui/material/NativeSelect';
 import { Button, TextField, List, ListItem, ListItemText, Modal, ListSubheader, Fab, Typography } from '@mui/material';
 import { crearPublicacion, actualizarPublicacion,deletePublicacion } from '../../../api/Datos/Publicacion/ApiPublicacion';
-import { useAppSelector } from "../../../hooks/StoreHook";
+import { useAppSelector,useAppDispatch } from "../../../hooks/StoreHook";
 import ModeEditIcon from '@mui/icons-material/ModeEdit';
 import DeleteSweepIcon from '@mui/icons-material/DeleteSweep';
 import DrawIcon from '@mui/icons-material/Draw';
@@ -17,6 +17,7 @@ import { PublicacionEdit } from '@/app/interfaces/interfaces';
 import dynamic from 'next/dynamic';
 import tinymce from 'tinymce/tinymce';
 import { Toast } from 'primereact/toast';
+import { setLoading } from '@/app/redux/Slice/loading';
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import 'primeicons/primeicons.css';
 
@@ -37,6 +38,7 @@ export default function EditPublicacion() {
     const [titulo, setTitulo] = useState('');
     const [contenido, setContenido] = useState('');
     const [published, setPublished] = useState('');
+    const [archivoBase64, setArchivoBase64] = React.useState<string | null>(null);
     const [publicaciones, setPublicaciones] = useState<PublicacionEdit[]>([]);
     const [editModalOpen, setEditModalOpen] = useState(false);
     const [editingPublicacion, setEditingPublicacion] = useState< PublicacionEdit | null>(null);
@@ -45,8 +47,7 @@ export default function EditPublicacion() {
     const currentUser = useAppSelector(state => state.user.currentUser);
     const toast = useRef<Toast>(null);
     const editorRef = useRef<any>(null);
-
-
+    const dispatch = useAppDispatch()
 
 
 
@@ -80,9 +81,9 @@ export default function EditPublicacion() {
                 published: published,
                 titulo: titulo,
                 contenido: contenido,
+                imagen: archivoBase64 || null,
                 autorId: autorId
             };
-    
             try {
                 await crearPublicacion(nuevaPublicacion);
                 toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'La publicación se creó exitosamente', life: 3000 });
@@ -99,6 +100,7 @@ export default function EditPublicacion() {
     };
     useEffect(() => {
         if (published) {
+            dispatch(setLoading(true));
             const GetPublic = async () => {
                 try {
                     const response = await fetch(`/api/Publicaciones?published=${published}`, {
@@ -111,6 +113,7 @@ export default function EditPublicacion() {
                         throw new Error('Error al obtener las publicaciones: ' + response.statusText);
                     }
                     const data = await response.json();
+                    console.log(data)
                     if (data.status === 200) {
                         setPublicaciones(data.publicaciones);
                     } else {
@@ -119,7 +122,9 @@ export default function EditPublicacion() {
                     }
                 } catch (error) {
                     console.error('Error al obtener las publicaciones:', error);
-                }
+                }finally {
+                    dispatch(setLoading(false));
+                  }
             };
     
             const handler = setTimeout(() => {
@@ -185,35 +190,39 @@ export default function EditPublicacion() {
 
 
     const handleFilePicker = (cb: (url: string, meta: { title: string }) => void, value: string, meta: { filetype: string }) => {
-        // const input = document.createElement('input');
-        // input.setAttribute('type', 'file');
-        // input.setAttribute('accept', 'image/*');
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
     
-        // input.addEventListener('change', (e) => {
-        //   const target = e.target as HTMLInputElement;
-        //   const file = target.files ? target.files[0] : null;
+        input.addEventListener('change', (e) => {
+          const target = e.target as HTMLInputElement;
+          const file = target.files ? target.files[0] : null;
           
-        //   if (file) {
-        //     const reader = new FileReader();
-        //     reader.addEventListener('load', () => {
-        //       const editor = tinymce.activeEditor;
-        //       if (editor) {
-        //         const id = 'blobid' + (new Date()).getTime();
-        //         const blobCache = editor.editorUpload.blobCache;
-        //         const base64 = (reader.result as string).split(',')[1];
-        //         const blobInfo = blobCache.create(id, file, base64);
-        //         blobCache.add(blobInfo);
+          if (file) {
+            const reader = new FileReader();
+            reader.addEventListener('load', () => {
+              const editor = tinymce.activeEditor;
+              if (editor) {
+                const id = 'blobid' + (new Date()).getTime();
+                const blobCache = editor.editorUpload.blobCache;
+                const base64 = (reader.result as string).split(',')[1];
+                const blobInfo = blobCache.create(id, file, base64);
+                blobCache.add(blobInfo);
+
+                // Guardar la imagen en base64 en el estado
+                setArchivoBase64(reader.result as string);
                 
-        //         // Call the callback and populate the Title field with the file name
-        //         cb(blobInfo.blobUri(), { title: file.name });
-        //       }
-        //     });
-        //     reader.readAsDataURL(file);
-        //   }
-        // });
+                // Llamar el callback y llenar el campo de Título con el nombre del archivo
+                cb(blobInfo.blobUri(), { title: file.name });
+              }
+            });
+            reader.readAsDataURL(file);
+          }
+        });
       
-        // input.click();
+        input.click();
       };
+
     return (
         <div className='bg-white rounded-lg'>
             <Box sx={{ minWidth: 120 }}>
@@ -266,7 +275,7 @@ export default function EditPublicacion() {
                            secondary={
                                <>
                                    <Typography variant="body2">
-                                       {`Autor: ${publicacion.autor.name} ${publicacion.autor.apellido}`}
+                                       {`Autor: ${publicacion.autor_name}`}
                                    </Typography>
                                    <Typography variant="body2" color="textSecondary">
                                    {`Actualizado: ${format(new Date(publicacion.updatedAt), 'eeee d/MM/yyyy', { locale: es })}`}

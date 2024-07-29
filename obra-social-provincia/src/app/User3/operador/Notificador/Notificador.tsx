@@ -7,8 +7,11 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import TemplateDemo from '@/app/components/FileUploa/TemplateDemo';
 import dynamic from 'next/dynamic';
+import tinymce from 'tinymce/tinymce';
+const UploadImag = dynamic(() => import ('@/app/components/FileUploa/TemplateDemo'),{
+  ssr:false
+})
 const BundledEditor = dynamic(() => import ('@/BundledEditor'),{
   ssr:false
 })
@@ -243,6 +246,40 @@ const handleEnviar = async () => {
 };
 
 
+const handleFilePicker = (cb: (url: string, meta: { title: string }) => void, value: string, meta: { filetype: string }) => {
+  const input = document.createElement('input');
+  input.setAttribute('type', 'file');
+  input.setAttribute('accept', 'image/*');
+
+  input.addEventListener('change', (e) => {
+    const target = e.target as HTMLInputElement;
+    const file = target.files ? target.files[0] : null;
+    
+    if (file) {
+      const reader = new FileReader();
+      reader.addEventListener('load', () => {
+        const editor = tinymce.activeEditor;
+        if (editor) {
+          const id = 'blobid' + (new Date()).getTime();
+          const blobCache = editor.editorUpload.blobCache;
+          const base64 = (reader.result as string).split(',')[1];
+          const blobInfo = blobCache.create(id, file, base64);
+          blobCache.add(blobInfo);
+
+          // Guardar la imagen en base64 en el estado
+          setArchivoBase64(reader.result as string);
+          
+          // Llamar el callback y llenar el campo de Título con el nombre del archivo
+          cb(blobInfo.blobUri(), { title: file.name });
+        }
+      });
+      reader.readAsDataURL(file);
+    }
+  });
+
+  input.click();
+};
+
 
   const handleCancelar = () => {
     setTitulo('');
@@ -371,14 +408,14 @@ image_title: true,
 automatic_uploads: true,
 image_advtab: true,
 media_live_embeds: true,
-
+file_picker_callback: handleFilePicker,
 }}
 />
           )}
 
 {messageType === 'success' && (afiliado || prestador) && (
               <div className="card mt-6">
-                  <TemplateDemo archivoBase64={archivoBase64} />
+                   <UploadImag onFileUpload={setArchivoBase64} />
               </div>
           )}
 

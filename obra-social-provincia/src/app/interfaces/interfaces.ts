@@ -7,6 +7,7 @@ export interface Publicacion {
     published: string;
 }
 export interface PublicacionEdit {
+  autor_name: any;
   updatedAt: string | number | Date;
   autor: any;
   id: number;
