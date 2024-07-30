@@ -75,7 +75,7 @@ CREATE TABLE [dbo].[Publicacion] (
     [titulo] NVARCHAR(1000) NOT NULL,
     [published] NVARCHAR(1000) NOT NULL,
     [contenido] TEXT,
-    [imagen] VARBINARY(max),
+    [imagen] TEXT NULL,
     [autorId] NVARCHAR(1000) NOT NULL,
     [createdAt] DATETIME2 NOT NULL CONSTRAINT [Publicacion_createdAt_df] DEFAULT CURRENT_TIMESTAMP,
     [updatedAt] DATETIME2 NOT NULL,

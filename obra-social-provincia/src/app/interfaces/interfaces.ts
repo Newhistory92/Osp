@@ -313,3 +313,10 @@ export interface CarruselItem {
   contenido: string;
   urlImagen: string;
 }
+
+export interface CarruselItem {
+  urlImagen: string;
+  tituloprincipal: string;
+  titulosecundario: string;
+  contenido: string;
+}

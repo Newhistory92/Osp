@@ -49,8 +49,8 @@ export async function POST(request: NextRequest) {
         console.log("Datos de la nueva publicación:", nuevaPublicacion);
         const currentDateTime = new Date().toISOString()
         const result = await prisma.$executeRaw`
-            INSERT INTO Publicacion (titulo, published, contenido, autorId,updatedAt,imagen) 
-            VALUES (${nuevaPublicacion.titulo}, ${nuevaPublicacion.published}, ${nuevaPublicacion.contenido}, ${nuevaPublicacion.autorId},${currentDateTime},${nuevaPublicacion.imagen || null})`;
+            INSERT INTO Publicacion (titulo, published, contenido,imagen, autorId,updatedAt) 
+            VALUES (${nuevaPublicacion.titulo}, ${nuevaPublicacion.published}, ${nuevaPublicacion.contenido},${nuevaPublicacion.imagen || null}, ${nuevaPublicacion.autorId},${currentDateTime})`;
 
         const publicacionCreada = result;
         console.log("Publicación creada exitosamente:", publicacionCreada);

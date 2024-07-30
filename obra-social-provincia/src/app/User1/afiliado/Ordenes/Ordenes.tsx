@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,useRef } from 'react';
 import { CarouselDefault } from './CarouselCard';
 import { OrdenData , UserInfo} from '@/app/interfaces/interfaces';
 import { useAppSelector,useAppDispatch } from "../../../hooks/StoreHook"
 import {setLoading} from '@/app/redux/Slice/loading';
-import Loading from '@/app/components/Loading/loading';
+import { Toast } from 'primereact/toast';
 
 
 
@@ -13,14 +13,17 @@ const Ordenes = () => {
     const ordenes = useAppSelector(state => state.navbarvertical);
     const currentUser = useAppSelector((state: { user: { currentUser: UserInfo | null; }; }) => state.user.currentUser?.grupFamiliar);
     const dispatch = useAppDispatch(); 
-  
+    const toast = useRef<Toast>(null);
+  console.log(currentUser)
     console.log(ordenesData);
   
-    if (!currentUser) {
-      return <div><Loading /></div>;
-    }
-  
     useEffect(() => {
+      if (!currentUser) {
+        dispatch(setLoading(false));
+        toast.current?.show({ severity: 'error', summary: 'Error', detail: 'ocurrió un error,Vuelva a seleccionar el usuario. Disculpe las molestias.', life: 3000 });
+        return;
+      }
+  
       const fetchOrdenes = async () => {
         
         dispatch(setLoading(true));
@@ -46,13 +49,13 @@ const Ordenes = () => {
       if (ordenes && currentUser) {
         fetchOrdenes();
     }
-}, [currentUser, dispatch]);
+}, [currentUser, dispatch, ordenes]);
 
     return (
         <div>
             
                <CarouselDefault ordenesData={ordenesData} />
-           
+               <Toast ref={toast} position="bottom-center" />
         </div>
     );
 };

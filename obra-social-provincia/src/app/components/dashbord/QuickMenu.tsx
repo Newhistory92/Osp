@@ -16,11 +16,14 @@ import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
 import DoneAllIcon from '@mui/icons-material/DoneAll';
 import dynamic from 'next/dynamic';
+import Image from "next/image";
 const NotificationsAccordion = dynamic(() => import('../../User3/operador/Notificador/Notification-history'), {
     ssr: false
 });
 
-
+const capitalizeWords = (str: string) => {
+    return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
+};
 const Notifications: React.FC<NotificationsProps> = ({ notificaciones, handleButtonClick }) => (
     <SimpleBar style={{ maxHeight: '300px' }}>
         <ListGroup variant="flush">
@@ -29,8 +32,9 @@ const Notifications: React.FC<NotificationsProps> = ({ notificaciones, handleBut
                     <Row>
                         <Col>
                             <Button variant="link" onClick={() => handleButtonClick(item)}>
-                                <h5 className="mb-1">{item.titulo}</h5>
-                                <p className="mb-0">{parse(item.contenido.slice(0, 20))}</p>
+                                <h5 className="mb-1 text-left">{capitalizeWords(item.titulo)}</h5>
+                                <p className=" text-left">{parse(item.contenido.slice(0, 45))}</p>
+                               
                             </Button>
                         </Col>
                     </Row>
@@ -244,7 +248,14 @@ const handleButtonClick = async (notification: Notificacion) => {
 }
 
     
-
+const handleDownload = () => {
+    if (selectedNotification?.url) {
+      const link = document.createElement('a');
+      link.href = selectedNotification.url;
+      link.download = 'imagen';
+      link.click();
+    }
+  };
     const footerContent = selectedNotification && (
         <div>
             <span >{selectedNotification.status}<DoneAllIcon className="ms-2 mb-2"/></span>
@@ -261,16 +272,31 @@ const handleButtonClick = async (notification: Notificacion) => {
                 : <QuickMenuMobile newMessagesCount={newMessagesCount} notificaciones={notificaciones} handleButtonClick={handleButtonClick} showModal={showModal} setShowModal={setShowModal} />
             )}
             {selectedNotification && (
-                <Dialog
-                    header={selectedNotification.titulo}
-                    visible={visible}
-                    onHide={() => setVisible(false)}
-                    style={{ width: '50vw' }}
-                    breakpoints={{ '960px': '75vw', '641px': '100vw' }}
-                    footer={footerContent}
+                  <Dialog
+                  header={selectedNotification.titulo}
+                  visible={visible}
+                  onHide={() => setVisible(false)}
+                  style={{ width: '50vw' }}
+                  breakpoints={{ '960px': '75vw', '641px': '100vw' }}
+                  footer={
+                    <Button onClick={handleDownload} disabled={!selectedNotification.url}>
+                      Descargar Imagen
+                    </Button>
+                  }
                 >
-                    <div>{parse(selectedNotification.contenido)}</div>
-                   
+                  <div>{parse(selectedNotification.contenido)}</div>
+                  {selectedNotification.url && (
+                    <div style={{ textAlign: 'center', marginTop: '20px' }}>
+                      <Image 
+                        src={selectedNotification.url} 
+                        alt="Obra Social Provincia" 
+                        layout="intrinsic"
+                        width={500} 
+                        height={300} 
+                        objectFit="contain"
+                      />
+                    </div>
+                  )}
                 </Dialog>
             )}
         </Fragment>

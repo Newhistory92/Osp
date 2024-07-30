@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useRef } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import ListItemText from '@mui/material/ListItemText';
@@ -17,7 +17,9 @@ import {Fab} from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Box from '@mui/material/Box';
 import UploadImag from '@/app/components/FileUploa/TemplateDemo';
-
+import { Toast } from 'primereact/toast';
+import { setLoading } from '@/app/redux/Slice/loading';
+import {useAppDispatch } from "../../../hooks/StoreHook";
 
 const EditCarrusel = React.forwardRef(function EditCarrusel(
   props: TransitionProps & {
@@ -34,6 +36,8 @@ export default function FullScreenDialog() {
   const [tituloSecundario, setTituloSecundario] = React.useState('');
   const [contenido, setContenido] = React.useState('');
   const [archivoBase64, setArchivoBase64] = React.useState<string | null>(null);
+  const toast = useRef<Toast>(null);
+  const dispatch =useAppDispatch();
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -55,9 +59,11 @@ export default function FullScreenDialog() {
       tituloprincipal: tituloPrincipal,
       titulosecundario: tituloSecundario,
       contenido,
-      urlImagen:archivoBase64
+      urlImagen: archivoBase64
     };
-
+  
+    dispatch(setLoading(true));
+  
     try {
       const response = await fetch('/api/Publicaciones/carrusel', {
         method: 'POST',
@@ -66,20 +72,24 @@ export default function FullScreenDialog() {
         },
         body: JSON.stringify(nuevoCarrusel),
       });
-      if (!response.ok) {
-        throw new Error('Error al crear el item de carrusel: ' + response.statusText);
+  
+      if (response.ok) {
+        const responseData = await response.json();
+        toast.current?.show({ severity: 'success', summary: 'Éxito', detail: 'Notificación enviada exitosamente', life: 3000 });
+        resetStates();
+        handleClose();
+        return responseData;
+      } else {
+        toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al crear el item de carrusel', life: 3000 });
       }
-      const responseData = await response.json();
-      resetStates();
-      handleClose();
-      return responseData;
     } catch (error) {
       console.error('Error al crear el item de carrusel:', error);
+      toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al crear el item de carrusel', life: 3000 });
+    } finally {
+      dispatch(setLoading(false));
     }
   };
-
-
-
+  
 
 
   return (
