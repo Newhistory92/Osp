@@ -1,4 +1,9 @@
 {
-  "extends": "next/core-web-vitals",
-  "ignorePatterns": ["dist", "node_modules", "public/tinymce"]
+  // "extends": "next/core-web-vitals",
+  "extends": "next",
+  "ignorePatterns": ["dist", "node_modules", "public/tinymce"],
+  "rules": {
+    "react/no-unescaped-entities": "off",
+    "@next/next/no-page-custom-font": "off"
+  }
 }

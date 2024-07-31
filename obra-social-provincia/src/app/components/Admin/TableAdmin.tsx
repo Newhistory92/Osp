@@ -212,8 +212,6 @@ const UserTable: React.FC<UserTableProps> = ({ userType }) => {
                     <div className="p-grid">
                         <div className="p-col-4"><strong>Nombre:</strong></div>
                         <div className="p-col-8">{selectedUser.name}</div>
-                        <div className="p-col-4"><strong>Apellido:</strong></div>
-                        <div className="p-col-8">{selectedUser.apellido}</div>
                         <div className="p-col-4"><strong>Email:</strong></div>
                         <div className="p-col-8">{selectedUser.email}</div>
                         <div className="p-col-4"><strong>Telefono:</strong></div>

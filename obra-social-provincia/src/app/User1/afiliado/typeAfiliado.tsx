@@ -38,7 +38,7 @@ const TypeAfiliado = () => {
         if (response.ok) {
           if (data.status === 200) {
             dispatch(setCurrentUser(data.users[0]));
-            window.location.href = '/page/dashboard';
+             window.location.href = '/page/dashboard';
           } else if (data.status === 401) {
             window.location.href = '/page/signin';
           } else if (data.status === 402) {

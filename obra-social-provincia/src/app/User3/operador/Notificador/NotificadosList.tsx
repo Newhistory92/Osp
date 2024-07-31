@@ -13,7 +13,7 @@ import { Tag } from 'primereact/tag';
 import { InputText } from 'primereact/inputtext';
 import PersonSearchIcon from '@mui/icons-material/PersonSearch';
 import Loading from '@/app/components/Loading/loading';
-import base64ToImageUrl  from '@/app/components/FileUploa/imageUtils';
+import Image from 'next/image';
 
 interface Props {
     autorId: string | null;
@@ -180,7 +180,7 @@ const NotificadosList = ({ autorId }: Props) => {
                 <div>{parse(selectedNotification.contenido)}</div>
                 {selectedNotification.url && (
                             <div>
-                                <img src={selectedNotification.url} alt="Notificación" style={{ maxWidth: '100%' }} />
+                                <Image src={selectedNotification.url} alt="Notificación" style={{ maxWidth: '100%' }} />
                             </div>
                         )}
               </Dialog>

@@ -98,6 +98,7 @@ export default function EditPublicacion() {
             setShowForm(false);
         }
     };
+
     useEffect(() => {
         if (published) {
             dispatch(setLoading(true));
@@ -135,7 +136,7 @@ export default function EditPublicacion() {
                 clearTimeout(handler);
             };
         }
-    }, [published]);
+    }, [published,dispatch]);
     
     
     

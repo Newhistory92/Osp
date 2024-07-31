@@ -54,7 +54,7 @@ interface DialogSelectProps {
                 onChange={handleChange}
                 input={<OutlinedInput label="Nueva" />}
               >
-                {Especialidades.especialidades.map((especialidad: { id: number; nombre: string; }, index: number) => (
+                {Especialidades.especialidades.map((especialidad: { id: string; nombre: string; }, index: number) => (
                   <MenuItem key={especialidad.id} value={especialidad.nombre}>{especialidad.nombre}</MenuItem>
                 ))}
               </Select>

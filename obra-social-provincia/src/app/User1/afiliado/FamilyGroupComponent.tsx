@@ -34,18 +34,15 @@ function capitalizeWords(str: string) {
 
 export default function FamilyGroup() {
   const [grupsData, setGrupsData] = React.useState<any>([]);
-  const familyGroupOpen = useAppSelector(state => state.navbarvertical.familyGroupOpen);
   const [modalVisible, setModalVisible] = useState(false);
   const currentUser = useAppSelector((state: { user: { currentUser: UserInfo | null; }; }) => state.user.currentUser);
   const dispatch = useAppDispatch();
 
-  if (!currentUser) {
-    return <div><Loading /></div>;
-  }
 
   const userData = Array.isArray(currentUser) ? currentUser[0] : currentUser;
 
   const fetchGrup = React.useCallback(async () => {
+    if (!userData) return;
     dispatch(setLoading(true));
     try {
       const response = await fetch(`/api/Datos/afiliado?doctit=${userData.dni}`);
@@ -62,13 +59,18 @@ export default function FamilyGroup() {
     } finally {
       dispatch(setLoading(false));
     }
-  }, [ userData.dni, dispatch]);
+  }, [userData, dispatch]);
 
   React.useEffect(() => {
-    if (familyGroupOpen) {
+    if (userData) {
       fetchGrup();
     }
-  }, [familyGroupOpen, fetchGrup]);
+  }, [fetchGrup, userData]);
+
+  if (!currentUser) {
+    return <div><Loading /></div>;
+  }
+
 
   const renderGrupsDataInfo = (grup: GrupData) => {
     const carnetVencimiento = grup.FecVenciCarnet === '9999-12-31T00:00:00.000Z' ? 'Permanente' : formatFecha(grup.FecVenciCarnet);

@@ -7,26 +7,7 @@ import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import GroupAddOutlinedIcon from '@mui/icons-material/GroupAddOutlined';
 
 const Statistic: React.FC = () => {
-  const [countAfiliados, setCountAfiliados] = React.useState<number>(0);
-  const [countPrestadores, setCountPrestadores] = React.useState<number>(0);
 
-  const fetchData = React.useCallback(async () => {
-    try {
-      const response = await fetch('/api/Datos/static');
-      const data = await response.json();
-      console.log(data);
-      if (data.status === 200) {
-        setCountAfiliados(data.data.countAfiliados);
-        setCountPrestadores(data.data.countPrestadores);
-      }
-    } catch (error) {
-      console.error('Error al obtener los datos:', error);
-    }
-  }, []);
-
-  React.useEffect(() => {
-    fetchData();
-  }, [fetchData]); 
   return (
     <section className="w-full text-gray-400 bg-gradient-to-b from-transparent via-gray-900 to-gray-900 body-font overflow-hidden">
         <div className="container mx-auto px-5 py-5">
@@ -41,7 +22,7 @@ const Statistic: React.FC = () => {
             <div className="border-2 border-gray-800 px-4 py-6 rounded-lg">
               <GroupAddOutlinedIcon sx={{ color: orange[400], fontSize: 40 }} />
               <h2 className="title-font font-medium text-3xl text-white">
-                <NumberTicker value={countPrestadores} />
+                <NumberTicker value={5896} />
               </h2>
               <p className="leading-relaxed text-center">Prestadores de Servicios</p>
             </div>
@@ -50,7 +31,7 @@ const Statistic: React.FC = () => {
             <div className="border-2 border-gray-800 px-4 py-6 rounded-lg">
               <FamilyRestroomOutlinedIcon sx={{ color: orange[400], fontSize: 40 }} />
               <h2 className="title-font font-medium text-3xl text-white">
-                <NumberTicker value={countAfiliados} />
+                <NumberTicker value={321807} />
               </h2>
               <p className="leading-relaxed text-center">Afiliados</p>
             </div>

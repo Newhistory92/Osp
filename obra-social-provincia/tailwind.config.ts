@@ -1,6 +1,5 @@
 
 /** @type {import('tailwindcss').Config} */
-import purgecss from '@fullhuman/postcss-purgecss';
 import animations from "@midudev/tailwind-animations";
 import withMT from "@material-tailwind/react/utils/withMT";
 import {nextui} from "@nextui-org/react"

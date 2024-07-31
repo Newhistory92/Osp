@@ -14,13 +14,11 @@ const Ordenes = () => {
     const currentUser = useAppSelector((state: { user: { currentUser: UserInfo | null; }; }) => state.user.currentUser?.grupFamiliar);
     const dispatch = useAppDispatch(); 
     const toast = useRef<Toast>(null);
-  console.log(currentUser)
-    console.log(ordenesData);
-  
+
     useEffect(() => {
       if (!currentUser) {
         dispatch(setLoading(false));
-        toast.current?.show({ severity: 'error', summary: 'Error', detail: 'ocurrió un error,Vuelva a seleccionar el usuario. Disculpe las molestias.', life: 3000 });
+        toast.current?.show({ severity: 'error', summary: 'Error', detail: `ocurrió un error,ingresa a su Grupo Familiar y retome su consulta` , life: 3000 });
         return;
       }
   

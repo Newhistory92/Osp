@@ -8,6 +8,7 @@ import { Tooltip } from 'primereact/tooltip';
 import Typography from '@mui/material/Typography';
 import BeenhereIcon from '@mui/icons-material/Beenhere';
 import { handleFileUpload } from './FileUploadHandler';
+import Image from 'next/image';
 
 interface TemplateDemoProps {
     onFileUpload: (base64: string | null) => void;
@@ -80,7 +81,7 @@ export default function UploadImag({ onFileUpload }: TemplateDemoProps) {
             <div className="flex align-items-center flex-wrap">
                 <div className="flex align-items-center" style={{ width: '40%' }}>
                     {/* @ts-ignore */}
-                    <img alt={file.name} role="presentation" src={file.objectURL} width={100} />
+                    <Image alt={file.name} role="presentation" src={file.objectURL} width={100} />
                     <span className="flex flex-column text-left ml-3">
                         {file.name}
                         <small>{new Date().toLocaleDateString()}</small>
