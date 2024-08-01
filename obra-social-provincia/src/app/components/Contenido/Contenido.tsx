@@ -18,7 +18,6 @@ const Contenido = () => {
   const showPrestadores = useAppSelector(state => state.navbar.showPrestadores);
   const selectedContent = useAppSelector(state => state.navbar.selectedContent);
   const showWelcome = useAppSelector(state => state.navbar.showWelcome)
-//console.log(showWelcome,"showWelcome")
   const dispatch = useAppDispatch(); 
 
  

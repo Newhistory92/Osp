@@ -12,9 +12,8 @@ export async function POST(request) {
         const email = user.emailAddresses[0].emailAddress;
         const userId = user.id;
         const name= body.name
-      console.log( numeroOperador)
+     
         const isAuthenticated = await checkUserAuthentication(userId, 'operador');
-        console.log(isAuthenticated.status, isAuthenticated.message);
         if (isAuthenticated.status == 200) {
             return NextResponse.json({ status: 404, message: isAuthenticated.message });
         }
@@ -37,7 +36,7 @@ export async function POST(request) {
             VALUES (${userId}, ${name},  ${email}, ${imageUrl}, ${phoneNumbers[0].phoneNumber}, ${passwordValue}, ${numeroOperador},${currentDateTime})
         `;
         
-        console.log("Perfil de usuario creado correctamente:", newOperador);
+        //console.log("Perfil de usuario creado correctamente:", newOperador);
 
         return NextResponse.json({ status: 200, message: "Perfil del Operador fue creado con éxito.", newOperador });
     } catch (error) {

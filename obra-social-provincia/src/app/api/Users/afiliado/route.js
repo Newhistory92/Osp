@@ -18,7 +18,7 @@ export async function POST(request) {
      
         // Verificar si el usuario ya está autenticado en alguna tabla
         const isAuthenticated = await checkUserAuthentication(userId, 'afiliado');
-        console.log(isAuthenticated.status,isAuthenticated.message )
+        //console.log(isAuthenticated.status,isAuthenticated.message )
         if (isAuthenticated.status == 200) {
             return NextResponse.json({ status: 404, message: isAuthenticated.message });
         }
@@ -27,7 +27,7 @@ export async function POST(request) {
       const existingUserWithEmail = await prisma.$queryRaw`
       SELECT * FROM Afiliado WHERE email = ${email}
   `;
-  console.log("Usuario existente con correo electrónico:", existingUserWithEmail);
+  //console.log("Usuario existente con correo electrónico:", existingUserWithEmail);
 
   if (existingUserWithEmail.length > 0) {
       return NextResponse.json({ status: 400, message: `El Correo Electrónico ${existingUserWithEmail[0].email} ya está asociado a un Prestador` });
@@ -45,7 +45,7 @@ export async function POST(request) {
        SELECT * FROM Afiliado WHERE id = ${userId}
    `;
  
- console.log("Perfil de usuario creado correctamente:", newAfiliado[0]);
+ //console.log("Perfil de usuario creado correctamente:", newAfiliado[0]);
 
  return NextResponse.json({ status: 200, message: "Perfil del Afiliado fue creado con éxito.", newAfiliado: newAfiliado[0] });
 } catch (error) {
@@ -91,7 +91,6 @@ export async function PUT(request) {
     try {
         const body = await request.json();
         const userId = body.id;
-        console.log(userId);
   
         if (!userId) {
             return NextResponse.json({ status: 400, message: "ID de usuario no proporcionado." });
@@ -119,7 +118,7 @@ export async function PUT(request) {
             SET ${updateFields.join(', ')}
             WHERE id = '${userId}'
         `;
-        console.log(updateQuery);
+        //console.log(updateQuery);
   
         // Ejecutar la consulta de actualización
         await prisma.$executeRawUnsafe(updateQuery);

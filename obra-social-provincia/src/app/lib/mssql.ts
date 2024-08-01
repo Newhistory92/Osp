@@ -5,7 +5,6 @@ const config = {
   user: 'prueba23',
   password: 'Q1Tp2aXiMjN1*23',
   server: '10.25.1.103',
-  // database: 'ObraSocial',
   options: {
     encrypt: false,
     trustServerCertificate: true,

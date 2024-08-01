@@ -44,10 +44,10 @@ export async function GET(req: NextRequest) {
 export async function POST(request: NextRequest) {
     try {
         const currentDateTime = new Date().toISOString()
-        console.log("Recibida solicitud POST para crear una nueva notificación");
+        //console.log("Recibida solicitud POST para crear una nueva notificación");
         const nuevaNotificacion = await request.json();
 
-        console.log("Datos de la nueva notificación:", nuevaNotificacion);
+        
 
         const { titulo, contenido, url, autorId, receptorId, receptorPrestadorId } = nuevaNotificacion;
 
@@ -69,7 +69,7 @@ export async function POST(request: NextRequest) {
             `;
         }
 
-        console.log("Notificación creada exitosamente:", notificacionCreada);
+        //console.log("Notificación creada exitosamente:", notificacionCreada);
         return NextResponse.json({ status: 200, message: "Notificación creada exitosamente", notificacion: notificacionCreada });
     } catch (error: any) {
         console.error("Error al crear la notificación:", error);

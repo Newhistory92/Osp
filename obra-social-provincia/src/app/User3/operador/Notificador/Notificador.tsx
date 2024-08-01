@@ -34,7 +34,7 @@ const Notificador = () => {
   const editorRef = useRef<any>(null);
   const toast = useRef<Toast>(null);
   const [isLoading, setIsLoading] = useState(false);
- console.log (archivoBase64, "se encuentra en notificador")
+ //console.log (archivoBase64, "se encuentra en notificador")
   const currentUser = useAppSelector(state => state.user.currentUser);
 
   let autorId;
@@ -73,16 +73,13 @@ const Notificador = () => {
         },
       });
       const data = await response.json();
-      console.log(data)
       if (response.ok) {
         if (data.status === 200) {
-          console.log('Afiliado encontrado:', data.afiliado);
           setAfiliado(data.afiliado);
           setMessage(`Afiliado encontrado: ${data.afiliado.name}`);
           setMessageType('success');
           setShowButtons(true);
         } else if (data.status === 404) {
-          console.log('Afiliado no encontrado');
           setMessage('Afiliado no encontrado');
           setMessageType('error');
           setShowButtons(false);
@@ -104,7 +101,6 @@ const Notificador = () => {
   };
 
   const obtenerPrestadorPorMatricula = async (matricula: string) => {
-    console.log(`Buscando prestador por matrícula: ${matricula}`);
     setIsLoading(true);
     try {
         const response = await fetch(`/api/Notificador?matricula=${matricula}`, {
@@ -112,7 +108,7 @@ const Notificador = () => {
             headers: { 'Content-Type': 'application/json' },
         });
         const data = await response.json();
-        console.log('Respuesta del servidor:', data);
+        //console.log('Respuesta del servidor:', data);
 
         if (response.ok && data.status === 200) {
             setPrestador(data.prestador);
@@ -125,7 +121,6 @@ const Notificador = () => {
             setShowButtons(false);
         }
     } catch (error) {
-        console.log('Error al obtener el Prestador:', error);
         setMessage('Error al obtener el Prestador');
         setMessageType('error');
         setShowButtons(false);
@@ -196,9 +191,6 @@ const handleEnviar = async () => {
       return;
   }
 
-  console.log("Contenido antes de enviar:", contenido);
-  console.log("Archivo Base64 antes de enviar:", archivoBase64);
-
   const notificacionData = {
       titulo,
       contenido,
@@ -209,8 +201,6 @@ const handleEnviar = async () => {
   };
 
   setIsLoading(true);
-  console.log("Datos de la notificación a enviar:", notificacionData);
-
   try {
       const response = await fetch('/api/Notificador', {
           method: 'POST',
@@ -227,13 +217,6 @@ const handleEnviar = async () => {
               editorRef.current.setContent('');
           }
           setArchivoBase64('');
-          console.log("Carga de archivo limpiada exitosamente.");
-
-          // Limpiar FileUpload
-          const fileUploadElement = document.querySelector('.p-fileupload') as any;
-          if (fileUploadElement && fileUploadElement.clear) {
-              fileUploadElement.clear();
-          }
       } else {
           toast.current?.show({ severity: 'error', summary: 'Error', detail: 'Error al enviar la notificación', life: 3000 });
       }

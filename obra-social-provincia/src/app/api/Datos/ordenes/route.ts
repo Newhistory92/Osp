@@ -5,7 +5,6 @@ export const GET = async (req: NextRequest) => {
     const url = new URL(req.url);
     const searchParams = new URLSearchParams(url.searchParams);
     const numerodni = searchParams.get('dni');
-    console.log(numerodni);
 
     try {
         const pool = await poolPromise;

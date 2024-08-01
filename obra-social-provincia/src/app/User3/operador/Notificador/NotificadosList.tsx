@@ -44,7 +44,7 @@ const NotificadosList = ({ autorId }: Props) => {
                     throw new Error('Error al obtener las notificaciones del autor');
                 }
                 const data = await response.json();
-                console.log(data)
+                //console.log(data)
                 setNotificaciones(data);
             } catch (error) {
                 console.error('Error inesperado al obtener las notificaciones del autor:', error);

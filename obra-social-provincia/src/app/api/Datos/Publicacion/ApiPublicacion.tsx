@@ -29,7 +29,7 @@ const actualizarPublicacion = async (id: number, datosActualizados: { titulo: st
       body: JSON.stringify({ id, ...datosActualizados }),
     });
     const responseData = await response.json();
-    console.log('Respuesta del backend:', responseData);
+   // console.log('Respuesta del backend:', responseData);
     if (responseData.status === 200) {
 
     }
@@ -48,7 +48,7 @@ const deletePublicacion = async (id: number) => {
           body: JSON.stringify({ id }),
       });
       const responseData = await response.json();
-      console.log('Respuesta del backend:', responseData);
+      //console.log('Respuesta del backend:', responseData);
       if (responseData.status === 200) {
        
       }

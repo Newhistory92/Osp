@@ -20,8 +20,7 @@ export async function POST(req: NextRequest) {
     try {
         const body = await req.json();
         const { denuncia, NombreEfector, EspecialidadEfector, NombrePractica, FechaEfectua, Efector } = body;
-        console.log(body)
-        // Verifica si el prestadorId existe en la tabla Prestador
+       
         const prestadorExists = await prisma.$queryRaw<any[]>`
         SELECT * FROM Prestador WHERE matricula = ${Efector}
     `;
@@ -51,19 +50,14 @@ export async function POST(req: NextRequest) {
 
 export async function PUT(req: NextRequest) {
     try {
-        console.log('Request received:', req);
+   
         const url = new URL(req.url);
         const searchParams = new URLSearchParams(url.searchParams);
-        const id = searchParams.get('id');
-        console.log('ID:', id);
-
+        const id = searchParams.get('id');       
         const { status } = await req.json();
-        console.log('Status:', status);
-
         if (status !== 'Leido') {
             return NextResponse.json({ status: 400, message: "Estado no válido" });
         }
-
         await prisma.$executeRawUnsafe(`
             UPDATE Denuncia
             SET status = 'Leido'

@@ -14,7 +14,9 @@ const TypePrestador = () => {
   const dispatch = useAppDispatch();
   const { currentUser, errorMessage,successMessage } = useAppSelector((state) => state.user);
   const { loading} = useAppSelector((state) => state.loading);
-  console.log("currentUser", currentUser)
+
+ // console.log("currentUser", currentUser)
+
   useEffect(() => {
     dispatch(setErrorMessage(null));
     dispatch(setSuccessMessage(null));
@@ -33,7 +35,7 @@ const TypePrestador = () => {
         });
 
         const data = await response.json();
-          console.log(data)
+         // console.log(data)
         if (response.ok) {
           if (data.status === 200) {
             dispatch(setCurrentUser(data.users[0]));
@@ -69,17 +71,17 @@ const TypePrestador = () => {
   useEffect(() => {
     dispatch(setLoading(true));
     if (matricula.length === 4) {
-      console.log('Triggering API call with numeroMatricula:', matricula);
+      //console.log('Triggering API call with numeroMatricula:', matricula);
       const timeoutId = setTimeout(async () => {
         try {
           const response = await fetch(`/api/Datos/prestador?matricula=${matricula}`);
-          console.log('API Response Status:', response.status);
-          console.log( response)
+          //console.log('API Response Status:', response.status);
+          //console.log( response)
           if (!response.ok) {
             throw new Error('Prestador not found');
           }
           const prestador = await response.json();
-          console.log(prestador)
+         // console.log(prestador)
           
           const capitalizeWords = (str:string) => {
             return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
@@ -100,9 +102,9 @@ const TypePrestador = () => {
             return;
           }
           const address = `${prestador.Domicilio},${prestador.Localidad}`;
-          console.log(address)
+          //console.log(address)
           const tipo = (prestador.Fidelizado === "0" || prestador.Fidelizado === null) ? "No Fidelizado" : "Fidelizado";
-          console.log(prestador.Telefono)
+          //console.log(prestador.Telefono)
 
           const newCurrentUser: PartialUserInfo = {
             id: prestador.id,
@@ -116,7 +118,7 @@ const TypePrestador = () => {
             dependencia: '',
             operador: ''
           };
-          console.log( newCurrentUser)
+          //console.log( newCurrentUser)
           dispatch(setPartialCurrentUser(newCurrentUser));
           dispatch(setErrorMessage(null));
           setIsmatriculaValid(true);
@@ -164,7 +166,7 @@ const TypePrestador = () => {
       });
 
       const responseData = await response.json();
-      console.log("respuesta del back",responseData)
+     //console.log("respuesta del back",responseData)
       if (responseData.status === 200) {
         dispatch(setCurrentUser(responseData.newPrestador));
         dispatch(setSuccessMessage('El prestador fue creado con éxito'));

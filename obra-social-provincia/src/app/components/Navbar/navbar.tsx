@@ -89,15 +89,10 @@ const Navbar: React.FC =() => {
     }
   };
   const handlePrestadoresClick = (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    // Evita que se realice la acción predeterminada del evento (por ejemplo, seguir un enlace)
     event.preventDefault();
-    // Verifica si se hizo clic en el botón "Cartilla de Prestadores"
-    console.log('Button clicked:', event.currentTarget.id);
-    if (event.currentTarget.id === 'cartillaPrestadores') {
-      // Si el botón clickeado es el mismo y el estado actual es true, establece el estado en false para cerrar la vista
+    if (event.currentTarget.id === 'cartillaPrestadores') {  
       dispatch(setShowPrestadores(!showPrestadores));
     } else {
-      // Si se hace clic en otro botón del navbar, establece el estado en false
       dispatch(setShowPrestadores(false));
     }
   };

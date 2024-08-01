@@ -44,16 +44,15 @@ export async function GET(req: NextRequest) {
 
 export async function POST(request: NextRequest) {
     try {
-        console.log("Recibida solicitud POST para crear una nueva publicación");
+        //console.log("Recibida solicitud POST para crear una nueva publicación");
         const nuevaPublicacion = await request.json();
-        console.log("Datos de la nueva publicación:", nuevaPublicacion);
         const currentDateTime = new Date().toISOString()
         const result = await prisma.$executeRaw`
             INSERT INTO Publicacion (titulo, published, contenido,imagen, autorId,updatedAt) 
             VALUES (${nuevaPublicacion.titulo}, ${nuevaPublicacion.published}, ${nuevaPublicacion.contenido},${nuevaPublicacion.imagen || null}, ${nuevaPublicacion.autorId},${currentDateTime})`;
 
         const publicacionCreada = result;
-        console.log("Publicación creada exitosamente:", publicacionCreada);
+        //console.log("Publicación creada exitosamente:", publicacionCreada);
         
         return NextResponse.json({ status: 200, message: "Publicación creada exitosamente", publicacion: publicacionCreada });
     } catch (error:any) {
@@ -65,11 +64,10 @@ export async function POST(request: NextRequest) {
 
 export async function PUT(request: NextRequest) {
     try {
-        console.log("Recibida solicitud PUT para actualizar una publicación");
+       // console.log("Recibida solicitud PUT para actualizar una publicación");
         const datosActualizados = await request.json();
         const id = datosActualizados.id;
-        console.log(datosActualizados);
-        console.log(id);
+        
 
         const result = await prisma.$executeRaw`
             UPDATE Publicacion 
@@ -83,7 +81,7 @@ export async function PUT(request: NextRequest) {
         `;
 
         const publicacionActualizada = result;
-        console.log("Publicación actualizada exitosamente:", publicacionActualizada);
+        //console.log("Publicación actualizada exitosamente:", publicacionActualizada);
 
         return NextResponse.json({ status: 200, message: "Publicación se actualizó exitosamente", publicacionActualizada });
     } catch (error:any) {
@@ -95,7 +93,7 @@ export async function PUT(request: NextRequest) {
 
 export async function DELETE(request: NextRequest) {
     try {
-        console.log("Recibida solicitud DELETE para eliminar una publicación");
+        //console.log("Recibida solicitud DELETE para eliminar una publicación");
         const datosEliminacion = await request.json();
         const id = datosEliminacion.id;
 
@@ -105,7 +103,7 @@ export async function DELETE(request: NextRequest) {
         `;
 
         const publicacionEliminada = result;
-        console.log("Publicación eliminada exitosamente:", publicacionEliminada);
+        //console.log("Publicación eliminada exitosamente:", publicacionEliminada);
         
         return NextResponse.json({ status: 200, message: "Publicación eliminada exitosamente", publicacionEliminada });
     } catch (error:any) {

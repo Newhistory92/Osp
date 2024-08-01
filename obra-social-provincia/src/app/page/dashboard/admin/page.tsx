@@ -3,7 +3,6 @@ import React, { useState, useEffect} from 'react';
 import NavbarVertical from '../../../components/dashbord/navbars/NavbarVertical';
 import NavbarTop from '../../../components/dashbord/navbars/NavbarTop';
 import { useAppSelector } from "../../../hooks/StoreHook"
-import { UserProfile } from '@clerk/nextjs';
 import Dashboard from '@/app/components/Admin/TableAdmin';
 
 const DashboardAdmin: React.FC = () => {

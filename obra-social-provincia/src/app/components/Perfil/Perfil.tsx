@@ -8,7 +8,7 @@ import Loading from '../Loading/loading';
 
 const Profile = () => {
   const currentUser = useAppSelector((state: { user: { currentUser: UserInfo | null; }; }) => state.user.currentUser);
-console.log("este estado global esta en el perfil",currentUser)
+//console.log("este estado global esta en el perfil",currentUser)
   if (!currentUser) {
     return <div><Loading/></div>;
   }

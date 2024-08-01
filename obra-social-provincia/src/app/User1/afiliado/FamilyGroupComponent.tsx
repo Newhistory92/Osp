@@ -47,7 +47,7 @@ export default function FamilyGroup() {
     try {
       const response = await fetch(`/api/Datos/afiliado?doctit=${userData.dni}`);
       const data = await response.json();
-      console.log("respuesta del backend", data);
+      //console.log("respuesta del backend", data);
       setGrupsData(Array.isArray(data) ? data : [data]);
       const grupDnis = Array.isArray(data) ? data.map(item => item.Codigo) : [data.Codigo];
       grupDnis.forEach(dni => {

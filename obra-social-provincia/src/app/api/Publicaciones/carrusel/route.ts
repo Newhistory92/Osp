@@ -4,17 +4,17 @@ import prisma from "../../../lib/prisma"
 
 export async function POST(request: NextRequest) {
     try {
-        console.log("Recibida solicitud POST para crear un nuevo item de carrusel");
+       //console.log("Recibida solicitud POST para crear un nuevo item de carrusel");
         const nuevaCarrusel = await request.json();
 
-        console.log("Datos del nuevo item de carrusel:", nuevaCarrusel);
+   
 
         const carruselCreado = await prisma.$executeRaw`
             INSERT INTO Carrusel (tituloprincipal, titulosecundario, contenido, urlImagen)
             VALUES (${nuevaCarrusel.tituloprincipal}, ${nuevaCarrusel.titulosecundario}, ${nuevaCarrusel.contenido}, ${nuevaCarrusel.urlImagen});
         `;
 
-        console.log("Item de carrusel creado exitosamente:", carruselCreado);
+        //console.log("Item de carrusel creado exitosamente:", carruselCreado);
 
         return NextResponse.json({ status: 200, message: "Item de carrusel creado exitosamente", carrusel: carruselCreado });
     } catch (error: any) {
@@ -30,12 +30,12 @@ export async function DELETE(request: NextRequest) {
     const id = datosEliminacion.id;
     
     try {
-        console.log(`Recibida solicitud DELETE para eliminar el item de carrusel con id: ${id}`);
+        //console.log(`Recibida solicitud DELETE para eliminar el item de carrusel con id: ${id}`);
         
         const carruselEliminado = await prisma.$executeRaw`(
             DELETE FROM Carrusel WHERE id = ${id})`;
 
-        console.log("Item de carrusel eliminado exitosamente:", carruselEliminado);
+        //console.log("Item de carrusel eliminado exitosamente:", carruselEliminado);
 
         return NextResponse.json({ status: 200, message: "Item de carrusel eliminado exitosamente", carrusel: carruselEliminado });
     } catch (error: any) {
@@ -47,14 +47,13 @@ export async function DELETE(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
     try {
-        console.log("Recibida solicitud GET para obtener todos los items del carrusel");
-
+       
         // Usar una consulta en crudo para obtener los datos del carrusel
         const carruselItems = await prisma.$queryRaw`
             SELECT * FROM Carrusel
         `;
 
-        console.log("Items del carrusel obtenidos exitosamente:", carruselItems);
+    
 
         return NextResponse.json({ status: 200, message: "Items del carrusel obtenidos exitosamente", carrusel: carruselItems });
     } catch (error: any) {

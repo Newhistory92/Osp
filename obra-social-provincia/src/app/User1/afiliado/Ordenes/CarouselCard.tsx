@@ -1,5 +1,5 @@
 import { Carousel } from "@material-tailwind/react";
-import Orden from "./OrdenCard"; // Asegúrate de importar el componente Orden desde la ubicación correcta
+import Orden from "./OrdenCard";
 import { OrdenData } from '@/app/interfaces/interfaces';
 
 

@@ -185,7 +185,6 @@ const QuickMenu = () => {
                     throw new Error('Error al obtener las notificaciones del receptor');
                 }
                 const data = await response.json();
-                console.log(data)
                 setNotificaciones(data);
             } catch (error) {
                 console.error('Error inesperado al obtener las notificaciones del receptor:', error);
@@ -220,7 +219,6 @@ const handleButtonClick = async (notification: Notificacion) => {
 
     try {
         const requestBody = { id: notification.id, status: 'Leido' };
-        console.log("Request body:", requestBody);
 
         const response = await fetch('/api/Datos/notificados', {
             method: 'PUT',
@@ -229,10 +227,6 @@ const handleButtonClick = async (notification: Notificacion) => {
             },
             body: JSON.stringify(requestBody),
         });
-
-        console.log("Response status:", response.status);
-        console.log("Response body:", await response.text());
-
         if (!response.ok) {
             throw new Error('Error al actualizar el estado de la notificación');
         }

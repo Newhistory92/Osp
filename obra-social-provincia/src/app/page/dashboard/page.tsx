@@ -35,7 +35,7 @@ const DefaultDashboardLayout: React.FC = () => {
     dialisisOpen,
   } = useAppSelector(state => state.navbarvertical);
   const { loading} = useAppSelector((state) => state.loading);
-console.log("login en el dasbha" , loading)
+//console.log("login en el dasbha" , loading)
   const currentUser = useAppSelector(state => state.user.currentUser);
   let userRole;
 

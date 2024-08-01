@@ -107,15 +107,12 @@ export default function DenunciasTable() {
         setVisible(true);
     
         try {
-            console.log('Updating status for denuncia:', denuncia.id);
-    
+
             const response = await fetch(`/api/Denuncias?id=${denuncia.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ status: 'Leido' })
             });
-    
-            console.log('Response:', response);
     
             if (!response.ok) {
                 throw new Error('Failed to update status');

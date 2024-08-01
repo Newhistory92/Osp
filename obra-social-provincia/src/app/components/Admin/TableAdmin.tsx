@@ -26,7 +26,7 @@ const fetchUserData = async (userType: string): Promise<UserType[]> => {
     try {
         const response = await fetch(`/api/Datos/${userType}`);
         const data = await response.json();
-        console.log(data)
+       // console.log(data)
          return data;
         
     } catch (error) {
@@ -101,8 +101,8 @@ const UserTable: React.FC<UserTableProps> = ({ userType }) => {
                 updatedUserData = { ...updatedUserData, tipo: newTipo };
             }
     
-            console.log(selectedUser, "la información del usuario");
-            console.log(updatedUserData, "datos a mandar a la función");
+            //console.log(selectedUser, "la información del usuario");
+            //console.log(updatedUserData, "datos a mandar a la función");
     
             setLoading(true);
             await updateUserRole(selectedUser.id, updatedUserData, userType);
@@ -118,7 +118,7 @@ const UserTable: React.FC<UserTableProps> = ({ userType }) => {
     const updateUserRole = async (id: string, updatedUserData: Partial<Operador>, userType: string):  Promise<void> => {
   
         try {
-           console.log(updatedUserData)
+          // console.log(updatedUserData)
             const response = await fetch(`/api/Datos/${userType}`, {
                 method: 'PUT',
                 headers: {

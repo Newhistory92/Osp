@@ -114,7 +114,7 @@ export default function EditPublicacion() {
                         throw new Error('Error al obtener las publicaciones: ' + response.statusText);
                     }
                     const data = await response.json();
-                    console.log(data)
+                    //console.log(data)
                     if (data.status === 200) {
                         setPublicaciones(data.publicaciones);
                     } else {
@@ -142,7 +142,7 @@ export default function EditPublicacion() {
     
 
     const handleEditPublicacion = (publicacion: PublicacionEdit) => {
-        console.log(publicacion)
+        //console.log(publicacion)
         setEditingPublicacion(publicacion);
         setTitulo(publicacion.titulo);
         setContenido(publicacion.contenido);
@@ -152,7 +152,7 @@ export default function EditPublicacion() {
     const handleAcceptEdit = async () => {
         try {
             if (editingPublicacion) {
-                console.log("ID de la publicación a actualizar:", editingPublicacion.id);
+                //console.log("ID de la publicación a actualizar:", editingPublicacion.id);
                 await actualizarPublicacion(editingPublicacion.id, {
                     titulo: titulo,
                     contenido: contenido

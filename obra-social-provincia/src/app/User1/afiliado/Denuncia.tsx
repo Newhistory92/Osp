@@ -11,7 +11,7 @@ import { addReportDenuncia } from '@/app/redux/Slice/denunciaSlice';
     const [denuncia, setDenuncia] = useState('');
     const toast = useRef<Toast>(null);
     const dispatch = useAppDispatch()
- console.log(IdFacturacion)
+ //console.log(IdFacturacion)
     const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 

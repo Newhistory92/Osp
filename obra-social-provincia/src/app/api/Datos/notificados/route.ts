@@ -8,8 +8,7 @@ export async function GET(req: NextRequest) {
         const autorId = searchParams.get('autorId');
         const receptorId = searchParams.get('receptorId');
 
-        console.log('autorId:', autorId);
-        console.log('receptorId:', receptorId);
+   
         if (!autorId && !receptorId) {
             return NextResponse.json({ error: "autorId o receptorId son necesarios" }, { status: 400 });
         }
@@ -49,11 +48,11 @@ export async function GET(req: NextRequest) {
 
 
 export async function PUT(req: NextRequest) {
-    console.log("Request received");
+ 
     
     try {
         const { id, status } = await req.json();
-        console.log("Parsed request body:", { id, status });
+       // console.log("Parsed request body:", { id, status });
 
         // Actualiza el estado de la notificación
         await prisma.$executeRaw`
@@ -66,7 +65,7 @@ export async function PUT(req: NextRequest) {
             SELECT * FROM Notificacion WHERE id = ${id}
         `;
 
-        console.log("Notification updated:", updatedNotification);
+        //console.log("Notification updated:", updatedNotification);
 
         return new NextResponse(JSON.stringify(updatedNotification), { status: 200 });
     } catch (error:any) {

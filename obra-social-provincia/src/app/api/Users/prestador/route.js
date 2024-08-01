@@ -6,13 +6,10 @@ import { checkUserAuthentication } from "../../checkUser/authUtils";
 
 export async function POST(request) {
   try {
-      console.log("Iniciando función POST...");
-
+      //console.log("Iniciando función POST...");
       const user = await currentUser();
-      console.log("Usuario actual:", user);
-
       const body = await request.json();
-      console.log("Cuerpo de la solicitud:", body);
+     // console.log("Cuerpo de la solicitud:", body);
 
       const matricula = body.matricula;
       const especialidad = body.especialidad;
@@ -23,10 +20,10 @@ export async function POST(request) {
       const name = body.name
       const currentDateTime = new Date().toISOString()
       
-      console.log("Matrícula:", matricula);
-      console.log("Especialidad:", especialidad);
-      console.log("Correo electrónico:", email);
-      console.log("ID de usuario:", userId);
+    //   console.log("Matrícula:", matricula);
+    //   console.log("Especialidad:", especialidad);
+    //   console.log("Correo electrónico:", email);
+    //   console.log("ID de usuario:", userId);
 
       // Verificar si el usuario ya está asociado a una cuenta existente
       const isAuthenticated = await checkUserAuthentication(userId, 'prestador');
@@ -39,7 +36,7 @@ export async function POST(request) {
       const existingUserWithMatricula = await prisma.$queryRaw`
           SELECT * FROM Prestador WHERE matricula = ${matricula}
       `;
-      console.log("Usuario existente con matrícula:", existingUserWithMatricula);
+      //console.log("Usuario existente con matrícula:", existingUserWithMatricula);
 
       if (existingUserWithMatricula.length > 0) {
           return NextResponse.json({ status: 400, message: `La Matricula N°: ${existingUserWithMatricula[0].matricula} ya está asociado a un Prestador` });
@@ -49,7 +46,7 @@ export async function POST(request) {
       const existingUserWithEmail = await prisma.$queryRaw`
           SELECT * FROM Prestador WHERE email = ${email}
       `;
-      console.log("Usuario existente con correo electrónico:", existingUserWithEmail);
+      //console.log("Usuario existente con correo electrónico:", existingUserWithEmail);
 
       if (existingUserWithEmail.length > 0) {
           return NextResponse.json({ status: 400, message: `El Correo Electrónico ${existingUserWithEmail[0].email} ya está asociado a un Prestador` });
@@ -59,11 +56,11 @@ export async function POST(request) {
       const {  imageUrl, phoneNumbers, passwordEnabled } = user;
       const passwordValue = passwordEnabled ? 'true' : 'false'; // Convertir el booleano a string
   
-      console.log("Imagen de perfil:", imageUrl);
-      console.log("Número de teléfono:", phoneNumbers[0].phoneNumber);
-      console.log("¿Contraseña habilitada?", passwordEnabled);
-      console.log("Valor de la contraseña:", passwordValue);
-      console.log("valor del telefono", phoneOpc)
+    //   console.log("Imagen de perfil:", imageUrl);
+    //   console.log("Número de teléfono:", phoneNumbers[0].phoneNumber);
+    //   console.log("¿Contraseña habilitada?", passwordEnabled);
+    //   console.log("Valor de la contraseña:", passwordValue);
+    //   console.log("valor del telefono", phoneOpc)
 
     
       await prisma.$executeRaw`
@@ -121,7 +118,7 @@ export async function PUT(request) {
   try {
       const body = await request.json();
       const userId = body.id;
-      console.log(userId);
+     // console.log(userId);
 
       if (!userId) {
           return NextResponse.json({ status: 400, message: "ID de usuario no proporcionado." });
@@ -175,7 +172,7 @@ export async function PUT(request) {
           SET ${updateFields.join(', ')}
           WHERE id = '${userId}'
       `;
-      console.log(updateQuery);
+      //console.log(updateQuery);
 
       // Ejecutar la consulta de actualización
       await prisma.$executeRawUnsafe(updateQuery);

@@ -74,7 +74,7 @@ const Prestadores = () => {
         headers: { 'Content-Type': 'application/json' },
       });
       const responseData = await response.json();
-      console.log(responseData)
+      //console.log(responseData)
       if (Array.isArray(responseData.data)) {
         const formattedData = responseData.data.map((prestador: {
           IdPrestador: any; Domicilio: string; Localidad: string; Fidelizado: string | null; Telefono:  string; Nombre: string; especialidad: string; 
@@ -150,7 +150,6 @@ useEffect(() => {
 
 
 const handleTabChange = useCallback((value: string) => {
-  console.log(`Tab changed to: ${value}`);
   setSelectedType(value);
   setPage(1);
 }, []);
@@ -161,7 +160,6 @@ const handleAvatarButtonClick = (prestador: Prestador | null) => {
   if (prestador && selectedPrestador && selectedPrestador.id === prestador.id) {
     return;
   }
-  console.log("handleAvatarButtonClick called with:", prestador); // Depuración
   setSelectedPrestador(prestador);
   onOpen();
 };

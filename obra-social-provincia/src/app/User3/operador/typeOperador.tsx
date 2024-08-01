@@ -16,7 +16,7 @@ const TypeOperador = () => {
   const { currentUser, errorMessage,successMessage } = useAppSelector((state) => state.user);
   const { loading} = useAppSelector((state) => state.loading);
 
- console.log(currentUser)
+
 
   useEffect(() => {
     dispatch(setErrorMessage(null));
@@ -36,7 +36,7 @@ const TypeOperador = () => {
         });
 
         const data = await response.json();
-        console.log (data)
+        //console.log (data)
         if (response.ok) {
           if (data.status === 200) {
             dispatch(setCurrentUser(data.users[0]));
@@ -72,17 +72,17 @@ const TypeOperador = () => {
   useEffect(() => {
     if (numeroOperador.length === 3) {
       dispatch(setLoading(true));
-      console.log('Triggering API call with numeroOperador:', numeroOperador);
+      //console.log('Triggering API call with numeroOperador:', numeroOperador);
       const timeoutId = setTimeout(async () => {
         try {
           const response = await fetch(`/api/Datos/operador?numeroOperador=${numeroOperador}`);
-          console.log('API Response Status:', response.status);
+          //console.log('API Response Status:', response.status);
             
           if (!response.ok) {
             throw new Error('Operador not found');
           }
           const operador = await response.json();
-          console.log(operador)
+          //console.log(operador)
           if (operador.ANULADA === "1") {
             dispatch(setErrorMessage(`Operador  Bloqueado`));
             dispatch(clearCurrentUser());dispatch(clearCurrentUser());
@@ -101,7 +101,7 @@ const TypeOperador = () => {
             address: null,
             phone: null
           };
-         console.log(newCurrentUser)
+         //console.log(newCurrentUser)
           dispatch(setPartialCurrentUser(newCurrentUser));
           dispatch(setErrorMessage(null));
           setIsoperadorValid(true);
@@ -123,7 +123,6 @@ const TypeOperador = () => {
   }, [numeroOperador, dispatch]);
   
   const handleConfirm = async () => {
-    console.log(currentUser, "post")
     if (!currentUser) {
       dispatch(setErrorMessage('Seleccione un operador antes de confirmar'));
       return;
@@ -142,7 +141,7 @@ const TypeOperador = () => {
       });
 
       const responseData = await response.json();
-      console.log(responseData)
+     // console.log(responseData)
       if (responseData.status === 200) {
         dispatch(setCurrentUser(responseData.newOperador));
         dispatch(setSuccessMessage('El Operador fue creado con éxito'));

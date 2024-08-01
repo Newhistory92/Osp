@@ -3,25 +3,20 @@ import Denuncia from '../Denuncia';
 import { OrdenData } from '@/app/interfaces/interfaces';
 import { format } from 'date-fns';
 import { es } from 'date-fns/locale';
-import {  addReportDenuncia } from '@/app/redux/Slice/denunciaSlice';
-import { useAppSelector,useAppDispatch } from '@/app/hooks/StoreHook';
+import { useAppSelector} from '@/app/hooks/StoreHook';
 
 
 const Orden: React.FC<OrdenData> = ({ Numero, FechaEfectua,  NombreEfector, EspecialidadEfector,  NombrePractica,   Cantidad, Nombre,Efector,IdFacturacion}) => {
     const [showDenuncia, setShowDenuncia] = useState(false);
     const reportedIds = useAppSelector((state) => state.denuncia.reportDenuncia);
     const hasReported = Array.isArray(reportedIds) && reportedIds.includes(IdFacturacion);
-    const dispatch = useAppDispatch();
+ 
    
 
     const capitalizeWords = (str: string) => {
         return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
     };
 
-    const handleDenunciaSuccess = () => {
-        
-        setShowDenuncia(false);
-    };
 
 
 

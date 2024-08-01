@@ -103,7 +103,6 @@ const handleConfirmChanges = async () => {
 
 
   const handleEspecialidadSelect = (especialidad: string) => {
-    console.log("Especialidad seleccionada:", especialidad);
     if (especialidad2Seleccionada === null) {
         setEspecialidad2Seleccionada(especialidad);
         setHasChanges(true)
@@ -153,7 +152,6 @@ const handleTelefonoPublicoChange = (event: React.ChangeEvent<HTMLInputElement>)
   const value = `${countryCallingCode}${event.target.value}`;
   setTelefonoPublico(value);
   setHasChanges(true);
-  console.log('Número con código de país:', value);
 };
 
 const handleCancelChanges = () => {

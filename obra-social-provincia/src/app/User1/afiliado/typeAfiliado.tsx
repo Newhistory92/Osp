@@ -34,7 +34,7 @@ const TypeAfiliado = () => {
         });
 
         const data = await response.json();
-          console.log(data)
+          //console.log(data)
         if (response.ok) {
           if (data.status === 200) {
             dispatch(setCurrentUser(data.users[0]));
@@ -69,17 +69,17 @@ const TypeAfiliado = () => {
   useEffect(() => {
     dispatch(setLoading(true));
     if (dni.length === 8) {
-        console.log('Triggering API call with numerodni:', dni);
+       // console.log('Triggering API call with numerodni:', dni);
         const timeoutId = setTimeout(async () => {
             try {
                 const response = await fetch(`/api/Datos/afiliado?dni=${dni}`);
-                console.log('API Response Status:', response.status);
+                //console.log('API Response Status:', response.status);
 
                 if (!response.ok) {
                     throw new Error('Afiliado not found');
                 }
                 const afiliado = await response.json();
-                console.log(afiliado);
+                //console.log(afiliado);
 
                 const capitalizeWords = (str: string) => {
                     return str.toLowerCase().replace(/\b\w/g, char => char.toUpperCase());
@@ -120,7 +120,7 @@ const TypeAfiliado = () => {
                     phone: null
                 };
 
-                console.log(newCurrentUser);
+               // console.log(newCurrentUser);
                 dispatch(setPartialCurrentUser(newCurrentUser));
                 dispatch(setErrorMessage(null));
                 setIsDniValid(true);

@@ -2,22 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "@/app/lib/prisma";
 import { poolPromise, sql } from '../../../lib/mssql';
 
-// export async function GET() {
-//     try {
-//         const users = await prisma.prestador.findMany();
-//         return NextResponse.json(users);
-//     } catch (error) {
-//         console.error('Error en la función GET para prestador:', error);
-//         return NextResponse.json({ status: 400, error: 'Error en el servidor' });
-//     }
-// }
 
 export async function PUT(request: Request) {
     try {
         const body = await request.json();
         const id = body.id
         const  tipo =body.tipo
-        console.log(body)
+    
         if (!id) {
             return NextResponse.json({ status: 400, error: 'ID is required' });
         }
@@ -37,7 +28,7 @@ export const GET = async (req: NextRequest) => {
     const url = new URL(req.url);
     const searchParams = new URLSearchParams(url.searchParams);
     const numeroMatricula = searchParams.get('matricula');
-   console.log(numeroMatricula)
+
     try {
       const pool = await poolPromise;
       const result = await pool.request()
@@ -48,7 +39,7 @@ export const GET = async (req: NextRequest) => {
         return NextResponse.json({ error: 'Prestador not found' }, { status: 404 });
       }
       const prestador = result.recordset[0];
-      console.log(prestador)
+
       const especialidadResult = await pool.request()
       .input('codigoEspecialidad', sql.VarChar(3), prestador.Especialidad)
       .query('SELECT nombre FROM ObraSocial.dbo.Especialidades_Medicas WHERE codigo = @codigoEspecialidad');
