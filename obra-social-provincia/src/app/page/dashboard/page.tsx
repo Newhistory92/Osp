@@ -8,11 +8,13 @@ import { useAppSelector,useAppDispatch } from "../../hooks/StoreHook"
 import { UserProfile } from '@clerk/nextjs';
 import FamilyGroup from "../../User1/afiliado/FamilyGroupComponent"
 import Ordenes from "../../User1/afiliado/Ordenes/Ordenes"
-import EditPublicacion from '../../User3/operador/Publicacion/EditPublic';
+const EditPublicacion = dynamic(() => import('../../User3/operador/Publicacion/EditPublic'), { ssr: false });
 import DenunciasTable from '../../User3/operador/Publicacion/GestionDenuncia';
 import Notificador from '../../User3/operador/Notificador/Notificador';
 import Loading from '@/app/components/Loading/loading';
 import { setLoading } from '@/app/redux/Slice/loading';
+import dynamic from 'next/dynamic';
+
 
 const DefaultDashboardLayout: React.FC = () => {
   const dispatch = useAppDispatch();
