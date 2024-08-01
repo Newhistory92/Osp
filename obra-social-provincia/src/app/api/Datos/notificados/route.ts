@@ -1,14 +1,16 @@
 import { NextRequest, NextResponse } from 'next/server';
-import prisma from '@/app/lib/prisma';  // Asegúrate de tener la instancia de prisma importada correctamente.
+import prisma from '@/app/lib/prisma'; 
 
 export async function GET(req: NextRequest) {
     try {
-        const url = new URL(req.url);
-        const searchParams = new URLSearchParams(url.searchParams);
+        // const url = new URL(req.url);
+        // const searchParams = new URLSearchParams(url.searchParams);
+        // const autorId = searchParams.get('autorId');
+        // const receptorId = searchParams.get('receptorId');
+        const { searchParams } = new URL(req.url);  
         const autorId = searchParams.get('autorId');
         const receptorId = searchParams.get('receptorId');
-
-   
+    
         if (!autorId && !receptorId) {
             return NextResponse.json({ error: "autorId o receptorId son necesarios" }, { status: 400 });
         }
