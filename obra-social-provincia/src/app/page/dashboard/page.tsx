@@ -1,19 +1,20 @@
 'use client';
-import React, { useState, useEffect} from 'react';
-import NavbarVertical from '../../components/dashbord/navbars/NavbarVertical';
-import NavbarTop from '../../components/dashbord/navbars/NavbarTop';
-import Prestadores from "../../User2/prestador/TablePrestador";
-import Profile from "../../components/Perfil/Perfil";
-import { useAppSelector,useAppDispatch } from "../../hooks/StoreHook"
-import { UserProfile } from '@clerk/nextjs';
-import FamilyGroup from "../../User1/afiliado/FamilyGroupComponent"
-import Ordenes from "../../User1/afiliado/Ordenes/Ordenes"
-const EditPublicacion = dynamic(() => import('../../User3/operador/Publicacion/EditPublic'), { ssr: false });
-import DenunciasTable from '../../User3/operador/Publicacion/GestionDenuncia';
-import Notificador from '../../User3/operador/Notificador/Notificador';
-import Loading from '@/app/components/Loading/loading';
-import { setLoading } from '@/app/redux/Slice/loading';
 import dynamic from 'next/dynamic';
+import React, { useState, useEffect} from 'react';
+import { UserProfile } from '@clerk/nextjs';
+import { useAppSelector,useAppDispatch } from "../../hooks/StoreHook"
+const NavbarVertical = dynamic(() => import('../../components/dashbord/navbars/NavbarVertical'), { ssr: false });
+const NavbarTop = dynamic(() => import('../../components/dashbord/navbars/NavbarTop'), { ssr: false });
+const Prestadores = dynamic(() => import("../../User2/prestador/TablePrestador"), { ssr: false });
+const Profile = dynamic(() => import("../../components/Perfil/Perfil"), { ssr: false });
+const FamilyGroup = dynamic(() => import("../../User1/afiliado/FamilyGroupComponent"), { ssr: false });
+const Ordenes = dynamic(() => import("../../User1/afiliado/Ordenes/Ordenes"), { ssr: false });
+const EditPublicacion = dynamic(() => import('../../User3/operador/Publicacion/EditPublic'), { ssr: false });
+const DenunciasTable = dynamic(() => import('../../User3/operador/Publicacion/GestionDenuncia'), { ssr: false });
+const Notificador = dynamic(() => import('../../User3/operador/Notificador/Notificador'), { ssr: false });
+const Loading = dynamic(() => import('@/app/components/Loading/loading'), { ssr: false });
+
+import { setLoading } from '@/app/redux/Slice/loading';
 
 
 const DefaultDashboardLayout: React.FC = () => {
