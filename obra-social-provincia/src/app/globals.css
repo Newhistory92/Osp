@@ -10,10 +10,8 @@
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;
   --background-end-rgb: 255, 255, 255;
-  --font-onest: 'Onest Variable', sans-serif;
   --font-noto-serif: 'Noto Serif', serif;
-  --font-maven-pro: 'Maven Pro', sans-serif;
-  --font-source-serif-pro: 'Source Serif Pro', serif;
+  --font-ubuntu: 'Ubuntu', sans-serif;
 }
 
 @media (prefers-color-scheme: dark) {

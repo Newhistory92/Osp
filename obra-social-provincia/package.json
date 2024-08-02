@@ -17,7 +17,6 @@
     "@emotion/is-prop-valid": "^1.2.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
-    "@fontsource-variable/onest": "^5.0.4",
     "@googlemaps/js-api-loader": "^1.16.6",
     "@material-tailwind/react": "^2.1.9",
     "@midudev/tailwind-animations": "^0.0.7",
