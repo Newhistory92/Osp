@@ -2,7 +2,7 @@
     display: grid;
     
     grid-template-columns: 1fr;
-    grid-template-rows: minmax(100px, 150px) minmax(400px,500px) minmax(700px, 1fr) minmax(500px, 1fr) minmax(312px,auto) minmax(550px,auto);
+    grid-template-rows: minmax(100px, 220px) minmax(400px,500px) minmax(700px, 1fr) minmax(500px, 1fr) minmax(312px,auto) minmax(550px,auto);
     min-height: 100vh;
     grid-template-areas:
       "register "
@@ -28,11 +28,12 @@
   }
   
   .container-home  div:first-child {
-    
+    margin-bottom: 3%;
     grid-area: register;
   }
   
   .container-home  div:nth-child(2) {
+    margin-bottom: 3%;
     grid-area: curusel;
   }
   

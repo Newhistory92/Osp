@@ -44,10 +44,10 @@ const Ordenes = () => {
         }
       };
   
-      if (ordenes && currentUser) {
+      if (ordenes ) {
         fetchOrdenes();
     }
-}, [currentUser, dispatch, ordenes]);
+}, [ dispatch, ordenes]);
 
     return (
         <div>

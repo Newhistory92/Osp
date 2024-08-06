@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useEffect,  useState } from "react";
 import ListItem from '@mui/material/ListItem';
 import Divider from '@mui/material/Divider';
 import ListItemText from '@mui/material/ListItemText';
@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { useAppSelector, useAppDispatch } from "../../hooks/StoreHook";
 import { setLoading } from '@/app/redux/Slice/loading';
 import Loading from '@/app/components/Loading/loading';
-import { UserInfo,GrupData } from '@/app/interfaces/interfaces';
+import { GrupData } from '@/app/interfaces/interfaces';
 import parentesco from "../../../../parentesco.json";
 import { format, parseISO, isValid, addDays } from 'date-fns';
 import { es } from 'date-fns/locale';
@@ -17,7 +17,8 @@ import { Dialog } from 'primereact/dialog';
 import { Button } from 'primereact/button';
 import Image from "next/image";
 import IcontComentario from "../../../../public/icons-comentarios.png"
-import { addGrupFamiliarMember } from "@/app/redux/Slice/userSlice";
+import { addGrupFamiliarMember,clearGrupFamiliar  } from "@/app/redux/Slice/userSlice";
+
 function formatFecha(fecha: string | null): string {
   if (!fecha) return 'Fecha inválida';
   const parsedFecha = parseISO(fecha);
@@ -35,21 +36,24 @@ function capitalizeWords(str: string) {
 export default function FamilyGroup() {
   const [grupsData, setGrupsData] = React.useState<any>([]);
   const [modalVisible, setModalVisible] = useState(false);
-  const currentUser = useAppSelector((state: { user: { currentUser: UserInfo | null; }; }) => state.user.currentUser);
+  const [hasFetched, setHasFetched] = useState(false); // Nuevo estado para rastrear si ya hemos hecho la llamada
+  const currentUser = useAppSelector((state) => state.user.currentUser);
   const dispatch = useAppDispatch();
-
+ console.log( currentUser )
 
   const userData = Array.isArray(currentUser) ? currentUser[0] : currentUser;
-
-  const fetchGrup = React.useCallback(async () => {
-    if (!userData) return;
+  const fetchGrup = useCallback(async () => {
+    if (!userData || hasFetched) return;
+    setHasFetched(true); // Marcamos como ya realizado
     dispatch(setLoading(true));
     try {
       const response = await fetch(`/api/Datos/afiliado?doctit=${userData.dni}`);
       const data = await response.json();
-      //console.log("respuesta del backend", data);
-      setGrupsData(Array.isArray(data) ? data : [data]);
-      const grupDnis = Array.isArray(data) ? data.map(item => item.Codigo) : [data.Codigo];
+      const uniqueData = Array.isArray(data) ? data.filter((item, index, self) =>
+        index === self.findIndex((t) => t.Codigo === item.Codigo)) : [data];
+      
+      setGrupsData(uniqueData);
+      const grupDnis = uniqueData.map(item => item.Codigo);
       grupDnis.forEach(dni => {
         dispatch(addGrupFamiliarMember(dni));
       });
@@ -59,9 +63,13 @@ export default function FamilyGroup() {
     } finally {
       dispatch(setLoading(false));
     }
-  }, [userData, dispatch]);
+  }, [userData, hasFetched, dispatch]);
 
-  React.useEffect(() => {
+  useEffect(() => {
+    dispatch(clearGrupFamiliar());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (userData) {
       fetchGrup();
     }
