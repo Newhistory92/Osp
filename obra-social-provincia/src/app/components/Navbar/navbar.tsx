@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import Logo from "../../../../public/Logo.png";
+import OSP from "../../../../public/OSP.png";
 import {  useAuth} from '@clerk/clerk-react';
 import React, { useState, useEffect } from 'react';
 import "./navbar.css"
@@ -156,11 +157,9 @@ const Navbar: React.FC =() => {
           <h2>San Juan</h2>
           <h3>Gobierno</h3>
         </div>
-        <Image src={Logo} alt="Obra Social Provincia" priority />
+        <Image src={Logo} alt="Gobierno de San Juan" priority />
+        <Image className='logoOSP' src={OSP} alt="Obra Social Provincia" priority />
       </div>
-      <a className="logo animate-fade-in-down animate-duration-1000" href="/">
-        Obra Social Provincia
-      </a>
       <input className="menu-btn" type="checkbox" id="menu-btn" />
       <label className="menu-icon" htmlFor="menu-btn"><span className="navicon"></span></label>
       <div className="auth-social-wrapper">
@@ -202,9 +201,9 @@ const Navbar: React.FC =() => {
             </svg>
           </Link>
         </div>
-        <div className="auth-buttons">
+       
           {renderAuthButtons()}
-        </div>
+       
       </div>
       <ul className="menu">
         <li><a id="cartillaPrestadores" href="#one" className="link link-theme link-arrow animate-zoom-in animate-duration-1000" onClick={handlePrestadoresClick}>Cartilla de Prestadores</a></li>
